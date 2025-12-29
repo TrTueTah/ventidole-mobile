@@ -1,0 +1,121 @@
+import { MMKV } from 'react-native-mmkv';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
+// Create MMKV storage instance
+const storage = new MMKV();
+
+// MMKV storage adapter for Zustand
+const mmkvStorage = {
+  setItem: (name: string, value: string) => {
+    storage.set(name, value);
+  },
+  getItem: (name: string) => {
+    const value = storage.getString(name);
+    return value ?? null;
+  },
+  removeItem: (name: string) => {
+    storage.delete(name);
+  },
+};
+
+// === Types ===
+interface UserMetadata {
+  uid: string;
+  phoneNumber: string;
+  email: string;
+  firstLogin: boolean;
+}
+
+interface AuthState {
+  userMetadata: UserMetadata;
+  userPhoneNumber: string;
+  accessToken: string;
+  refreshToken: string;
+  isLogin: boolean;
+  isStorageReady: boolean;
+
+  // === Actions ===
+  setIsStorageReady: (ready: boolean) => void;
+  setUserMetadata: (metadata: Partial<UserMetadata>) => void;
+  setUserPhoneNumber: (phoneNumber: string) => void;
+  setAccessToken: (token: string) => void;
+  setRefreshToken: (token: string) => void;
+  setIsLogin: (isLogin: boolean) => void;
+  logout: () => void;
+}
+
+// === Initial values ===
+const initialUserMetadata: UserMetadata = {
+  uid: '',
+  phoneNumber: '',
+  email: '',
+  firstLogin: false,
+};
+
+// === Store ===
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      userMetadata: initialUserMetadata,
+      userPhoneNumber: '',
+      accessToken: '',
+      refreshToken: '',
+      isLogin: false,
+      isStorageReady: false,
+
+      // === Actions ===
+      setIsStorageReady: ready => set({ isStorageReady: ready }),
+
+      setUserMetadata: metadata =>
+        set(state => ({
+          userMetadata: { ...state.userMetadata, ...metadata },
+        })),
+
+      setUserPhoneNumber: phoneNumber => set({ userPhoneNumber: phoneNumber }),
+
+      setAccessToken: token => set({ accessToken: token ?? '' }),
+
+      setRefreshToken: token => set({ refreshToken: token ?? '' }),
+
+      setIsLogin: isLogin => set({ isLogin }),
+
+      logout: () =>
+        set(state => ({
+          userMetadata: { ...initialUserMetadata },
+          accessToken: '',
+          refreshToken: '',
+          isLogin: false,
+          isStorageReady: state.isStorageReady, // giữ nguyên flag này
+        })),
+    }),
+    {
+      name: 'auth-storage',
+      storage: createJSONStorage(() => mmkvStorage),
+      partialize: state => ({
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
+        userMetadata: state.userMetadata,
+        userPhoneNumber: state.userPhoneNumber,
+        isLogin: state.isLogin,
+      }),
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error('AuthStore: hydration error', error);
+        } else if (state) {
+          state.setIsStorageReady(true);
+        }
+      },
+    },
+  ),
+);
+
+// === Selectors ===
+export const selectIsAuthenticated = (state: AuthState): boolean =>
+  Boolean(state.accessToken && state.refreshToken);
+
+export const selectIsStorageReady = (state: AuthState): boolean =>
+  state.isStorageReady;
+
+export const selectIsFirstLogin = (state: AuthState): boolean =>
+  state.userMetadata.firstLogin;
