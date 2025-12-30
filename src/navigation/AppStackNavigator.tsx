@@ -1,7 +1,8 @@
+import SettingsScreen from '@/screens/SettingsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from './types';
-import { bottomTabPath } from './pathLocations';
 import BottomTabNavigator from './BottomTabNavigator';
+import { bottomTabPath } from './pathLocations';
+import { RootStackParamList } from './types';
 
 const AppStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -33,6 +34,13 @@ const AppStackNavigator = () => {
           component={Payment}
           options={{ headerShown: false }}
         /> */}
+        <AppStack.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            title: 'Settings',
+          }}
+        />
       </AppStack.Navigator>
     </>
   );

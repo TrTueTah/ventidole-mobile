@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
 
 import { BackendApiContext } from '@/components/providers/BackendApiProvider';
@@ -16,13 +17,19 @@ interface LoginCredentials {
 export const useLogin = () => {
   const backendApi = useContext(BackendApiContext);
   const { showSuccess, showWarning } = useToast();
-  const { setAccessToken, setRefreshToken, setIsLogin, setUserMetadata } =
-    useAuthStore();
+  const {
+    setAccessToken,
+    setRefreshToken,
+    setIsLogin,
+    setUserMetadata,
+    setIsChooseCommunity,
+  } = useAuthStore();
+  const navigation = useNavigation<any>();
 
   const loginMutation = backendApi.useMutation('post', '/v1/auth/sign-in', {
     onSuccess: data => {
       if (data.data) {
-        const { accessToken, refreshToken, id, role } =
+        const { accessToken, refreshToken, id, role, isChooseCommunity } =
           data.data as SignInResponse;
 
         // Update auth store
@@ -30,8 +37,14 @@ export const useLogin = () => {
         setRefreshToken(refreshToken);
         setUserMetadata({ uid: id });
         setIsLogin(true);
+        setIsChooseCommunity(isChooseCommunity);
 
         showSuccess('Login successful!');
+
+        // Navigate based on community selection status
+        if (!isChooseCommunity) {
+          navigation.replace('ChooseCommunity');
+        }
       }
     },
     onError: (error: any) => {

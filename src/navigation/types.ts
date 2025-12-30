@@ -20,17 +20,19 @@ export type RootStackParamList = {
   Register: undefined;
   About: undefined;
   SignIn: undefined;
-  SignUp: undefined;
-  ResetPassword: undefined;
+  SignUp: { email: string };
+  ResetPassword: { email: string };
   VerifyEmail: { type: 'register' | 'resetPassword' };
-  AuthComplete: undefined;
+  AuthComplete: { type: 'register' | 'resetPassword' };
   TermAndUse: undefined;
-  ChooseIdol: undefined;
+  ChooseCommunity: undefined;
 };
 
 // Main Tab Navigator
 export type MainTabParamList = {
   HOME: undefined;
+  CHAT: undefined;
+  MARKETPLACE: undefined;
   MORE: undefined;
 };
 

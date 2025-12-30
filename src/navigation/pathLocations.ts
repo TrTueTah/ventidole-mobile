@@ -6,16 +6,16 @@ const resetPasswordPath: keyof RootStackParamList = 'ResetPassword';
 const verifyEmailPath: keyof RootStackParamList = 'VerifyEmail';
 const authCompletePath: keyof RootStackParamList = 'AuthComplete';
 const termAndUsePath: keyof RootStackParamList = 'TermAndUse';
-const chooseIdolPath: keyof RootStackParamList = 'ChooseIdol';
+const chooseCommunityPath: keyof RootStackParamList = 'ChooseCommunity';
 const bottomTabPath: keyof RootStackParamList = 'Main';
 
 export {
+  authCompletePath,
+  bottomTabPath,
+  chooseCommunityPath,
+  resetPasswordPath,
   signInPath,
   signUpPath,
-  resetPasswordPath,
-  verifyEmailPath,
-  authCompletePath,
   termAndUsePath,
-  chooseIdolPath,
-  bottomTabPath,
+  verifyEmailPath,
 };

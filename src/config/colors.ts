@@ -1,6 +1,7 @@
 export const AppColors = {
   primary: '#08cbc9',
   secondary: '#0cf4b4',
+  logoColor: '#0E0E0E',
   primaryForeground: '#0E0E0E',
   secondaryForeground: '#FFFFFF',
   foreground: '#fafafa',
@@ -17,13 +18,14 @@ export const AppColors = {
   neutrals600: '#4d4d4d',
   neutrals700: '#414240',
   neutrals800: '#1d1d1d',
-  neutrals900: '#1c1c1c', 
+  neutrals900: '#1c1c1c',
   neutrals1000: '#111111',
 };
 
 export const AppColorsLight: typeof AppColors = {
   primary: '#08cbc9',
   secondary: '#0cf4b4',
+  logoColor: '#0cf4b4',
   primaryForeground: '#111111',
   secondaryForeground: '#FFFFFF',
   foreground: '#1a1a1a',
@@ -43,4 +45,3 @@ export const AppColorsLight: typeof AppColors = {
   neutrals900: '#f2f2f2',
   neutrals1000: '#f5f5f5',
 };
-

@@ -640,6 +640,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/user/community/bulk-follow": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CommunityController_bulkFollowCommunities_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/user/community/{id}/leave": {
         parameters: {
             query?: never;
@@ -1081,6 +1097,22 @@ export interface paths {
         patch: operations["AdminOrderController_updateOrder_v1"];
         trace?: never;
     };
+    "/v1/admin/order/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminOrderController_changeOrderStatus_v1"];
+        trace?: never;
+    };
     "/v1/admin/chat/community-channel": {
         parameters: {
             query?: never;
@@ -1303,6 +1335,11 @@ export interface components {
              * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
              */
             refreshToken: string;
+            /**
+             * @description Whether user has chosen their communities
+             * @example false
+             */
+            isChooseCommunity: boolean;
         };
         VerificationCodeResponse: {
             /**
@@ -2194,6 +2231,17 @@ export interface components {
              * @example false
              */
             isNew: boolean;
+        };
+        BulkFollowCommunitiesDto: {
+            /**
+             * @description Array of community IDs to follow
+             * @example [
+             *       "cm123abc",
+             *       "cm456def",
+             *       "cm789ghi"
+             *     ]
+             */
+            communityIds: string[];
         };
         ChannelDto: {
             /**
@@ -3152,6 +3200,23 @@ export interface components {
              */
             avatarUrl?: Record<string, never>;
         };
+        ShopOwnerDto: {
+            /**
+             * @description User ID
+             * @example clxxxxxxx
+             */
+            id: string;
+            /**
+             * @description Username
+             * @example john_doe
+             */
+            username: string;
+            /**
+             * @description Avatar URL
+             * @example https://example.com/avatar.jpg
+             */
+            avatarUrl?: Record<string, never>;
+        };
         ShopDto: {
             /**
              * @description Shop ID
@@ -3175,6 +3240,13 @@ export interface components {
             avatarUrl?: Record<string, never>;
             /** @description Community information */
             community: components["schemas"]["ShopCommunityDto"];
+            /** @description Shop owner information */
+            owner?: components["schemas"]["ShopOwnerDto"];
+            /**
+             * @description Number of products in shop
+             * @example 42
+             */
+            productCount?: number;
             /**
              * @description Whether the shop is active
              * @example true
@@ -3357,7 +3429,7 @@ export interface components {
              *       "https://example.com/image2.jpg"
              *     ]
              */
-            mediaUrls?: Record<string, never>;
+            mediaUrls?: string[];
             /** @description Shop information */
             shop: components["schemas"]["AdminProductShopDto"];
             /** @description Product type information */
@@ -3635,15 +3707,22 @@ export interface components {
             totalAmount: number;
             /**
              * @description Order status
-             * @example pending
+             * @example PENDING_PAYMENT
              * @enum {string}
              */
             status: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
             /**
              * @description Payment method
-             * @example credit_card
+             * @example CREDIT
+             * @enum {string}
              */
-            paymentMethod: string;
+            paymentMethod: "CREDIT" | "COD";
+            /**
+             * @description Payment status from latest transaction
+             * @example PAID
+             * @enum {string}
+             */
+            paymentStatus?: "PENDING" | "PAID" | "FAILED" | "CANCELED" | "EXPIRED";
             /**
              * @description Paid at
              * @example 2023-01-01T00:00:00.000Z
@@ -3861,6 +3940,19 @@ export interface components {
              * @example true
              */
             isActive?: boolean;
+        };
+        ChangeOrderStatusDto: {
+            /**
+             * @description New order status
+             * @example CONFIRMED
+             * @enum {string}
+             */
+            status: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
+            /**
+             * @description Optional note about status change
+             * @example Order confirmed by admin
+             */
+            note?: string;
         };
         CreateCommunityChannelDto: {
             /**
@@ -6493,6 +6585,56 @@ export interface operations {
             };
         };
     };
+    CommunityController_bulkFollowCommunities_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BulkFollowCommunitiesDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
     CommunityController_leaveCommunity_v1: {
         parameters: {
             query?: never;
@@ -8682,9 +8824,11 @@ export interface operations {
                 /** @description Filter by user ID */
                 userId?: string;
                 /** @description Filter by order status */
-                status?: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
+                orderStatus?: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
+                /** @description Filter by payment status */
+                paymentStatus?: "PENDING" | "PAID" | "FAILED" | "CANCELED" | "EXPIRED";
                 /** @description Filter by payment method */
-                paymentMethod?: string;
+                paymentMethod?: "CREDIT" | "COD";
                 /** @description Filter by active status */
                 isActive?: string;
                 /** @description Sort by field */
@@ -8944,6 +9088,55 @@ export interface operations {
             };
         };
     };
+    AdminOrderController_changeOrderStatus_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeOrderStatusDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["OrderDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
     AdminChatController_createCommunityChannel_v1: {
         parameters: {
             query?: never;
@@ -9100,7 +9293,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
+            /** @description Successful paginated response */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -9117,8 +9310,31 @@ export interface operations {
                          * @example OK
                          */
                         message: string;
-                        /** @description Response data array */
-                        data?: components["schemas"]["OrderListDto"][];
+                        /** @description Array of data items */
+                        data: components["schemas"]["OrderListDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
                         /**
                          * @description Error information (null on success)
                          * @example null

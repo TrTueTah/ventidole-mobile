@@ -1,5 +1,10 @@
 {
   "HOME": "Home",
+  "CHAT": "Chat",
+  "MARKETPLACE": "Marketplace",
+  "CHAT_SCREEN": "Chat Screen",
+  "MARKETPLACE_SCREEN": "Marketplace Screen",
+  "COMING_SOON": "Coming soon...",
   "WELCOME": "Welcome to React Native Rapid Boilerplate",
   "COUNT": "Count {{count}}",
   "APPEARANCE": "Appearance",

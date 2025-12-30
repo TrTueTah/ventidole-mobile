@@ -1,5 +1,10 @@
 {
   "HOME": "Trang chủ",
+  "CHAT": "Trò chuyện",
+  "MARKETPLACE": "Cửa hàng",
+  "CHAT_SCREEN": "Màn hình trò chuyện",
+  "MARKETPLACE_SCREEN": "Màn hình cửa hàng",
+  "COMING_SOON": "Sắp ra mắt...",
   "WELCOME": "Chào mừng đến với React Native Rapid Boilerplate",
   "COUNT": "Đếm {{count}}",
   "APPEARANCE": "Giao diện",

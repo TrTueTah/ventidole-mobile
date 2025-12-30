@@ -7,14 +7,14 @@ import { useForm } from '@/hooks/useForm';
 import { getSignInSchema } from '@/validations/common';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  TouchableOpacity,
-  View,
-  ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { useLogin } from './hooks/useLogin';
 
@@ -23,7 +23,6 @@ export default function SignInScreen() {
   const { login, isLoading } = useLogin();
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
 
   const signInSchema = getSignInSchema();
   type SignInFormData = z.infer<typeof signInSchema>;
@@ -78,6 +77,9 @@ export default function SignInScreen() {
                 autoCapitalize="none"
                 autoComplete="email"
                 errorText={errors.email?.message}
+                leftIcon={
+                  <Icon name="Mail" className="w-5 h-5 text-foreground" />
+                }
               />
 
               <AppInput
@@ -88,6 +90,9 @@ export default function SignInScreen() {
                 autoCapitalize="none"
                 autoComplete="password"
                 errorText={errors.password?.message}
+                leftIcon={
+                  <Icon name="Lock" className="w-5 h-5 text-foreground" />
+                }
                 rightIcon={
                   <TouchableOpacity
                     onPress={() => setShowPassword(!showPassword)}

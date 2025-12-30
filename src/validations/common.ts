@@ -57,9 +57,6 @@ export const getSignUpSchema = () =>
         .string()
         .min(3, t('VALIDATION.USERNAME_MIN_LENGTH'))
         .max(50, t('VALIDATION.USERNAME_TOO_LONG')),
-      phoneNumber: z
-        .string()
-        .regex(/^[0-9]{10}$/, t('VALIDATION.PHONE_NUMBER_INVALID')),
       password: z.string().min(8, t('VALIDATION.PASSWORD_MIN_LENGTH')),
       confirmPassword: z.string(),
     })
@@ -79,6 +76,19 @@ export const getVerifyEmailSchema = () =>
 export const getResetPasswordSchema = () =>
   z
     .object({
+      password: z.string().min(8, t('VALIDATION.PASSWORD_MIN_LENGTH')),
+      confirmPassword: z.string(),
+    })
+    .refine(data => data.password === data.confirmPassword, {
+      message: t('VALIDATION.PASSWORDS_DONT_MATCH'),
+      path: ['confirmPassword'],
+    });
+
+// Reset Password with Email Schema (for API call)
+export const getResetPasswordWithEmailSchema = () =>
+  z
+    .object({
+      email: getEmailSchema(),
       password: z.string().min(8, t('VALIDATION.PASSWORD_MIN_LENGTH')),
       confirmPassword: z.string(),
     })

@@ -7264,6 +7264,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lottie-react-native@npm:^7.3.4":
+  version: 7.3.4
+  resolution: "lottie-react-native@npm:7.3.4"
+  peerDependencies:
+    "@lottiefiles/dotlottie-react": ^0.13.5
+    react: "*"
+    react-native: ">=0.46"
+    react-native-windows: ">=0.63.x"
+  peerDependenciesMeta:
+    "@lottiefiles/dotlottie-react":
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: 10/c22cbac35b426d3d348448e7de3254b1825734b445d6dfee27dca03b8b231d9ba288dffb4890ae5a909314eedf2e2340545e1b8bbfd0c1b58e8e317b095b66c8
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^10.0.1, lru-cache@npm:^10.2.0":
   version: 10.4.3
   resolution: "lru-cache@npm:10.4.3"
@@ -10736,6 +10753,7 @@ __metadata:
     clsx: "npm:^2.1.1"
     dotenv: "npm:^17.2.3"
     i18next: "npm:^25.5.3"
+    lottie-react-native: "npm:^7.3.4"
     lucide-react-native: "npm:^0.544.0"
     metro-react-native-babel-transformer: "npm:^0.77.0"
     nativewind: "npm:^4.2.1"

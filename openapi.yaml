@@ -2272,6 +2272,52 @@ paths:
                   - message
       security: *ref_12
       tags: *ref_13
+  /v1/user/community/bulk-follow:
+    post:
+      operationId: CommunityController_bulkFollowCommunities_v1
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkFollowCommunitiesDto'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 200
+                    description: HTTP status code
+                  message:
+                    type: string
+                    example: OK
+                    description: Response message
+                  data:
+                    type: object
+                    nullable: true
+                    example: null
+                    description: No data returned
+                  error:
+                    type: object
+                    nullable: true
+                    example: null
+                    description: Error information (null on success)
+                  errorCode:
+                    type: string
+                    nullable: true
+                    example: null
+                    description: Error code (null on success)
+                required:
+                  - statusCode
+                  - message
+      security: *ref_12
+      tags: *ref_13
   /v1/user/community/{id}/leave:
     delete:
       operationId: CommunityController_leaveCommunity_v1
@@ -4643,12 +4689,12 @@ paths:
           schema:
             example: clxxxxxxx
             type: string
-        - name: status
+        - name: orderStatus
           required: false
           in: query
           description: Filter by order status
           schema:
-            example: pending
+            example: PENDING_PAYMENT
             type: string
             enum:
               - PENDING_PAYMENT
@@ -4658,13 +4704,29 @@ paths:
               - DELIVERED
               - CANCELED
               - EXPIRED
+        - name: paymentStatus
+          required: false
+          in: query
+          description: Filter by payment status
+          schema:
+            example: PAID
+            type: string
+            enum:
+              - PENDING
+              - PAID
+              - FAILED
+              - CANCELED
+              - EXPIRED
         - name: paymentMethod
           required: false
           in: query
           description: Filter by payment method
           schema:
-            example: credit_card
+            example: CREDIT
             type: string
+            enum:
+              - CREDIT
+              - COD
         - name: isActive
           required: false
           in: query
@@ -4937,6 +4999,55 @@ paths:
                   - message
       security: *ref_28
       tags: *ref_29
+  /v1/admin/order/{id}/status:
+    patch:
+      operationId: AdminOrderController_changeOrderStatus_v1
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrderStatusDto'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 200
+                    description: HTTP status code
+                  message:
+                    type: string
+                    example: OK
+                    description: Response message
+                  data:
+                    $ref: '#/components/schemas/OrderDto'
+                    description: Response data
+                  error:
+                    type: object
+                    nullable: true
+                    example: null
+                    description: Error information (null on success)
+                  errorCode:
+                    type: string
+                    nullable: true
+                    example: null
+                    description: Error code (null on success)
+                required:
+                  - statusCode
+                  - message
+      security: *ref_28
+      tags: *ref_29
   /v1/admin/chat/community-channel:
     post:
       operationId: AdminChatController_createCommunityChannel_v1
@@ -5119,7 +5230,7 @@ paths:
               - EXPIRED
       responses:
         '200':
-          description: Successful Response
+          description: Successful paginated response
           content:
             application/json:
               schema:
@@ -5137,7 +5248,32 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/OrderListDto'
-                    description: Response data array
+                    description: Array of data items
+                  paging:
+                    type: object
+                    description: Pagination metadata
+                    properties:
+                      total:
+                        type: number
+                        example: 100
+                        description: Total number of items
+                      page:
+                        type: number
+                        example: 1
+                        description: Current page number
+                      limit:
+                        type: number
+                        example: 10
+                        description: Items per page
+                      totalPages:
+                        type: number
+                        example: 10
+                        description: Total number of pages
+                    required:
+                      - total
+                      - page
+                      - limit
+                      - totalPages
                   error:
                     type: object
                     nullable: true
@@ -5151,6 +5287,8 @@ paths:
                 required:
                   - statusCode
                   - message
+                  - data
+                  - paging
       security: *ref_30
       summary: Get user orders
       tags: *ref_31
@@ -5558,11 +5696,16 @@ components:
           type: string
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
           description: JWT refresh token
+        isChooseCommunity:
+          type: boolean
+          example: false
+          description: Whether user has chosen their communities
       required:
         - id
         - role
         - accessToken
         - refreshToken
+        - isChooseCommunity
     VerificationCodeResponse:
       type: object
       properties:
@@ -6535,6 +6678,20 @@ components:
         - updatedAt
         - totalMember
         - isNew
+    BulkFollowCommunitiesDto:
+      type: object
+      properties:
+        communityIds:
+          description: Array of community IDs to follow
+          example:
+            - cm123abc
+            - cm456def
+            - cm789ghi
+          type: array
+          items:
+            type: string
+      required:
+        - communityIds
     ChannelDto:
       type: object
       properties:
@@ -7595,6 +7752,24 @@ components:
       required:
         - id
         - name
+    ShopOwnerDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: clxxxxxxx
+          description: User ID
+        username:
+          type: string
+          example: john_doe
+          description: Username
+        avatarUrl:
+          type: object
+          example: https://example.com/avatar.jpg
+          description: Avatar URL
+      required:
+        - id
+        - username
     ShopDto:
       type: object
       properties:
@@ -7618,6 +7793,14 @@ components:
           description: Community information
           allOf:
             - $ref: '#/components/schemas/ShopCommunityDto'
+        owner:
+          description: Shop owner information
+          allOf:
+            - $ref: '#/components/schemas/ShopOwnerDto'
+        productCount:
+          type: number
+          example: 42
+          description: Number of products in shop
         isActive:
           type: boolean
           example: true
@@ -7795,11 +7978,13 @@ components:
           example: 100
           description: Stock quantity
         mediaUrls:
-          type: object
           example:
             - https://example.com/image1.jpg
             - https://example.com/image2.jpg
           description: Product media URLs
+          type: array
+          items:
+            type: string
         shop:
           description: Shop information
           allOf:
@@ -8095,7 +8280,7 @@ components:
           description: Total amount
         status:
           type: string
-          example: pending
+          example: PENDING_PAYMENT
           description: Order status
           enum:
             - PENDING_PAYMENT
@@ -8107,8 +8292,21 @@ components:
             - EXPIRED
         paymentMethod:
           type: string
-          example: credit_card
+          example: CREDIT
           description: Payment method
+          enum:
+            - CREDIT
+            - COD
+        paymentStatus:
+          type: string
+          example: PAID
+          description: Payment status from latest transaction
+          enum:
+            - PENDING
+            - PAID
+            - FAILED
+            - CANCELED
+            - EXPIRED
         paidAt:
           type: object
           example: '2023-01-01T00:00:00.000Z'
@@ -8366,6 +8564,27 @@ components:
           type: boolean
           example: true
           description: Whether the order is active
+    ChangeOrderStatusDto:
+      type: object
+      properties:
+        status:
+          type: string
+          example: CONFIRMED
+          description: New order status
+          enum:
+            - PENDING_PAYMENT
+            - CONFIRMED
+            - PAID
+            - SHIPPING
+            - DELIVERED
+            - CANCELED
+            - EXPIRED
+        note:
+          type: string
+          example: Order confirmed by admin
+          description: Optional note about status change
+      required:
+        - status
     CreateCommunityChannelDto:
       type: object
       properties:

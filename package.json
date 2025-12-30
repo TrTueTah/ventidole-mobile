@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "start": "ENV_FILE=.env. node scripts/generate-colors-css.js --watch & react-native start",
     "generate-translation": "node scripts/translator/index.js",
-    "generate-type": "npx openapi-tyspescript openapi.yaml -o src/schemas/openapi.d.ts"
+    "generate-type": "npx openapi-typescript openapi.yaml -o src/schemas/openapi.d.ts"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.2.6",
@@ -17,6 +17,7 @@
     "@tanstack/react-query": "^5.90.13",
     "class-variance-authority": "^0.7.1",
     "i18next": "^25.5.3",
+    "lottie-react-native": "^7.3.4",
     "lucide-react-native": "^0.544.0",
     "nativewind": "^4.2.1",
     "openapi-typescript": "^7.10.1",

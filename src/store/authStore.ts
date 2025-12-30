@@ -33,6 +33,7 @@ interface AuthState {
   accessToken: string;
   refreshToken: string;
   isLogin: boolean;
+  isChooseCommunity: boolean;
   isStorageReady: boolean;
 
   // === Actions ===
@@ -42,6 +43,7 @@ interface AuthState {
   setAccessToken: (token: string) => void;
   setRefreshToken: (token: string) => void;
   setIsLogin: (isLogin: boolean) => void;
+  setIsChooseCommunity: (isChooseCommunity: boolean) => void;
   logout: () => void;
 }
 
@@ -62,6 +64,7 @@ export const useAuthStore = create<AuthState>()(
       accessToken: '',
       refreshToken: '',
       isLogin: false,
+      isChooseCommunity: false,
       isStorageReady: false,
 
       // === Actions ===
@@ -80,12 +83,15 @@ export const useAuthStore = create<AuthState>()(
 
       setIsLogin: isLogin => set({ isLogin }),
 
+      setIsChooseCommunity: isChooseCommunity => set({ isChooseCommunity }),
+
       logout: () =>
         set(state => ({
           userMetadata: { ...initialUserMetadata },
           accessToken: '',
           refreshToken: '',
           isLogin: false,
+          isChooseCommunity: false,
           isStorageReady: state.isStorageReady, // giữ nguyên flag này
         })),
     }),
@@ -98,6 +104,7 @@ export const useAuthStore = create<AuthState>()(
         userMetadata: state.userMetadata,
         userPhoneNumber: state.userPhoneNumber,
         isLogin: state.isLogin,
+        isChooseCommunity: state.isChooseCommunity,
       }),
       onRehydrateStorage: () => (state, error) => {
         if (error) {

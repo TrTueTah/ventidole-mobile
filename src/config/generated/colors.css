@@ -3,6 +3,7 @@
   /* Light theme colors */
   --color-primary: 8 203 201; /* #08cbc9 */
   --color-secondary: 12 244 180; /* #0cf4b4 */
+  --color-logo-color: 12 244 180; /* #0cf4b4 */
   --color-primary-foreground: 17 17 17; /* #111111 */
   --color-secondary-foreground: 255 255 255; /* #ffffff */
   --color-foreground: 26 26 26; /* #1a1a1a */
@@ -27,6 +28,7 @@
   /* Dark theme colors */
   --color-primary: 8 203 201; /* #08cbc9 */
   --color-secondary: 12 244 180; /* #0cf4b4 */
+  --color-logo-color: 14 14 14; /* #0e0e0e */
   --color-primary-foreground: 14 14 14; /* #0e0e0e */
   --color-secondary-foreground: 255 255 255; /* #ffffff */
   --color-foreground: 250 250 250; /* #fafafa */
