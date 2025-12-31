@@ -9,12 +9,14 @@ const termAndUsePath: keyof RootStackParamList = 'TermAndUse';
 const chooseCommunityPath: keyof RootStackParamList = 'ChooseCommunity';
 const bottomTabPath: keyof RootStackParamList = 'Main';
 const homePath: keyof RootStackParamList = 'Home';
+const postStackPath: keyof RootStackParamList = 'PostStack';
 
 export {
   authCompletePath,
   bottomTabPath,
   chooseCommunityPath,
   homePath,
+  postStackPath,
   resetPasswordPath,
   signInPath,
   signUpPath,

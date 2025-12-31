@@ -1,13 +1,18 @@
-import { icons } from 'lucide-react-native'
-import { cssInterop } from 'nativewind'
-import { memo, useMemo } from 'react'
+import { icons } from 'lucide-react-native';
+import { cssInterop } from 'nativewind';
+import { memo, useMemo } from 'react';
 
-type IconName = keyof typeof icons
-type IconProps = { name: IconName; className?: string }
+type IconName = keyof typeof icons;
+type IconProps = { name: IconName; className?: string };
 
 const Icon: React.FC<IconProps> = memo(({ name, className }) => {
   const CustomIcon = useMemo(() => {
-    const Icon = icons[name]
+    const Icon = icons[name];
+
+    if (!Icon) {
+      console.warn(`Icon "${name}" not found in lucide-react-native`);
+      return null;
+    }
 
     return cssInterop(Icon, {
       className: {
@@ -18,10 +23,12 @@ const Icon: React.FC<IconProps> = memo(({ name, className }) => {
           height: true,
         },
       },
-    })
-  }, [name])
+    });
+  }, [name]);
 
-  return <CustomIcon className={className} />
-})
+  if (!CustomIcon) return null;
 
-export default Icon
+  return <CustomIcon className={className} />;
+});
+
+export default Icon;

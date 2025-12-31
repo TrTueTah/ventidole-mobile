@@ -3,6 +3,7 @@ import PostCardSkeleton from '@/components/card/post-card/PostCardSkeleton';
 import { AppText } from '@/components/ui';
 import { useColors } from '@/hooks/useColors';
 import { components } from '@/schemas/openapi';
+import { useNavigation } from '@react-navigation/native';
 import { useCallback, useRef } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
@@ -25,6 +26,7 @@ const HomeScreen = () => {
   });
 
   const colors = useColors();
+  const navigation = useNavigation();
   const scrollY = useSharedValue(0);
   const lastScrollY = useRef(0);
   const headerVisible = useSharedValue(true);
@@ -105,18 +107,25 @@ const HomeScreen = () => {
             {(isLoadingPosts || isRefreshingPosts) && renderLoadingPost()}
           </View>
         }
-        renderItem={({ item }) => <PostCard post={item} />}
+        renderItem={({ item }) => (
+          <PostCard
+            post={item}
+            onClick={() =>
+              navigation.navigate('PostStack', { postId: item.id })
+            }
+          />
+        )}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
         ListFooterComponent={renderFooter}
         ListEmptyComponent={!isLoadingPosts ? renderEmptyState() : null}
+        bounces={!isRefreshingPosts}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshingPosts}
             onRefresh={refreshPosts}
             tintColor={colors.primary}
             colors={[colors.primary]}
-            progressBackgroundColor={colors.background}
           />
         }
       />

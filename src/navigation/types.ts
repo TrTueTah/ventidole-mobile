@@ -27,6 +27,7 @@ export type RootStackParamList = {
   TermAndUse: undefined;
   ChooseCommunity: undefined;
   Home: undefined;
+  PostStack: { postId: string; communityId?: string };
 };
 
 // Main Tab Navigator

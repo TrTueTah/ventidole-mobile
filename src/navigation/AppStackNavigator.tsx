@@ -1,7 +1,8 @@
 import SettingsScreen from '@/screens/SettingsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import PostStackNavigator from './app-stack/PostStackNavigator';
 import BottomTabNavigator from './BottomTabNavigator';
-import { bottomTabPath } from './pathLocations';
+import { bottomTabPath, postStackPath } from './pathLocations';
 import { RootStackParamList } from './types';
 
 const AppStack = createNativeStackNavigator<RootStackParamList>();
@@ -18,12 +19,12 @@ const AppStackNavigator = () => {
           name={bottomTabPath}
           component={BottomTabNavigator}
         />
-        {/* <AppStack.Screen
+        <AppStack.Screen
           key={postStackPath}
           name={postStackPath}
-          component={PostStackScreen}
+          component={PostStackNavigator}
         />
-        <AppStack.Screen
+        {/* <AppStack.Screen
           key={communityStackPath}
           name={communityStackPath}
           component={CommunityStackScreen}

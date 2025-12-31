@@ -14,7 +14,7 @@ interface AppInputProps extends TextInputProps {
   label?: string;
   helperText?: string;
   errorText?: string;
-  variant?: 'default' | 'textarea';
+  variant?: 'default' | 'textarea' | 'comment';
   size?: 'sm' | 'md' | 'lg';
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -30,6 +30,7 @@ const inputVariants = cva('border rounded-lg font-sans-medium bg-background', {
     variant: {
       default: 'text-foreground',
       textarea: 'min-h-20 text-top text-foreground',
+      comment: 'text-foreground',
     },
     size: {
       sm: 'px-3 py-2 text-sm',
@@ -175,7 +176,7 @@ const AppInput = forwardRef<TextInput, AppInputProps>(
           <TextInput
             ref={ref}
             {...props}
-            multiline={variant === 'textarea'}
+            multiline={variant === 'textarea' || variant === 'comment'}
             textAlignVertical={variant === 'textarea' ? 'top' : 'center'}
             onFocus={handleFocus}
             placeholderTextColor={colors.neutrals600}
