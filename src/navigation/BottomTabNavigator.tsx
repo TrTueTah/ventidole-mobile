@@ -1,10 +1,10 @@
 import CustomTabBar from '@/navigation/components/CustomTabBar.tsx';
 import ChatScreen from '@/screens/ChatScreen';
-import HomeScreen from '@/screens/home';
 import MarketplaceScreen from '@/screens/MarketplaceScreen';
 import MoreScreen from '@/screens/MoreScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
+import HomeStackNavigator from './app-stack/HomeStackNavigator';
 import { MainTabParamList } from './types';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -19,7 +19,7 @@ const BottomTabNavigator: React.FC = () => {
     >
       <Tab.Screen
         name="HOME"
-        component={HomeScreen}
+        component={HomeStackNavigator}
         options={{
           title: 'HOME',
         }}

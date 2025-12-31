@@ -12,6 +12,7 @@
   --color-warning: 255 229 193; /* #ffe5c1 */
   --color-error: 228 98 111; /* #e4626f */
   --color-border: 232 232 232; /* #e8e8e8 */
+  --color-verify: 42 171 227; /* #2aabe3 */
   --color-neutrals100: 108 108 108; /* #6c6c6c */
   --color-neutrals200: 128 128 128; /* #808080 */
   --color-neutrals300: 158 158 158; /* #9e9e9e */
@@ -28,7 +29,7 @@
   /* Dark theme colors */
   --color-primary: 8 203 201; /* #08cbc9 */
   --color-secondary: 12 244 180; /* #0cf4b4 */
-  --color-logo-color: 14 14 14; /* #0e0e0e */
+  --color-logo-color: 255 255 255; /* #ffffff */
   --color-primary-foreground: 14 14 14; /* #0e0e0e */
   --color-secondary-foreground: 255 255 255; /* #ffffff */
   --color-foreground: 250 250 250; /* #fafafa */
@@ -37,6 +38,7 @@
   --color-warning: 244 199 144; /* #f4c790 */
   --color-error: 228 98 111; /* #e4626f */
   --color-border: 77 77 77; /* #4d4d4d */
+  --color-verify: 42 171 227; /* #2aabe3 */
   --color-neutrals100: 148 148 148; /* #949494 */
   --color-neutrals200: 133 133 133; /* #858585 */
   --color-neutrals300: 122 122 122; /* #7a7a7a */

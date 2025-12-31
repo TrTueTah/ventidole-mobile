@@ -26,6 +26,7 @@ export type RootStackParamList = {
   AuthComplete: { type: 'register' | 'resetPassword' };
   TermAndUse: undefined;
   ChooseCommunity: undefined;
+  Home: undefined;
 };
 
 // Main Tab Navigator

@@ -1,3 +1,4 @@
+import { components } from '@/schemas/openapi';
 import { MMKV } from 'react-native-mmkv';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -27,8 +28,11 @@ interface UserMetadata {
   firstLogin: boolean;
 }
 
+type UserData = components['schemas']['UserDto'];
+
 interface AuthState {
   userMetadata: UserMetadata;
+  userData: UserData | null;
   userPhoneNumber: string;
   accessToken: string;
   refreshToken: string;
@@ -39,6 +43,7 @@ interface AuthState {
   // === Actions ===
   setIsStorageReady: (ready: boolean) => void;
   setUserMetadata: (metadata: Partial<UserMetadata>) => void;
+  setUserData: (userData: UserData | null) => void;
   setUserPhoneNumber: (phoneNumber: string) => void;
   setAccessToken: (token: string) => void;
   setRefreshToken: (token: string) => void;
@@ -60,6 +65,7 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       userMetadata: initialUserMetadata,
+      userData: null,
       userPhoneNumber: '',
       accessToken: '',
       refreshToken: '',
@@ -75,6 +81,8 @@ export const useAuthStore = create<AuthState>()(
           userMetadata: { ...state.userMetadata, ...metadata },
         })),
 
+      setUserData: userData => set({ userData }),
+
       setUserPhoneNumber: phoneNumber => set({ userPhoneNumber: phoneNumber }),
 
       setAccessToken: token => set({ accessToken: token ?? '' }),
@@ -88,6 +96,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () =>
         set(state => ({
           userMetadata: { ...initialUserMetadata },
+          userData: null,
           accessToken: '',
           refreshToken: '',
           isLogin: false,
@@ -102,6 +111,7 @@ export const useAuthStore = create<AuthState>()(
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
         userMetadata: state.userMetadata,
+        userData: state.userData,
         userPhoneNumber: state.userPhoneNumber,
         isLogin: state.isLogin,
         isChooseCommunity: state.isChooseCommunity,
