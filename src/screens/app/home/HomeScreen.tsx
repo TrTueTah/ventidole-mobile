@@ -3,8 +3,9 @@ import PostCardSkeleton from '@/components/card/post-card/PostCardSkeleton';
 import { AppText } from '@/components/ui';
 import { useColors } from '@/hooks/useColors';
 import { components } from '@/schemas/openapi';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
+import { useSharedValue } from 'react-native-reanimated';
 import CommunityList from './components/CommunityList';
 import HomeBanner from './components/HomeBanner';
 import HomeHeader from './components/HomeHeader';
@@ -24,6 +25,34 @@ const HomeScreen = () => {
   });
 
   const colors = useColors();
+  const scrollY = useSharedValue(0);
+  const lastScrollY = useRef(0);
+  const headerVisible = useSharedValue(true);
+
+  const handleScroll = useCallback(
+    (event: any) => {
+      const currentScrollY = event.nativeEvent.contentOffset.y;
+      const delta = currentScrollY - lastScrollY.current;
+
+      // Only hide/show header when scrolled past a threshold
+      if (currentScrollY > 50) {
+        if (delta > 5 && headerVisible.value) {
+          // Scrolling down - hide header
+          headerVisible.value = false;
+        } else if (delta < -5 && !headerVisible.value) {
+          // Scrolling up - show header
+          headerVisible.value = true;
+        }
+      } else {
+        // Always show header when near the top
+        headerVisible.value = true;
+      }
+
+      lastScrollY.current = currentScrollY;
+      scrollY.value = currentScrollY;
+    },
+    [headerVisible, scrollY],
+  );
 
   const handleEndReached = useCallback(() => {
     if (hasMorePosts && !isLoadingMorePosts) {
@@ -62,10 +91,13 @@ const HomeScreen = () => {
 
   return (
     <View className="flex-1 bg-background">
-      <HomeHeader />
+      <HomeHeader headerVisible={headerVisible} />
       <FlatList
         data={posts}
         keyExtractor={(item: components['schemas']['PostDto']) => item.id}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        contentContainerStyle={{ paddingTop: 108 }}
         ListHeaderComponent={
           <View>
             <CommunityList />
