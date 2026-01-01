@@ -26,8 +26,7 @@ const CommunityList = () => {
   });
 
   const handleCommunityPress = (communityId: string) => {
-    // Navigate to community detail - adjust route as needed
-    // navigation.navigate('CommunityStack', { communityId });
+    navigation.navigate('CommunityStack', { communityId });
   };
 
   return (

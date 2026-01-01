@@ -2,6 +2,7 @@ import { Icon } from '@/components/ui';
 import PostScreen from '@/screens/app/post/PostScreen';
 import PostActionsBottomSheet from '@/screens/app/post/components/PostActionsBottomSheet';
 import BottomSheet from '@gorhom/bottom-sheet';
+import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useRef } from 'react';
 import { TouchableOpacity } from 'react-native';
@@ -13,6 +14,7 @@ const PostStackNavigator = ({ route }: { route: any }) => {
   const communityId = route?.params?.communityId;
   const postId = route?.params?.postId;
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const navigation = useNavigation();
 
   const handleOpenBottomSheet = () => {
     bottomSheetRef.current?.expand();
@@ -20,8 +22,9 @@ const PostStackNavigator = ({ route }: { route: any }) => {
 
   const handleGotoCommunity = () => {
     bottomSheetRef.current?.close();
-    // TODO: Navigate to community
-    console.log('Go to community:', communityId);
+    if (communityId) {
+      navigation.navigate('CommunityStack', { communityId });
+    }
   };
 
   const handleReport = () => {

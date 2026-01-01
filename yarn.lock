@@ -8894,6 +8894,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-image-crop-picker@npm:^0.51.1":
+  version: 0.51.1
+  resolution: "react-native-image-crop-picker@npm:0.51.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/7a78882931c26a28b4707b35b63fba01de62ad94241217f287caccee735b53bef89b93f30e21f20a6f0e6bc599f96a0bc7184c1905cda1413681d16f967d5234
+  languageName: node
+  linkType: hard
+
 "react-native-is-edge-to-edge@npm:^1.2.1":
   version: 1.2.1
   resolution: "react-native-is-edge-to-edge@npm:1.2.1"
@@ -8938,6 +8948,30 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/61c3d61db0bf8c311c99ae9ac6cf93071a2cf8771fc0e92af828938b50be7631834d608126182d13aa97ed059e202ffc31dbfe2d84cc760a21e65893dc6a7866
+  languageName: node
+  linkType: hard
+
+"react-native-pager-view@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "react-native-pager-view@npm:8.0.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/69164a56ae2d6ab7bdf4cacc637f59f73fe3859ad51a564be74e860f1e58ec7714646febdd7f2df9d7b890e1f4a489981c327a9653aa7dc4af7971f241b6faff
+  languageName: node
+  linkType: hard
+
+"react-native-permissions@npm:^5.4.4":
+  version: 5.4.4
+  resolution: "react-native-permissions@npm:5.4.4"
+  peerDependencies:
+    react: ">=18.1.0"
+    react-native: ">=0.70.0"
+    react-native-windows: ">=0.70.0"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: 10/9a31237a47ecdb01e33c25d3e926db6d8de90629d019c61b2e7127b9e83be544b77bc2bab49c46e295a8c667abbfde9c6efbba180d92c51e9f9a9dedba9d4ba7
   languageName: node
   linkType: hard
 
@@ -9023,6 +9057,29 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/03db4516aec2dfcdf406283bf6b0e18ea3f56cdf228c97f92d282128b1e39c3336424d46a1afec894ebc1c3681b16d2c35c03b08a8a5ee2314c124bdea7ae6e3
+  languageName: node
+  linkType: hard
+
+"react-native-system-navigation-bar@npm:^2.8.0":
+  version: 2.8.0
+  resolution: "react-native-system-navigation-bar@npm:2.8.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/97cfa15a186a57bd72f386da094fb9937cf061da4c17256d42f10d3e6f2d7d51cb411ff10ae962c796f4a569412406a2b1fac7b5dc8768eb9a8a1b3da931ed4e
+  languageName: node
+  linkType: hard
+
+"react-native-tab-view@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "react-native-tab-view@npm:4.2.2"
+  dependencies:
+    use-latest-callback: "npm:^0.2.4"
+  peerDependencies:
+    react: ">= 18.2.0"
+    react-native: "*"
+    react-native-pager-view: ">= 6.0.0"
+  checksum: 10/88a76ec86f6e5ea854aa9cb900823065517ab2db12cbc17a5a5b0f3726f74df246b854440de828a16d781f542d70da285e7d98861238c7ce4fbde459f65f9901
   languageName: node
   linkType: hard
 
@@ -10778,15 +10835,20 @@ __metadata:
     react-native: "npm:^0.80.1"
     react-native-dotenv: "npm:^3.4.11"
     react-native-gesture-handler: "npm:^2.28.0"
+    react-native-image-crop-picker: "npm:^0.51.1"
     react-native-linear-gradient: "npm:^2.8.3"
     react-native-localize: "npm:^3.5.2"
     react-native-mmkv: "npm:^3.3.3"
+    react-native-pager-view: "npm:^8.0.0"
+    react-native-permissions: "npm:^5.4.4"
     react-native-reanimated: "npm:^4.1.2"
     react-native-reanimated-carousel: "npm:^4.0.3"
     react-native-rename: "npm:^3.2.17"
     react-native-safe-area-context: "npm:5.4.0"
     react-native-screens: "npm:^4.16.0"
     react-native-svg: "npm:^15.13.0"
+    react-native-system-navigation-bar: "npm:^2.8.0"
+    react-native-tab-view: "npm:^4.2.2"
     react-native-url-polyfill: "npm:^3.0.0"
     react-native-worklets: "npm:^0.6.0"
     react-test-renderer: "npm:19.1.0"

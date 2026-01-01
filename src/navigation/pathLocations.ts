@@ -10,11 +10,13 @@ const chooseCommunityPath: keyof RootStackParamList = 'ChooseCommunity';
 const bottomTabPath: keyof RootStackParamList = 'Main';
 const homePath: keyof RootStackParamList = 'Home';
 const postStackPath: keyof RootStackParamList = 'PostStack';
+const communityStackPath: keyof RootStackParamList = 'CommunityStack';
 
 export {
   authCompletePath,
   bottomTabPath,
   chooseCommunityPath,
+  communityStackPath,
   homePath,
   postStackPath,
   resetPasswordPath,

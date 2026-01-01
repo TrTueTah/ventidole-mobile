@@ -111,7 +111,10 @@ const HomeScreen = () => {
           <PostCard
             post={item}
             onClick={() =>
-              navigation.navigate('PostStack', { postId: item.id })
+              navigation.navigate('PostStack', {
+                postId: item.id,
+                communityId: item.communityId,
+              })
             }
           />
         )}

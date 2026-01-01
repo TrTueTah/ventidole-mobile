@@ -4,5 +4,5 @@ import { useContext } from 'react';
 export const useLeaveCommunity = () => {
   const backendApi = useContext(BackendApiContext);
 
-  return backendApi.useMutation('post', '/v1/user/community/{id}/leave');
+  return backendApi.useMutation('delete', '/v1/user/community/{id}/leave');
 };

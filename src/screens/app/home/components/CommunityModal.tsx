@@ -247,7 +247,10 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
   const renderCommunityItem = ({ item }: { item: any }) => {
     const isLoadingThisItem =
       (isJoining && joinVariables?.params?.path?.id === item.id) ||
-      (isLeaving && leaveVariables?.params?.path?.id === item.id);
+      (isLeaving && 
+        leaveVariables?.params?.path && 
+        'id' in leaveVariables.params.path && 
+        leaveVariables.params.path.id === item.id);
 
     return (
       <View className="flex-row items-center px-4 py-4 border-b border-neutrals800">

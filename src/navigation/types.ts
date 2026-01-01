@@ -28,6 +28,7 @@ export type RootStackParamList = {
   ChooseCommunity: undefined;
   Home: undefined;
   PostStack: { postId: string; communityId?: string };
+  CommunityStack: { communityId: string };
 };
 
 // Main Tab Navigator

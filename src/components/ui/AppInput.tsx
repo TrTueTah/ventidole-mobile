@@ -155,7 +155,10 @@ const AppInput = forwardRef<TextInput, AppInputProps>(
           </Text>
         )}
 
-        <Animated.View style={animatedStyle} className="relative">
+        <Animated.View
+          style={animatedStyle}
+          className="relative overflow-hidden"
+        >
           {leftIcon && (
             <View className="absolute left-3 top-1/2 -translate-y-1/2 z-10">
               {leftIcon}
