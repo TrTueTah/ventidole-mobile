@@ -29,6 +29,14 @@ export type RootStackParamList = {
   Home: undefined;
   PostStack: { postId: string; communityId?: string };
   CommunityStack: { communityId: string };
+  Shop: undefined;
+  ShopDetail: { shopId: string; shopName: string };
+  ShopProduct: { productId: string; shopName: string };
+  Cart: undefined;
+  ConfirmOrder: undefined;
+  Payment: { orderId: string; paymentMethod: 'CREDIT' | 'COD' };
+  PaymentSuccess: { orderId: string };
+  PaymentFailure: { orderId: string };
 };
 
 // Main Tab Navigator

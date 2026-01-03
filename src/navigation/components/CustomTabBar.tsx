@@ -1,10 +1,10 @@
-import React from 'react';
-import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { useColors } from '@/hooks/useColors.ts';
-import { Home, Menu } from 'lucide-react-native';
 import { AppText } from '@/components/ui';
+import { useColors } from '@/hooks/useColors.ts';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { House, Menu, MessageCircleMore, Store } from 'lucide-react-native';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Dimensions, TouchableOpacity, View } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -17,11 +17,15 @@ interface TabIconProps {
 const TabIcon: React.FC<TabIconProps> = ({ name, color, size }) => {
   switch (name) {
     case 'HOME':
-      return <Home size={size} color={color} fill={color} />;
+      return <House size={size} color={color} />;
     case 'MORE':
-      return <Menu size={size} color={color} fill={color} />;
+      return <Menu size={size} color={color} />;
+    case 'CHAT':
+      return <MessageCircleMore size={size} color={color} />;
+    case 'MARKETPLACE':
+      return <Store size={size} color={color} />;
     default:
-      return <Home size={size} color={color} fill={color} />;
+      return <Store size={size} color={color} />;
   }
 };
 

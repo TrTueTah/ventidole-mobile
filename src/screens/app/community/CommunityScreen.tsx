@@ -14,6 +14,7 @@ import {
 import AboutTab from './components/AboutTab';
 import ArtistTab from './components/ArtistTab';
 import CommunityHeader from './components/CommunityHeader';
+import CommunitySkeleton from './components/CommunitySkeleton';
 import CreatePostModal, {
   CreatePostModalRef,
 } from './components/CreatePostModal';
@@ -60,11 +61,7 @@ const CommunityScreen = () => {
   }
 
   if (isLoading || !community) {
-    return (
-      <View className="flex-1 bg-background items-center justify-center">
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
+    return <CommunitySkeleton />;
   }
 
   const renderHeader = () => (

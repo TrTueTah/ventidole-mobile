@@ -35,7 +35,7 @@ const CommunityList = () => {
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 12, padding: 12 }}
+          contentContainerStyle={{ padding: 12 }}
           ListHeaderComponent={
             <View className="flex-row gap-3">
               {/* Add Community Button */}
