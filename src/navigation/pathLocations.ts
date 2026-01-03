@@ -16,6 +16,7 @@ const shopDetailPath: keyof RootStackParamList = 'ShopDetail';
 const shopProductPath: keyof RootStackParamList = 'ShopProduct';
 const cartPath: keyof RootStackParamList = 'Cart';
 const confirmOrderPath: keyof RootStackParamList = 'ConfirmOrder';
+const paymentStackPath: keyof RootStackParamList = 'PaymentStack';
 const paymentPath: keyof RootStackParamList = 'Payment';
 const paymentSuccessPath: keyof RootStackParamList = 'PaymentSuccess';
 const paymentFailurePath: keyof RootStackParamList = 'PaymentFailure';
@@ -29,6 +30,7 @@ export {
   homePath,
   paymentFailurePath,
   paymentPath,
+  paymentStackPath,
   paymentSuccessPath,
   postStackPath,
   resetPasswordPath,

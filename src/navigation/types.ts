@@ -29,6 +29,7 @@ export type RootStackParamList = {
   Home: undefined;
   PostStack: { postId: string; communityId?: string };
   CommunityStack: { communityId: string };
+  PaymentStack: { orderId: string; paymentMethod: 'CREDIT' | 'COD' };
   Shop: undefined;
   ShopDetail: { shopId: string; shopName: string };
   ShopProduct: { productId: string; shopName: string };

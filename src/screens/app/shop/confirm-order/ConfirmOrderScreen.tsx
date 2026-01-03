@@ -113,9 +113,9 @@ const ConfirmOrderScreen = () => {
   // Confirm order hook
   const { confirmOrderAsync, isLoading: isConfirming } = useConfirmOrder({
     onSuccess: order => {
-      // Navigate to payment screen
+      // Navigate to payment stack
       // @ts-ignore
-      navigation.navigate('Payment', {
+      navigation.navigate('PaymentStack', {
         orderId: order.orderId,
         paymentMethod: paymentMethod,
       });
@@ -209,11 +209,15 @@ const ConfirmOrderScreen = () => {
       }));
 
       // Confirm order
-      await confirmOrderAsync({
+      const result = await confirmOrderAsync({
         items: orderItems,
         paymentMethod: paymentMethod,
         shippingAddressId: selectedAddress.id || '',
       });
+
+      // Note: The orderId will be appended to these URLs by the backend
+      // For example: ventidole://payment/success/ORDER123
+      console.log('Order confirmed successfully:', result);
     } catch (error) {
       console.error('Error confirming order:', error);
     }

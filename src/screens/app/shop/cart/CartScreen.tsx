@@ -1,15 +1,12 @@
-import { AppText } from '@/components/ui';
+import { AppText, Icon } from '@/components/ui';
 import { useColors } from '@/hooks/useColors';
 import { useCreateAddress } from '@/hooks/useCreateAddress';
 import { useGetAddresses } from '@/hooks/useGetAddresses';
 import { useUpdateAddress } from '@/hooks/useUpdateAddress';
 import { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  View,
-} from 'react-native';
+import { Pressable, View } from 'react-native';
 import AddAddressModal, { ShippingAddress } from './components/AddAddressModal';
+import CartItemSkeleton from './components/CartItemSkeleton';
 import PickupTab from './components/PickupTab';
 import SelectAddressModal from './components/SelectAddressModal';
 import ShippingTab from './components/ShippingTab';
@@ -133,6 +130,38 @@ const CartScreen = () => {
   };
 
   const renderTabContent = () => {
+    // Show skeleton loading state
+    if (isLoading) {
+      return (
+        <View className="flex-1 bg-background">
+          {[1, 2, 3].map(index => (
+            <CartItemSkeleton key={index} />
+          ))}
+        </View>
+      );
+    }
+
+    // Show empty state
+    if (!cart || !cart.items || cart.items.length === 0) {
+      return (
+        <View className="flex-1 bg-background items-center justify-center px-6">
+          <View className="w-32 h-32 bg-neutrals900/5 rounded-full items-center justify-center mb-6">
+            <Icon name="ShoppingCart" className="w-16 h-16 text-neutrals500" />
+          </View>
+          <AppText
+            variant="heading3"
+            weight="bold"
+            className="text-center mb-2"
+          >
+            Your cart is empty
+          </AppText>
+          <AppText variant="body" className="text-neutrals500 text-center mb-6">
+            Add items to your cart to get started
+          </AppText>
+        </View>
+      );
+    }
+
     switch (activeTab) {
       case 'shipping':
         return (
@@ -150,15 +179,6 @@ const CartScreen = () => {
     }
   };
 
-  // Show loading state
-  if (isLoading) {
-    return (
-      <View className="flex-1 bg-background items-center justify-center">
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
   return (
     <View className="flex-1 bg-background">
       {/* Tab Navigation */}
@@ -175,7 +195,10 @@ const CartScreen = () => {
             variant="body"
             weight={activeTab === 'shipping' ? 'semibold' : 'regular'}
             style={{
-              color: activeTab === 'shipping' ? colors.foreground : colors.neutrals500,
+              color:
+                activeTab === 'shipping'
+                  ? colors.foreground
+                  : colors.neutrals500,
             }}
           >
             Shipping
@@ -193,7 +216,8 @@ const CartScreen = () => {
             variant="body"
             weight={activeTab === 'pickup' ? 'semibold' : 'regular'}
             style={{
-              color: activeTab === 'pickup' ? colors.foreground : colors.neutrals500,
+              color:
+                activeTab === 'pickup' ? colors.foreground : colors.neutrals500,
             }}
           >
             Pick up

@@ -1,6 +1,7 @@
 import InsetsHelper from '@/components/helpers/InsetsHelper.tsx';
 import { LanguageHelper } from '@/components/helpers/LanguageHelper.tsx';
 import BackendApiProvider from '@/components/providers/BackendApiProvider';
+import { AppText } from '@/components/ui';
 import { DialogProvider } from '@/components/ui/DialogProvider.tsx';
 import { ToastProvider } from '@/components/ui/ToastProvider.tsx';
 import '@/config/global.css';
@@ -12,8 +13,8 @@ import { useAppStore } from '@/store/appStore';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React from 'react';
-import { StatusBar, View } from 'react-native';
+import React, { useRef } from 'react';
+import { Linking, StatusBar, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -33,6 +34,34 @@ const queryClient = new QueryClient({
 const AppContent: React.FC = () => {
   const theme = useAppStore(state => state.theme);
   const colors = useColors();
+  const navigationRef = useRef<any>(null);
+
+  React.useEffect(() => {
+    console.log('Setting up deep link listeners...');
+
+    // Get initial URL when app is opened from a deep link
+    Linking.getInitialURL()
+      .then(url => {
+        console.log('getInitialURL result:', url);
+        if (url) {
+          console.log('Initial URL:', url);
+        }
+      })
+      .catch(err => {
+        console.error('Error getting initial URL:', err);
+      });
+
+    // Listen for deep links when app is already open
+    const subscription = Linking.addEventListener('url', event => {
+      console.log('Deep link event received:', event);
+      console.log('Deep link URL:', event.url);
+    });
+
+    return () => {
+      console.log('Removing deep link listener');
+      subscription.remove();
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -45,6 +74,37 @@ const AppContent: React.FC = () => {
               barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
             />
             <NavigationContainer
+              ref={navigationRef}
+              onReady={() => console.log('Navigation is ready')}
+              onStateChange={state =>
+                console.log(
+                  'Navigation state changed:',
+                  state?.routes?.[state.index]?.name,
+                )
+              }
+              linking={{
+                enabled: true,
+                prefixes: ['ventidole://', 'https://ventidole.com'],
+                config: {
+                  screens: {
+                    PaymentStack: {
+                      path: 'payment',
+                      screens: {
+                        PaymentSuccess: 'success/:orderId',
+                        PaymentFailure: 'failure/:orderId',
+                      },
+                    },
+                    Main: {
+                      path: '',
+                    },
+                  },
+                },
+              }}
+              fallback={
+                <View>
+                  <AppText>Loading...</AppText>
+                </View>
+              }
               theme={{
                 ...DefaultTheme,
                 dark: theme === 'dark',
