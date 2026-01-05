@@ -1,4 +1,4 @@
-import { RootStackParamList } from './types';
+import { ChatStackParamList, RootStackParamList } from './types';
 
 const signInPath: keyof RootStackParamList = 'SignIn';
 const signUpPath: keyof RootStackParamList = 'SignUp';
@@ -20,10 +20,14 @@ const paymentStackPath: keyof RootStackParamList = 'PaymentStack';
 const paymentPath: keyof RootStackParamList = 'Payment';
 const paymentSuccessPath: keyof RootStackParamList = 'PaymentSuccess';
 const paymentFailurePath: keyof RootStackParamList = 'PaymentFailure';
+const chatListPath: keyof ChatStackParamList = 'ChatList';
+const chatWindowPath: keyof ChatStackParamList = 'ChatWindow';
 export {
   authCompletePath,
   bottomTabPath,
   cartPath,
+  chatListPath,
+  chatWindowPath,
   chooseCommunityPath,
   communityStackPath,
   confirmOrderPath,

@@ -141,7 +141,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Generate Stream Chat authentication token */
+        /** Generate Stream Chat authentication token for current user */
         post: operations["StreamChatController_generateToken_v1"];
         delete?: never;
         options?: never;
@@ -166,7 +166,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/users/{userId}": {
+    "/v1/stream-chat/channels/community": {
         parameters: {
             query?: never;
             header?: never;
@@ -175,49 +175,38 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post?: never;
-        /** Delete user from Stream Chat */
-        delete: operations["StreamChatController_deleteUser_v1"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/stream-chat/channels": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create a new channel */
-        post: operations["StreamChatController_createChannel_v1"];
+        /**
+         * Create a community channel (ADMIN only)
+         * @description Creates a community channel and automatically adds all idols from the community with send permissions
+         */
+        post: operations["StreamChatController_createCommunityChannel_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/channels/{userId}": {
+    "/v1/stream-chat/channels/idol": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get all channels for a user */
-        get: operations["StreamChatController_getUserChannels_v1"];
+        get?: never;
         put?: never;
-        post?: never;
+        /**
+         * Create an idol channel (IDOL only)
+         * @description Creates an idol channel where the creator becomes owner. Members join as readonly by default
+         */
+        post: operations["StreamChatController_createIdolChannel_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/channels/{channelType}/{channelId}": {
+    "/v1/stream-chat/channels/{channelId}/members/{memberId}/grant-send-permission": {
         parameters: {
             query?: never;
             header?: never;
@@ -226,15 +215,18 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post?: never;
-        /** Delete a channel */
-        delete: operations["StreamChatController_deleteChannel_v1"];
+        /**
+         * Grant send message permission to a member
+         * @description For idol channels: only creator can grant. For community channels: any idol in the community can grant
+         */
+        post: operations["StreamChatController_grantSendPermission_v1"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/channels/{channelType}/{channelId}/members": {
+    "/v1/stream-chat/channels/{channelId}/members/{memberId}/revoke-send-permission": {
         parameters: {
             query?: never;
             header?: never;
@@ -243,27 +235,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Add members to a channel */
-        post: operations["StreamChatController_addMembers_v1"];
-        /** Remove members from a channel */
-        delete: operations["StreamChatController_removeMembers_v1"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/stream-chat/channels/{channelType}/{channelId}/messages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get channel messages */
-        get: operations["StreamChatController_getMessages_v1"];
-        put?: never;
-        /** Send a message to a channel */
-        post: operations["StreamChatController_sendMessage_v1"];
+        /**
+         * Revoke send message permission from a member
+         * @description For idol channels: only creator can revoke. For community channels: any idol in the community can revoke
+         */
+        post: operations["StreamChatController_revokeSendPermission_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -688,95 +664,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/user/chat/my-channels": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get channels owned by the current user (idol only) */
-        get: operations["ChatController_getMyChannels_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/chat/joined-channels": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get channels that the current user has joined */
-        get: operations["ChatController_getJoinedChannels_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/chat/channels": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Create a new channel (idol only)
-         * @description Creates a new chat channel. Only idols can create channels. Can be a personal channel or a community channel.
-         */
-        post: operations["ChatController_createChannel_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/chat/channels/{channelId}/messages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get messages from a specific channel */
-        get: operations["ChatController_getMessages_v1"];
-        put?: never;
-        /** Send a message to a channel */
-        post: operations["ChatController_sendMessage_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/chat/channels/{channelId}/read": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Mark channel as read */
-        post: operations["ChatController_markChannelAsRead_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/user/shop/following": {
         parameters: {
             query?: never;
@@ -1113,23 +1000,6 @@ export interface paths {
         patch: operations["AdminOrderController_changeOrderStatus_v1"];
         trace?: never;
     };
-    "/v1/admin/chat/community-channel": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create a chat channel for a community and add all idols as participants */
-        post: operations["AdminChatController_createCommunityChannel_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/orders/confirm": {
         parameters: {
             query?: never;
@@ -1311,7 +1181,7 @@ export interface components {
              * @description Error code (optional)
              * @enum {string}
              */
-            errorCode?: "validation_failed" | "unauthenticated" | "unauthorized" | "http_error" | "unknown_error" | "token_expired" | "invalid_token" | "not_any_recipient" | "send_mail_failed" | "consumer_not_found" | "consumer_failed" | "process_failed" | "otp_already_exist" | "otp_spam" | "otp_expired" | "otp_incorrect" | "invalid_decode_token" | "invalid_token_issuer" | "VerificationNotFound" | "VerificationSessionExpired" | "AccountNotFound" | "ExistedEmail" | "ExistedPhoneNumber" | "ExistedUsername" | "InvalidEmailOrPassword" | "InvalidTokenSecret" | "FileNotFound" | "FileTooLarge" | "InvalidFileType" | "InvalidFileName" | "EmailAlreadyExists" | "UsernameAlreadyExists" | "FanProfileNotFound" | "IdolProfileNotFound" | "ChatChannelNotFound" | "NotChannelParticipant" | "NotChannelAdmin" | "CannotSendToAnnouncementChannel" | "InternalServerError" | "IdolNotFound" | "PostNotFound" | "PostNotOwned" | "CommentNotFound" | "CommentNotOwned" | "CommentNotBelongToPost" | "CommunityNotFound" | "AlreadyJoinedCommunity" | "NotJoinedCommunity" | "ChatChannelRetrievalFailed" | "ChatChannelCreationFailed" | "ChatMessageRetrievalFailed" | "ChatMessageSendFailed" | "ChatChannelAccessDenied" | "InvalidChannelId" | "KnockTokenGenerationFailed" | "KnockNotificationSendFailed" | "KnockWorkflowTriggerFailed" | "KnockUserUpsertFailed" | "KnockPreferencesFetchFailed" | "KnockPreferencesUpdateFailed" | "KnockChannelDataUpdateFailed" | "KnockPushChannelNotConfigured" | "KnockFcmTokenRegistrationFailed" | "InvalidFcmToken" | "UserNotFound" | "OrderNotFound" | "OrderAccessDenied" | "OrderInvalidStatus" | "OrderCannotRetryPayment" | "OrderAlreadyPaid" | "OrderItemsEmpty" | "OrderProductInvalid" | "OrderProductUnavailable" | "OrderVariantNotFound" | "OrderInsufficientStock" | "PaymentTransactionNotFound" | "PaymentTransactionCreateFailed" | "PaymentWebhookSignatureInvalid" | "ResourceNotFound" | "UserNotFoundInRecommendationSystem" | "RecommendationServiceError";
+            errorCode?: "validation_failed" | "unauthenticated" | "unauthorized" | "http_error" | "unknown_error" | "token_expired" | "invalid_token" | "not_any_recipient" | "send_mail_failed" | "consumer_not_found" | "consumer_failed" | "process_failed" | "otp_already_exist" | "otp_spam" | "otp_expired" | "otp_incorrect" | "invalid_decode_token" | "invalid_token_issuer" | "VerificationNotFound" | "VerificationSessionExpired" | "AccountNotFound" | "ExistedEmail" | "ExistedPhoneNumber" | "ExistedUsername" | "InvalidEmailOrPassword" | "InvalidTokenSecret" | "FileNotFound" | "FileTooLarge" | "InvalidFileType" | "InvalidFileName" | "EmailAlreadyExists" | "UsernameAlreadyExists" | "FanProfileNotFound" | "IdolProfileNotFound" | "ChatChannelNotFound" | "NotChannelParticipant" | "NotChannelAdmin" | "CannotSendToAnnouncementChannel" | "InternalServerError" | "IdolNotFound" | "PostNotFound" | "PostNotOwned" | "CommentNotFound" | "CommentNotOwned" | "CommentNotBelongToPost" | "CommunityNotFound" | "AlreadyJoinedCommunity" | "NotJoinedCommunity" | "ChatChannelRetrievalFailed" | "ChatChannelCreationFailed" | "ChatMessageRetrievalFailed" | "ChatMessageSendFailed" | "ChatChannelAccessDenied" | "ChatChannelAlreadyJoined" | "ChatChannelNotJoined" | "ChatChannelOwnerCannotLeave" | "InvalidChannelId" | "KnockTokenGenerationFailed" | "KnockNotificationSendFailed" | "KnockWorkflowTriggerFailed" | "KnockUserUpsertFailed" | "KnockPreferencesFetchFailed" | "KnockPreferencesUpdateFailed" | "KnockChannelDataUpdateFailed" | "KnockPushChannelNotConfigured" | "KnockFcmTokenRegistrationFailed" | "InvalidFcmToken" | "UserNotFound" | "OrderNotFound" | "OrderAccessDenied" | "OrderInvalidStatus" | "OrderCannotRetryPayment" | "OrderAlreadyPaid" | "OrderItemsEmpty" | "OrderProductInvalid" | "OrderProductUnavailable" | "OrderVariantNotFound" | "OrderInsufficientStock" | "PaymentTransactionNotFound" | "PaymentTransactionCreateFailed" | "PaymentWebhookSignatureInvalid" | "ResourceNotFound" | "UserNotFoundInRecommendationSystem" | "RecommendationServiceError";
         };
         SignInResponse: {
             /**
@@ -1616,15 +1486,20 @@ export interface components {
              */
             role?: string;
         };
-        CreateChannelDto: {
+        CreateCommunityChannelDto: {
             /**
              * @description Channel name
-             * @example General Discussion
+             * @example BTS Community Chat
              */
             name: string;
             /**
+             * @description Community ID
+             * @example comm_123
+             */
+            communityId: string;
+            /**
              * @description Channel description
-             * @example A place for general discussion
+             * @example Official chat for BTS community
              */
             description?: string;
             /**
@@ -1632,52 +1507,23 @@ export interface components {
              * @example https://example.com/image.jpg
              */
             image?: string;
-            /**
-             * @description Channel type
-             * @default messaging
-             * @example messaging
-             */
-            type: string;
-            /**
-             * @description Community ID to associate with this channel
-             * @example cm123abc
-             */
-            communityId?: string;
-            /**
-             * @description Whether this is a community channel
-             * @default false
-             * @example false
-             */
-            isCommunityChannel: boolean;
         };
-        GenerateTokenDto: {
+        CreateIdolChannelDto: {
             /**
-             * @description User ID for token generation
-             * @example user_123
+             * @description Channel name
+             * @example JK Personal Chat
              */
-            userId: string;
-        };
-        ManageMembersDto: {
+            name: string;
             /**
-             * @description Array of user IDs to add/remove
-             * @example [
-             *       "user_1",
-             *       "user_2"
-             *     ]
+             * @description Channel description
+             * @example JK's personal fan chat
              */
-            memberIds: string[];
-        };
-        SendMessageDto: {
+            description?: string;
             /**
-             * @description Message text content
-             * @example Hello, how are you?
+             * @description Channel image URL
+             * @example https://example.com/image.jpg
              */
-            text: string;
-            /**
-             * @description Parent message ID (for threaded replies)
-             * @example msg_parent_123
-             */
-            parentId?: string;
+            image?: string;
         };
         UploadFileResponse: {
             /**
@@ -2242,124 +2088,6 @@ export interface components {
              *     ]
              */
             communityIds: string[];
-        };
-        ChannelDto: {
-            /**
-             * @description Channel ID (cid)
-             * @example messaging:channel-123
-             */
-            id: string;
-            /**
-             * @description Channel type
-             * @example messaging
-             */
-            type: string;
-            /**
-             * @description Channel name
-             * @example General Discussion
-             */
-            name?: string;
-            /**
-             * @description Channel image URL
-             * @example https://example.com/image.jpg
-             */
-            image?: string;
-            /**
-             * @description Channel member IDs
-             * @example [
-             *       "user_1",
-             *       "user_2"
-             *     ]
-             */
-            memberIds: string[];
-            /**
-             * @description Number of members
-             * @example 2
-             */
-            memberCount: number;
-            /**
-             * @description Last message in the channel
-             * @example {
-             *       "id": "msg_123",
-             *       "text": "Hello!",
-             *       "createdAt": "2024-01-01T00:00:00.000Z"
-             *     }
-             */
-            lastMessage?: Record<string, never>;
-            /**
-             * @description Unread message count
-             * @example 0
-             */
-            unreadCount: number;
-            /**
-             * @description Channel creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * @description Channel last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        MessageDto: {
-            /**
-             * @description Message ID
-             * @example msg_123
-             */
-            id: string;
-            /**
-             * @description Message text content
-             * @example Hello, how are you?
-             */
-            text: string;
-            /**
-             * @description Message sender information
-             * @example {
-             *       "id": "user_123",
-             *       "name": "John Doe",
-             *       "image": "https://example.com/avatar.jpg"
-             *     }
-             */
-            user: Record<string, never>;
-            /**
-             * @description Attached images
-             * @example [
-             *       "https://example.com/image1.jpg"
-             *     ]
-             */
-            attachments?: string[];
-            /**
-             * @description Message reactions
-             * @example {
-             *       "like": [
-             *         "user_1",
-             *         "user_2"
-             *       ]
-             *     }
-             */
-            reactions?: Record<string, never>;
-            /**
-             * @description Parent message ID (for replies)
-             * @example msg_parent_123
-             */
-            parentId?: string;
-            /**
-             * @description Message creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * @description Message last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        GetMessagesDto: {
-            /** @example 1 */
-            page?: number;
-            /** @example 20 */
-            limit?: number;
         };
         ShopProductDto: {
             /**
@@ -3954,23 +3682,6 @@ export interface components {
              */
             note?: string;
         };
-        CreateCommunityChannelDto: {
-            /**
-             * @description Community ID
-             * @example clxyz123abc
-             */
-            communityId: string;
-            /**
-             * @description Channel name
-             * @example Community General Chat
-             */
-            name: string;
-            /**
-             * @description Channel description
-             * @example A place for all community idols to chat
-             */
-            description?: string;
-        };
         OrderItemDto: {
             /**
              * @description Product ID
@@ -4713,11 +4424,7 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GenerateTokenDto"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {
@@ -4800,55 +4507,7 @@ export interface operations {
             };
         };
     };
-    StreamChatController_deleteUser_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                userId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    StreamChatController_createChannel_v1: {
+    StreamChatController_createCommunityChannel_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -4857,7 +4516,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateChannelDto"];
+                "application/json": components["schemas"]["CreateCommunityChannelDto"];
             };
         };
         responses: {
@@ -4895,113 +4554,16 @@ export interface operations {
             };
         };
     };
-    StreamChatController_getUserChannels_v1: {
+    StreamChatController_createIdolChannel_v1: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                userId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data array */
-                        data?: components["schemas"]["StreamChannelDto"][];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    StreamChatController_deleteChannel_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelType: string;
-                channelId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    StreamChatController_addMembers_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelType: string;
-                channelId: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ManageMembersDto"];
+                "application/json": components["schemas"]["CreateIdolChannelDto"];
             };
         };
         responses: {
@@ -5022,11 +4584,8 @@ export interface operations {
                          * @example OK
                          */
                         message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
+                        /** @description Response data */
+                        data?: components["schemas"]["StreamChannelDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -5042,68 +4601,13 @@ export interface operations {
             };
         };
     };
-    StreamChatController_removeMembers_v1: {
+    StreamChatController_grantSendPermission_v1: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                channelType: string;
                 channelId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ManageMembersDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    StreamChatController_getMessages_v1: {
-        parameters: {
-            query: {
-                limit: number;
-            };
-            header?: never;
-            path: {
-                channelType: string;
-                channelId: string;
+                memberId: string;
             };
             cookie?: never;
         };
@@ -5146,21 +4650,17 @@ export interface operations {
             };
         };
     };
-    StreamChatController_sendMessage_v1: {
+    StreamChatController_revokeSendPermission_v1: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                channelType: string;
                 channelId: string;
+                memberId: string;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SendMessageDto"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {
@@ -6713,307 +6213,6 @@ export interface operations {
                         message: string;
                         /** @description Response data */
                         data?: components["schemas"]["CommunityDetailDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ChatController_getMyChannels_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data array */
-                        data?: components["schemas"]["ChannelDto"][];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ChatController_getJoinedChannels_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data array */
-                        data?: components["schemas"]["ChannelDto"][];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ChatController_createChannel_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateChannelDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["ChannelDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ChatController_getMessages_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                channelId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["MessageDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ChatController_sendMessage_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SendMessageDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["MessageDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ChatController_markChannelAsRead_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -9122,56 +8321,6 @@ export interface operations {
                         message: string;
                         /** @description Response data */
                         data?: components["schemas"]["OrderDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminChatController_createCommunityChannel_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCommunityChannelDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
                         /**
                          * @description Error information (null on success)
                          * @example null

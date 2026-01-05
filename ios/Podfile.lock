@@ -80,6 +80,7 @@ PODS:
     - React-RCTText (= 0.80.1)
     - React-RCTVibration (= 0.80.1)
   - React-callinvoker (0.80.1)
+  - React-Codegen (0.1.0)
   - React-Core (0.80.1):
     - boost
     - DoubleConversion
@@ -1710,6 +1711,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - react-native-netinfo (11.4.1):
+    - React-Core
   - react-native-pager-view (8.0.0):
     - boost
     - DoubleConversion
@@ -2785,6 +2788,36 @@ PODS:
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
+  - stream-chat-react-native (8.12.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - SwiftUIIntrospect (1.3.0)
   - TOCropViewController (2.8.0)
   - Yoga (0.0.0)
@@ -2834,6 +2867,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -2877,11 +2911,13 @@ DEPENDENCIES:
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNWorklets (from `../node_modules/react-native-worklets`)
   - SocketRocket (~> 0.7.1)
+  - stream-chat-react-native (from `../node_modules/stream-chat-react-native`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - lottie-ios
+    - React-Codegen
     - SocketRocket
     - SwiftUIIntrospect
     - TOCropViewController
@@ -2974,6 +3010,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
@@ -3058,6 +3096,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   RNWorklets:
     :path: "../node_modules/react-native-worklets"
+  stream-chat-react-native:
+    :path: "../node_modules/stream-chat-react-native"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -3078,6 +3118,7 @@ SPEC CHECKSUMS:
   RCTTypeSafety: d877728097547d0a37786cc9130c43ad71739ac3
   React: 4b0b9cb962e694611e5e8a697c1b0300a2510c21
   React-callinvoker: 70f125c17c7132811a6b473946ac5e7ae93b5e57
+  React-Codegen: 4b8b4817cea7a54b83851d4c1f91f79aa73de30a
   React-Core: 7cbc3118df2334b2ef597d9a515938b02c82109f
   React-CoreModules: 7d8c14ecb889e7786a04637583b55b7d8f246baf
   React-cxxreact: f32be07cba236c2f20f4e05ca200577ba5358e78
@@ -3106,6 +3147,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 9a7c65078c6851397c1999068989e4fc239d0c80
   React-microtasksnativemodule: 4f1ef719ba6c7ebbd2d75346ffa2916f9b4771c9
   react-native-mmkv: d59bfa2de25ee4adf87acc7cb163102aa1de0266
+  react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
   react-native-pager-view: 2ec78aa929dd5990a8ebf35a89aa872bdae6a31f
   react-native-safe-area-context: 47c1782a327ca2affa9bec5a2f95534cbabb620a
   react-native-webview: fe1b2ebf06ca1ba26e22caf7228abce5d9de4ec9
@@ -3149,6 +3191,7 @@ SPEC CHECKSUMS:
   RNSVG: 70d577ac284cff74cb37b58da5f1690b0eeed271
   RNWorklets: 747cb8457fd3dc0665d5665cef88d5faba1911cb
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  stream-chat-react-native: ae403f89512e686229d88844dd23e9086b8132b8
   SwiftUIIntrospect: fee9aa07293ee280373a591e1824e8ddc869ba5d
   TOCropViewController: 797deaf39c90e6e9ddd848d88817f6b9a8a09888
   Yoga: daa1e4de4b971b977b23bc842aaa3e135324f1f3

@@ -40,10 +40,16 @@ export type RootStackParamList = {
   PaymentFailure: { orderId: string };
 };
 
+// Chat Stack Navigator
+export type ChatStackParamList = {
+  ChatList: undefined;
+  ChatWindow: { channelId: string };
+};
+
 // Main Tab Navigator
 export type MainTabParamList = {
   HOME: undefined;
-  CHAT: undefined;
+  CHAT: NavigatorScreenParams<ChatStackParamList>;
   MARKETPLACE: undefined;
   MORE: undefined;
 };
@@ -54,6 +60,9 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> =
 
 export type MainTabScreenProps<T extends keyof MainTabParamList> =
   NativeStackScreenProps<MainTabParamList, T>;
+
+export type ChatStackScreenProps<T extends keyof ChatStackParamList> =
+  NativeStackScreenProps<ChatStackParamList, T>;
 
 // Navigation prop types
 declare global {
