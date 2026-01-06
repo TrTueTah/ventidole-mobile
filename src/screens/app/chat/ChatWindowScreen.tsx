@@ -1,9 +1,17 @@
-import { AppText } from '@/components/ui';
+import { AppText, Icon } from '@/components/ui';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { ChatStackParamList } from '@/navigation/types';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Channel as StreamChannel } from 'stream-chat';
 import {
   Channel,
@@ -11,17 +19,45 @@ import {
   MessageList,
   useChatContext,
 } from 'stream-chat-react-native';
+import ChannelDetailModal, {
+  ChannelDetailModalRef,
+} from './components/ChannelDetailModal';
 
 type ChatWindowRouteProp = RouteProp<ChatStackParamList, 'ChatWindow'>;
+type ChatWindowNavigationProp = NativeStackNavigationProp<
+  ChatStackParamList,
+  'ChatWindow'
+>;
 
 const ChatWindowScreen = () => {
   const route = useRoute<ChatWindowRouteProp>();
+  const navigation = useNavigation<ChatWindowNavigationProp>();
   const { channelId } = route.params;
   const { client } = useChatContext();
+  const insets = useSafeAreaInsets();
   const { user } = useGetCurrentUser();
   const [channel, setChannel] = useState<StreamChannel | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const channelDetailModalRef = useRef<ChannelDetailModalRef>(null);
+  const currentUserIdRef = useRef<string | null>(null);
+
+  // Reset channel when user changes
+  useEffect(() => {
+    if (user?.id && currentUserIdRef.current !== user.id) {
+      console.log('[ChatWindowScreen] User changed, resetting channel...');
+      setChannel(null);
+      setIsLoading(true);
+      setError(null);
+      currentUserIdRef.current = user.id;
+    } else if (!user?.id && currentUserIdRef.current) {
+      console.log('[ChatWindowScreen] User logged out, clearing channel...');
+      setChannel(null);
+      setIsLoading(true);
+      setError(null);
+      currentUserIdRef.current = null;
+    }
+  }, [user?.id]);
 
   useEffect(() => {
     let isMounted = true;
@@ -122,6 +158,30 @@ const ChatWindowScreen = () => {
     };
   }, [client, channelId, user?.id]);
 
+  // Update header title and right button
+  useLayoutEffect(() => {
+    if (channel) {
+      const channelName =
+        (channel.data as any)?.name || channel.data?.name || 'Channel';
+
+      navigation.setOptions({
+        title: channelName,
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => channelDetailModalRef.current?.open(channel)}
+            style={{ padding: 8, marginRight: -8 }}
+          >
+            <Icon name="Info" className="w-6 h-6 text-foreground" />
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [channel, navigation]);
+
+  const handleChannelLeft = () => {
+    navigation.goBack();
+  };
+
   if (isLoading) {
     return (
       <View className="flex-1 bg-background items-center justify-center">
@@ -147,13 +207,42 @@ const ChatWindowScreen = () => {
     return null;
   }
 
+  // Check user's channel role to determine if they can send messages
+  const currentMember = channel.state?.members?.[user?.id || ''];
+  const channelRole = currentMember?.channel_role;
+  const canSendMessages =
+    channelRole === 'moderator_member' || channelRole === 'trusted_member';
+
   return (
-    <View className="flex-1 bg-background">
-      <Channel channel={channel}>
-        <MessageList />
-        <MessageInput />
-      </Channel>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{ flex: 1 }}
+    >
+      <View className="flex-1 bg-background mb-safe-offset-0">
+        <Channel channel={channel}>
+          <MessageList />
+          {canSendMessages ? (
+            <MessageInput />
+          ) : (
+            <View className="px-4 py-3 bg-muted/20 border-t border-neutrals900">
+              <AppText
+                variant="bodySmall"
+                color="muted"
+                className="text-center"
+              >
+                You can only view messages in this channel
+              </AppText>
+            </View>
+          )}
+        </Channel>
+
+        {/* Channel Detail Modal */}
+        <ChannelDetailModal
+          ref={channelDetailModalRef}
+          onChannelLeft={handleChannelLeft}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

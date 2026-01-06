@@ -2,7 +2,7 @@ import { Icon } from '@/components/ui';
 import { useChatChannels } from '@/hooks/useChatChannels';
 import { useColors } from '@/hooks/useColors';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
-import { ChatStackScreenProps } from '@/navigation/types';
+import { RootStackScreenProps } from '@/navigation/types';
 import { useCallback, useRef } from 'react';
 import { FlatList, RefreshControl, TouchableOpacity, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
@@ -18,7 +18,7 @@ import SearchChannelModal, {
   SearchChannelModalRef,
 } from './components/SearchChannelModal';
 
-const ChatListScreen = ({ navigation }: ChatStackScreenProps<'ChatList'>) => {
+const ChatListScreen = ({ navigation }: RootStackScreenProps<'Main'>) => {
   const colors = useColors();
   const { channels, isLoading, isFetching, refetch } = useChatChannels();
   const { user } = useGetCurrentUser();
@@ -63,7 +63,10 @@ const ChatListScreen = ({ navigation }: ChatStackScreenProps<'ChatList'>) => {
   const onSelectChannel = (channel: Channel) => {
     const channelId = channel.id || channel.cid?.replace('messaging:', '');
     if (channelId) {
-      navigation.navigate('ChatWindow', { channelId });
+      navigation.navigate('ChatStack', {
+        screen: 'ChatWindow',
+        params: { channelId },
+      });
     }
   };
 

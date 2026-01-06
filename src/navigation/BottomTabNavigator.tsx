@@ -1,8 +1,8 @@
 import CustomTabBar from '@/navigation/components/CustomTabBar.tsx';
 import MoreScreen from '@/screens/MoreScreen';
+import ChatListScreen from '@/screens/app/chat/ChatListScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import ChatStackNavigator from './app-stack/ChatStackNavigator';
 import HomeStackNavigator from './app-stack/HomeStackNavigator';
 import ShopStackNavigator from './app-stack/ShopStackNavigator';
 import { MainTabParamList } from './types';
@@ -26,7 +26,7 @@ const BottomTabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="CHAT"
-        component={ChatStackNavigator}
+        component={ChatListScreen}
         options={{
           title: 'CHAT',
         }}

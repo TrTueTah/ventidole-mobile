@@ -11,6 +11,7 @@ const bottomTabPath: keyof RootStackParamList = 'Main';
 const homePath: keyof RootStackParamList = 'Home';
 const postStackPath: keyof RootStackParamList = 'PostStack';
 const communityStackPath: keyof RootStackParamList = 'CommunityStack';
+const chatStackPath: keyof RootStackParamList = 'ChatStack';
 const shopPath: keyof RootStackParamList = 'Shop';
 const shopDetailPath: keyof RootStackParamList = 'ShopDetail';
 const shopProductPath: keyof RootStackParamList = 'ShopProduct';
@@ -27,6 +28,7 @@ export {
   bottomTabPath,
   cartPath,
   chatListPath,
+  chatStackPath,
   chatWindowPath,
   chooseCommunityPath,
   communityStackPath,

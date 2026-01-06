@@ -29,6 +29,7 @@ export type RootStackParamList = {
   Home: undefined;
   PostStack: { postId: string; communityId?: string };
   CommunityStack: { communityId: string };
+  ChatStack: NavigatorScreenParams<ChatStackParamList>;
   PaymentStack: { orderId: string; paymentMethod: 'CREDIT' | 'COD' };
   Shop: undefined;
   ShopDetail: { shopId: string; shopName: string };
@@ -49,7 +50,7 @@ export type ChatStackParamList = {
 // Main Tab Navigator
 export type MainTabParamList = {
   HOME: undefined;
-  CHAT: NavigatorScreenParams<ChatStackParamList>;
+  CHAT: undefined;
   MARKETPLACE: undefined;
   MORE: undefined;
 };

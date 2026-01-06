@@ -67,6 +67,18 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
     if (!client || !user?.id || !client.userID) {
       console.log(
         '[ChatChannelsProvider] Cannot fetch: client or user not ready',
+        { client: !!client, userId: user?.id, clientUserID: client?.userID },
+      );
+      setIsLoading(false);
+      setIsFetching(false);
+      return;
+    }
+
+    // CRITICAL: Verify that client.userID matches current user.id
+    if (client.userID !== user.id) {
+      console.log(
+        '[ChatChannelsProvider] Client user mismatch! Waiting for client to reconnect...',
+        { clientUserID: client.userID, expectedUserId: user.id },
       );
       setIsLoading(false);
       setIsFetching(false);
@@ -77,6 +89,7 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
       setIsFetching(true);
       console.log('[ChatChannelsProvider] Fetching channels from GetStream...');
       console.log('[ChatChannelsProvider] User ID:', user.id);
+      console.log('[ChatChannelsProvider] Client User ID:', client.userID);
 
       // Query channels where user is a member
       const filter = { members: { $in: [user.id] } };
@@ -133,6 +146,8 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
       client?.userID,
       'hasBootstrapped:',
       hasBootstrappedRef.current,
+      'currentUserIdRef:',
+      currentUserIdRef.current,
     );
 
     if (!client || !user?.id || !client.userID) {
@@ -140,6 +155,15 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
       console.log('[ChatChannelsProvider] - client:', !!client);
       console.log('[ChatChannelsProvider] - user.id:', user?.id);
       console.log('[ChatChannelsProvider] - client.userID:', client?.userID);
+      return;
+    }
+
+    // CRITICAL: Verify client.userID matches current user.id
+    if (client.userID !== user.id) {
+      console.log(
+        '[ChatChannelsProvider] User ID mismatch! Waiting for client to reconnect with new user...',
+        { clientUserID: client.userID, expectedUserId: user.id },
+      );
       return;
     }
 
@@ -153,7 +177,7 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
         '[ChatChannelsProvider] Already bootstrapped, skipping fetch',
       );
     }
-  }, [client, user?.id, client?.userID]);
+  }, [client, user?.id, client?.userID, fetchChannelsFromStream]);
 
   // Real-time event handlers (GetStream events only - no queries)
   useEffect(() => {
@@ -170,41 +194,64 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
       channelId: string,
       moveToTop: boolean = false,
     ) => {
-      // Find existing channel or create new one
-      const cleanId = channelId.replace('messaging:', '');
-      const channel = client.channel('messaging', cleanId);
+      console.log('[ChatChannelsProvider] updateChannelInState called:', {
+        channelId,
+        moveToTop,
+      });
 
-      // Query to get latest state
-      try {
-        await channel.query({
-          messages: { limit: 1 },
-          state: true,
-        });
-      } catch (error) {
-        console.error('[ChatChannelsProvider] Error querying channel:', error);
-        return;
-      }
+      // Extract clean ID from cid format (messaging:xxx -> xxx)
+      const cleanId = channelId.replace('messaging:', '');
 
       setChannels(prev => {
-        const channelIndex = prev.findIndex(
-          ch => (ch.id || ch.cid) === channelId,
+        console.log(
+          '[ChatChannelsProvider] Current channels count:',
+          prev.length,
+        );
+
+        // Find channel by comparing both id and cid
+        const channelIndex = prev.findIndex(ch => {
+          const chId = ch.id || ch.cid?.replace('messaging:', '');
+          const chCid = ch.cid;
+          return (
+            chId === cleanId ||
+            chCid === channelId ||
+            ch.id === channelId ||
+            ch.cid === channelId
+          );
+        });
+
+        console.log(
+          '[ChatChannelsProvider] Channel found at index:',
+          channelIndex,
         );
 
         if (channelIndex === -1) {
-          // New channel - add to top
-          return [channel, ...prev];
+          console.log(
+            '[ChatChannelsProvider] Channel not in list, fetching all channels...',
+          );
+          // Channel not in list - refetch to get it
+          fetchChannelsFromStream();
+          return prev;
         }
+
+        // Get the existing channel from the list
+        const existingChannel = prev[channelIndex];
 
         // Create new array to trigger re-render
         const newChannels = [...prev];
 
         if (moveToTop) {
           // Move to top (for new messages)
+          console.log('[ChatChannelsProvider] Moving channel to top:', cleanId);
           newChannels.splice(channelIndex, 1);
-          newChannels.unshift(channel);
+          newChannels.unshift(existingChannel);
         } else {
           // Update in place (for read events)
-          newChannels[channelIndex] = channel;
+          console.log(
+            '[ChatChannelsProvider] Updating channel in place:',
+            cleanId,
+          );
+          newChannels[channelIndex] = existingChannel;
         }
 
         return newChannels;
@@ -214,9 +261,14 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
     // Handle new message - move channel to top
     const handleMessageNew = async (event: any) => {
       const channelId = event?.cid || event?.channel?.cid || event?.channel?.id;
+      console.log('[ChatChannelsProvider] message.new event received:', {
+        channelId,
+        eventCid: event?.cid,
+        channelCid: event?.channel?.cid,
+        channelId: event?.channel?.id,
+      });
       if (channelId) {
-        console.log('[ChatChannelsProvider] message.new event:', channelId);
-        await updateChannelInState(channelId, true);
+        updateChannelInState(channelId, true);
       }
     };
 
@@ -228,7 +280,7 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
           '[ChatChannelsProvider] notification.mark_read event:',
           channelId,
         );
-        await updateChannelInState(channelId, false);
+        updateChannelInState(channelId, false);
       }
     };
 
