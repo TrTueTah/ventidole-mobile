@@ -1,7 +1,8 @@
-import SettingsScreen from '@/screens/SettingsScreen';
+import SettingsScreen from '@/screens/app/more/SettingsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatStackNavigator from './app-stack/ChatStackNavigator';
 import CommunityStackNavigator from './app-stack/CommunityStackNavigator';
+import MoreStackNavigator from './app-stack/MoreStackNavigator';
 import PaymentStackNavigator from './app-stack/PaymentStackNavigator';
 import PostStackNavigator from './app-stack/PostStackNavigator';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -9,6 +10,7 @@ import {
   bottomTabPath,
   chatStackPath,
   communityStackPath,
+  moreStackPath,
   paymentStackPath,
   postStackPath,
 } from './pathLocations';
@@ -42,6 +44,11 @@ const AppStackNavigator = () => {
           key={chatStackPath}
           name={chatStackPath}
           component={ChatStackNavigator}
+        />
+        <AppStack.Screen
+          key={moreStackPath}
+          name={moreStackPath}
+          component={MoreStackNavigator}
         />
         {/* <AppStack.Screen
           key={paymentStackPath}

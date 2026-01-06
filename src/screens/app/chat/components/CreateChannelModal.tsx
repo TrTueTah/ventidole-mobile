@@ -1,5 +1,7 @@
 import { AppButton, AppInput, AppText, Icon } from '@/components/ui';
+import { useToast } from '@/components/ui/ToastProvider';
 import { useColors } from '@/hooks/useColors';
+import { useEnhancedImagePicker } from '@/hooks/useEnhancedImagePicker';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -12,7 +14,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Alert, Pressable, View } from 'react-native';
+import { Image, Pressable, TouchableOpacity, View } from 'react-native';
 import { useCreateChannel } from '../hooks/useCreateChannel';
 
 export interface CreateChannelModalRef {
@@ -31,8 +33,10 @@ const CreateChannelModal = forwardRef<
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [isCommunityChannel, setIsCommunityChannel] = useState(false);
+  const [imageUri, setImageUri] = useState<string | null>(null);
   const colors = useColors();
+  const { openPickerWithAndroidFixes } = useEnhancedImagePicker();
+  const { showError } = useToast();
 
   const { createChannel, isCreating } = useCreateChannel();
 
@@ -41,9 +45,25 @@ const CreateChannelModal = forwardRef<
     close: () => bottomSheetRef.current?.dismiss(),
   }));
 
+  const handleImagePick = useCallback(async () => {
+    try {
+      const result = await openPickerWithAndroidFixes({
+        width: 800,
+        height: 800,
+        cropping: true,
+        cropperCircleOverlay: true,
+      });
+      if (result) {
+        setImageUri(result.path);
+      }
+    } catch (error) {
+      console.log('Image picker cancelled or error:', error);
+    }
+  }, [openPickerWithAndroidFixes]);
+
   const handleSubmit = useCallback(() => {
     if (!name.trim()) {
-      Alert.alert('Error', 'Please enter a channel name');
+      showError('Please enter a channel name');
       return;
     }
 
@@ -51,23 +71,23 @@ const CreateChannelModal = forwardRef<
       {
         name: name.trim(),
         description: description.trim() || undefined,
-        isCommunityChannel,
+        image: imageUri || undefined,
         type: 'messaging',
       },
       {
         onSuccess: () => {
           setName('');
           setDescription('');
-          setIsCommunityChannel(false);
+          setImageUri(null);
           bottomSheetRef.current?.dismiss();
           onSuccess?.();
         },
         onError: (error: any) => {
-          Alert.alert('Error', error.message || 'Failed to create channel');
+          showError(error.message || 'Failed to create channel');
         },
       },
     );
-  }, [name, description, isCommunityChannel, createChannel, onSuccess]);
+  }, [name, description, imageUri, createChannel, onSuccess, showError]);
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -145,32 +165,38 @@ const CreateChannelModal = forwardRef<
             </AppText>
           </View>
 
-          {/* Community Channel Toggle */}
-          <Pressable
-            onPress={() => setIsCommunityChannel(!isCommunityChannel)}
-            disabled={isCreating}
-            className="flex-row items-start mb-6 p-4 border border-neutrals800 rounded-lg active:bg-neutrals900"
-          >
-            <View
-              className={`w-6 h-6 rounded border-2 mr-3 items-center justify-center ${
-                isCommunityChannel
-                  ? 'bg-primary border-primary'
-                  : 'border-neutrals600'
-              }`}
+          {/* Channel Image */}
+          <View className="mb-6">
+            <AppText variant="body" weight="medium" className="mb-2">
+              Channel Image (Optional)
+            </AppText>
+            <TouchableOpacity
+              onPress={handleImagePick}
+              disabled={isCreating}
+              className="items-center justify-center border-2 border-dashed border-neutrals800 rounded-lg p-6"
             >
-              {isCommunityChannel && (
-                <Icon name="Check" className="w-4 h-4 text-white" />
+              {imageUri ? (
+                <View className="items-center">
+                  <Image
+                    source={{ uri: imageUri }}
+                    className="w-24 h-24 rounded-full mb-2"
+                  />
+                  <AppText variant="bodySmall" color="muted">
+                    Tap to change image
+                  </AppText>
+                </View>
+              ) : (
+                <View className="items-center">
+                  <View className="w-16 h-16 rounded-full bg-neutrals800 items-center justify-center mb-2">
+                    <Icon name="Image" className="w-8 h-8 text-muted" />
+                  </View>
+                  <AppText variant="body" color="muted">
+                    Add channel image
+                  </AppText>
+                </View>
               )}
-            </View>
-            <View className="flex-1">
-              <AppText variant="body" weight="medium" className="mb-1">
-                Community Channel
-              </AppText>
-              <AppText variant="bodySmall" color="muted">
-                Make this channel available to all your community members
-              </AppText>
-            </View>
-          </Pressable>
+            </TouchableOpacity>
+          </View>
 
           {/* Info */}
           <View className="bg-neutrals900 rounded-lg p-4 mb-6">

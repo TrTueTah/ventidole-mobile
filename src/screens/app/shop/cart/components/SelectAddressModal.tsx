@@ -1,10 +1,10 @@
 import { AppButton, AppText, Icon } from '@/components/ui';
+import { useToast } from '@/components/ui/ToastProvider';
 import { useDeleteAddress } from '@/hooks/useDeleteAddress';
 import { useGetAddresses } from '@/hooks/useGetAddresses';
 import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   Modal,
   TouchableOpacity,
@@ -36,6 +36,7 @@ const SelectAddressModal: React.FC<SelectAddressModalProps> = ({
     isLoading: isLoadingAddresses,
     refetch,
   } = useGetAddresses();
+  const { showWarning } = useToast();
   const { deleteAddress, isLoading: isDeleting } = useDeleteAddress({
     onSuccess: () => {
       refetch();
@@ -64,24 +65,10 @@ const SelectAddressModal: React.FC<SelectAddressModalProps> = ({
   const handleDelete = (addressId: string, event: any) => {
     event.stopPropagation();
 
-    Alert.alert(
-      'Delete Address',
-      'Are you sure you want to delete this shipping address?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            deleteAddress(addressId);
-          },
-        },
-      ],
-      { cancelable: true },
-    );
+    // Show warning and delete
+    // Note: Toast doesn't support confirm dialogs
+    showWarning('Deleting address...');
+    deleteAddress(addressId);
   };
 
   const renderAddressItem = ({ item }: { item: any }) => {

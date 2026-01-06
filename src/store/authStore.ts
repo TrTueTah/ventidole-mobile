@@ -101,7 +101,7 @@ export const useAuthStore = create<AuthState>()(
           refreshToken: '',
           isLogin: false,
           isChooseCommunity: false,
-          isStorageReady: state.isStorageReady, // giữ nguyên flag này
+          isStorageReady: state.isStorageReady,
         })),
     }),
     {

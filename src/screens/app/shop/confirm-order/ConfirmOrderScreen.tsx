@@ -1,5 +1,6 @@
 import Accordion from '@/components/other/Accordion';
 import { AppButton, AppText, Checkbox, Icon } from '@/components/ui';
+import { useToast } from '@/components/ui/ToastProvider';
 import { useCreateAddress } from '@/hooks/useCreateAddress';
 import { useGetAddresses } from '@/hooks/useGetAddresses';
 import { useUpdateAddress } from '@/hooks/useUpdateAddress';
@@ -7,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Image,
   ScrollView,
   TouchableOpacity,
@@ -42,6 +42,7 @@ const sections: Section[] = [
 
 const ConfirmOrderScreen = () => {
   const navigation = useNavigation();
+  const { showError } = useToast();
   const scrollRef = useRef<ScrollView>(null);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('CREDIT');
@@ -121,7 +122,7 @@ const ConfirmOrderScreen = () => {
       });
     },
     onError: error => {
-      Alert.alert('Order Failed', error.message || 'Failed to confirm order');
+      showError(error.message || 'Failed to confirm order');
     },
   });
 
@@ -180,23 +181,17 @@ const ConfirmOrderScreen = () => {
 
   const handleAcceptAndPay = async () => {
     if (!agreeToTerms) {
-      Alert.alert(
-        'Terms Required',
-        'Please agree to the terms and conditions to continue.',
-      );
+      showError('Please agree to the terms and conditions to continue.');
       return;
     }
 
     if (!selectedAddress) {
-      Alert.alert('Address Required', 'Please select a shipping address.');
+      showError('Please select a shipping address.');
       return;
     }
 
     if (!cart || !cart.items || cart.items.length === 0) {
-      Alert.alert(
-        'Empty Cart',
-        'Your cart is empty. Please add items to continue.',
-      );
+      showError('Your cart is empty. Please add items to continue.');
       return;
     }
 

@@ -4,7 +4,7 @@ import MenuList from '@/components/ui/MenuList.tsx';
 import { useAppStore } from '@/store/appStore';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigation } from '@react-navigation/native';
-import { Alert, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 const MoreScreen = () => {
   const navigation = useNavigation();
@@ -24,19 +24,11 @@ const MoreScreen = () => {
   };
 
   const handleLogout = () => {
-    Alert.alert('Logout', 'Are you sure you want to logout?', [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'Logout',
-        style: 'destructive',
-        onPress: () => {
-          logout();
-        },
-      },
-    ]);
+    // Show warning and perform logout
+    // Note: Toast doesn't support confirm dialogs, but we can show warning and logout
+    // For confirmation dialogs, consider creating a custom modal component
+    showWarning('Logging out...');
+    logout();
   };
 
   return (

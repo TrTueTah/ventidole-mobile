@@ -293,15 +293,39 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
 
     // Handle channel deleted - remove from state
     const handleChannelDeleted = (event: any) => {
-      const channelId = event?.channel?.id || event?.channel?.cid;
+      const channelId = event?.channel?.id || event?.channel?.cid || event?.cid;
       if (channelId) {
         console.log(
           '[ChatChannelsProvider] notification.channel_deleted event:',
           channelId,
         );
-        setChannels(prev =>
-          prev.filter(ch => ch.id !== channelId && ch.cid !== channelId),
-        );
+
+        // Extract clean ID from cid format (messaging:xxx -> xxx)
+        const cleanId = channelId.replace('messaging:', '');
+
+        setChannels(prev => {
+          const filtered = prev.filter(ch => {
+            const chId = ch.id || ch.cid?.replace('messaging:', '');
+            const chCid = ch.cid;
+            // Filter out if any match
+            return (
+              chId !== cleanId &&
+              chId !== channelId &&
+              chCid !== channelId &&
+              ch.id !== channelId &&
+              ch.cid !== channelId
+            );
+          });
+
+          console.log(
+            '[ChatChannelsProvider] Channels after deletion:',
+            filtered.length,
+            'from',
+            prev.length,
+          );
+
+          return filtered;
+        });
       }
     };
 

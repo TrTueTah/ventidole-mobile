@@ -1,6 +1,8 @@
 import Accordion from '@/components/other/Accordion';
 import { AppText, Icon } from '@/components/ui';
 import AppButton from '@/components/ui/AppButton';
+import { useToast } from '@/components/ui/ToastProvider';
+import { useChatChannels } from '@/hooks/useChatChannels';
 import { useColors } from '@/hooks/useColors';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { forwardRef, useImperativeHandle, useState } from 'react';
@@ -31,12 +33,15 @@ const ChannelDetailModal = forwardRef<
 >(({ onChannelLeft }, ref) => {
   const colors = useColors();
   const { user } = useGetCurrentUser();
+  const { refetch } = useChatChannels();
+  const { showError, showWarning } = useToast();
   const [visible, setVisible] = useState(false);
   const [channel, setChannel] = useState<Channel | null>(null);
   const { mutateAsync: leaveChannel, isPending: isLeaving } = useLeaveChannel();
   const [promotingMemberId, setPromotingMemberId] = useState<string | null>(
     null,
   );
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useImperativeHandle(ref, () => ({
     open: (ch: Channel) => {
@@ -63,6 +68,29 @@ const ChannelDetailModal = forwardRef<
       onChannelLeft?.();
     } catch (error) {
       console.error('Failed to leave channel:', error);
+    }
+  };
+
+  const handleDeleteChannel = async () => {
+    if (!channel) return;
+
+    // Show warning and delete
+    // Note: Toast doesn't support confirm dialogs
+    showWarning('Deleting channel...');
+    try {
+      setIsDeleting(true);
+      await channel.delete();
+      handleClose();
+      // Manually refetch channels to ensure list updates
+      setTimeout(() => {
+        refetch({ silent: true });
+      }, 500);
+      onChannelLeft?.();
+    } catch (error) {
+      console.error('Failed to delete channel:', error);
+      showError('Failed to delete channel. Please try again.');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -288,8 +316,8 @@ const ChannelDetailModal = forwardRef<
             />
           </View>
 
-          {/* Leave Button */}
-          {!isOwner && (
+          {/* Leave/Delete Button */}
+          {!isOwner ? (
             <View className="px-4 py-6 pb-safe-offset-6">
               <AppButton
                 onPress={handleLeaveChannel}
@@ -300,6 +328,19 @@ const ChannelDetailModal = forwardRef<
                 loading={isLeaving}
               >
                 Leave Channel
+              </AppButton>
+            </View>
+          ) : (
+            <View className="px-4 py-6 pb-safe-offset-6">
+              <AppButton
+                onPress={handleDeleteChannel}
+                disabled={isDeleting}
+                variant="default"
+                className="bg-error"
+                textClassname="text-secondary-foreground"
+                loading={isDeleting}
+              >
+                Delete Channel
               </AppButton>
             </View>
           )}

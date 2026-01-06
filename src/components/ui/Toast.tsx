@@ -1,10 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {Pressable, TouchableOpacity, View} from 'react-native';
-import Animated, {runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming,} from 'react-native-reanimated';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {AppText, Icon} from '@/components/ui';
-import {useColors} from '@/hooks/useColors';
-import {cn} from "@/utils";
+import { AppText, Icon } from '@/components/ui';
+import { useColors } from '@/hooks/useColors';
+import { cn } from '@/utils';
+import React, { useEffect, useState } from 'react';
+import { Pressable, TouchableOpacity, View } from 'react-native';
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -22,17 +28,17 @@ export interface ToastProps {
 }
 
 const Toast: React.FC<ToastProps> = ({
-                                       id,
-                                       type,
-                                       title,
-                                       message,
-                                       duration = 4000,
-                                       onDismiss,
-                                       position = 'top',
-                                       index = 0,
-                                       closable = true,
-                                       onPress,
-                                     }) => {
+  id,
+  type,
+  title,
+  message,
+  duration = 4000,
+  onDismiss,
+  position = 'top',
+  index = 0,
+  closable = true,
+  onPress,
+}) => {
   const colors = useColors();
   const insets = useSafeAreaInsets();
 
@@ -41,9 +47,10 @@ const Toast: React.FC<ToastProps> = ({
 
   const baseOffset = 16;
   const stackOffset = index * 80;
-  const initialPosition = position === 'top'
-    ? insets.top + baseOffset + stackOffset
-    : insets.bottom + baseOffset + stackOffset;
+  const initialPosition =
+    position === 'top'
+      ? insets.top + baseOffset + stackOffset
+      : insets.bottom + baseOffset + stackOffset;
 
   const positionY = useSharedValue(initialPosition);
 
@@ -68,20 +75,20 @@ const Toast: React.FC<ToastProps> = ({
   const getIconColor = () => {
     switch (type) {
       case 'success':
-        return "text-success";
+        return 'text-success';
       case 'error':
-        return "text-error";
+        return 'text-error';
       case 'warning':
-        return "text-warning";
+        return 'text-warning';
       case 'info':
       default:
-        return "text-primary";
+        return 'text-primary';
     }
   };
 
   const animatedStyle = useAnimatedStyle(() => {
     const style: any = {
-      transform: [{translateY: translateY.value}],
+      transform: [{ translateY: translateY.value }],
       opacity: opacity.value,
     };
 
@@ -95,8 +102,10 @@ const Toast: React.FC<ToastProps> = ({
   });
 
   const handleDismiss = () => {
-    translateY.value = withTiming(position === 'top' ? -100 : 100, {duration: 300});
-    opacity.value = withTiming(0, {duration: 300}, () => {
+    translateY.value = withTiming(position === 'top' ? -100 : 100, {
+      duration: 300,
+    });
+    opacity.value = withTiming(0, { duration: 300 }, () => {
       runOnJS(onDismiss)(id);
     });
   };
@@ -107,7 +116,7 @@ const Toast: React.FC<ToastProps> = ({
       damping: 15,
       stiffness: 150,
     });
-    opacity.value = withTiming(1, {duration: 300});
+    opacity.value = withTiming(1, { duration: 300 });
 
     // Auto dismiss - only if duration is greater than 0
     if (duration && duration > 0) {
@@ -123,9 +132,10 @@ const Toast: React.FC<ToastProps> = ({
   useEffect(() => {
     const baseOffset = 16;
     const stackOffset = index * 80;
-    const newPosition = position === 'top'
-      ? insets.top + baseOffset + stackOffset
-      : insets.bottom + baseOffset + stackOffset;
+    const newPosition =
+      position === 'top'
+        ? insets.top + baseOffset + stackOffset
+        : insets.bottom + baseOffset + stackOffset;
 
     positionY.value = withSpring(newPosition, {
       damping: 15,
@@ -164,13 +174,13 @@ const Toast: React.FC<ToastProps> = ({
           borderColor: colors.neutrals800,
         }}
         onPress={onPress}
-        {...(onPress && {activeOpacity: 0.8})}
+        {...(onPress && { activeOpacity: 0.8 })}
       >
         {/* Icon */}
         <View className="mr-3 mt-0.5">
           <Icon
             name={getIconName()}
-            className={cn("w-5 h-5", getIconColor())}
+            className={cn('w-5 h-5', getIconColor())}
           />
         </View>
 
@@ -200,12 +210,9 @@ const Toast: React.FC<ToastProps> = ({
           <TouchableOpacity
             onPress={handleDismiss}
             className="ml-2 p-1"
-            hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Icon
-              name="X"
-              className="w-4 h-4 text-neutrals100"
-            />
+            <Icon name="X" className="w-4 h-4 text-neutrals100" />
           </TouchableOpacity>
         )}
       </ToastContainer>

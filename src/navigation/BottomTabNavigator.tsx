@@ -1,9 +1,9 @@
 import CustomTabBar from '@/navigation/components/CustomTabBar.tsx';
-import MoreScreen from '@/screens/MoreScreen';
 import ChatListScreen from '@/screens/app/chat/ChatListScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import HomeStackNavigator from './app-stack/HomeStackNavigator';
+import MoreStackNavigator from './app-stack/MoreStackNavigator';
 import ShopStackNavigator from './app-stack/ShopStackNavigator';
 import { MainTabParamList } from './types';
 
@@ -40,7 +40,7 @@ const BottomTabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="MORE"
-        component={MoreScreen}
+        component={MoreStackNavigator}
         options={{
           title: 'MORE',
         }}

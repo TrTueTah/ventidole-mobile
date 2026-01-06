@@ -6,8 +6,7 @@ interface CreateChannelInput {
   name: string;
   description?: string;
   image?: string;
-  communityId?: string;
-  isCommunityChannel?: boolean;
+  type?: string;
 }
 
 interface CreateChannelCallbacks {
@@ -19,12 +18,6 @@ export const useCreateChannel = () => {
   const backendApi = useContext(BackendApiContext);
   const { user } = useGetCurrentUser();
 
-  // Determine which endpoint to use based on channel type
-  const createCommunityChannelMutation = backendApi.useMutation(
-    'post',
-    '/v1/stream-chat/channels/community',
-  );
-
   const createIdolChannelMutation = backendApi.useMutation(
     'post',
     '/v1/stream-chat/channels/idol',
@@ -34,37 +27,19 @@ export const useCreateChannel = () => {
     input: CreateChannelInput,
     callbacks?: CreateChannelCallbacks,
   ) => {
-    const isAdmin = user?.role === 'ADMIN';
-    const isCommunityChannel = input.isCommunityChannel === true;
-
-    // Use appropriate mutation based on channel type
-    const mutation = isCommunityChannel
-      ? createCommunityChannelMutation
-      : createIdolChannelMutation;
-
-    if (isCommunityChannel && !isAdmin) {
+    if (user?.role !== 'IDOL') {
       callbacks?.onError?.({
-        message: 'Only admins can create community channels',
+        message: 'Only idols can create channels',
       });
       return;
     }
 
-    if (!isCommunityChannel && user?.role !== 'IDOL') {
-      callbacks?.onError?.({
-        message: 'Only idols can create idol channels',
-      });
-      return;
-    }
-
-    mutation.mutate(
+    createIdolChannelMutation.mutate(
       {
         body: {
           name: input.name,
           description: input.description,
           image: input.image,
-          ...(isCommunityChannel && input.communityId
-            ? { communityId: input.communityId }
-            : {}),
         },
       } as any,
       {
@@ -80,13 +55,9 @@ export const useCreateChannel = () => {
     );
   };
 
-  const isCreating =
-    createCommunityChannelMutation.isPending ||
-    createIdolChannelMutation.isPending;
-  const error =
-    createCommunityChannelMutation.error || createIdolChannelMutation.error;
-  const data =
-    createCommunityChannelMutation.data || createIdolChannelMutation.data;
+  const isCreating = createIdolChannelMutation.isPending;
+  const error = createIdolChannelMutation.error;
+  const data = createIdolChannelMutation.data;
 
   return {
     createChannel,

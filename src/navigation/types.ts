@@ -30,6 +30,7 @@ export type RootStackParamList = {
   PostStack: { postId: string; communityId?: string };
   CommunityStack: { communityId: string };
   ChatStack: NavigatorScreenParams<ChatStackParamList>;
+  MoreStack: NavigatorScreenParams<MoreStackParamList>;
   PaymentStack: { orderId: string; paymentMethod: 'CREDIT' | 'COD' };
   Shop: undefined;
   ShopDetail: { shopId: string; shopName: string };
@@ -45,6 +46,16 @@ export type RootStackParamList = {
 export type ChatStackParamList = {
   ChatList: undefined;
   ChatWindow: { channelId: string };
+};
+
+// More Stack Navigator
+export type MoreStackParamList = {
+  MoreMain: undefined;
+  Profile: undefined;
+  Orders: undefined;
+  Privacy: undefined;
+  Terms: undefined;
+  Settings: undefined;
 };
 
 // Main Tab Navigator
@@ -64,6 +75,9 @@ export type MainTabScreenProps<T extends keyof MainTabParamList> =
 
 export type ChatStackScreenProps<T extends keyof ChatStackParamList> =
   NativeStackScreenProps<ChatStackParamList, T>;
+
+export type MoreStackScreenProps<T extends keyof MoreStackParamList> =
+  NativeStackScreenProps<MoreStackParamList, T>;
 
 // Navigation prop types
 declare global {

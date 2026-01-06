@@ -26,9 +26,12 @@ export const useGetAllChannels = ({
 
       try {
         setIsLoading(true);
-        // Query all channels (no filter to get all public channels)
-        // You can add filters here based on your requirements
-        const filter = search.trim() ? { name: { $autocomplete: search } } : {};
+        // Query all discoverable channels
+        const filter = {
+          // discoverable: true,
+          member: { $in: ['admin'] },
+          ...(search.trim() && { name: { $autocomplete: search } }),
+        };
         const sort = [{ member_count: -1 as const }];
         const channelsResponse = await client.queryChannels(filter, sort, {
           watch: false,

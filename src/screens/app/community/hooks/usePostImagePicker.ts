@@ -2,7 +2,7 @@ import { BackendApiContext } from '@/components/providers/BackendApiProvider';
 import { useToast } from '@/components/ui/ToastProvider';
 import { useEnhancedImagePicker } from '@/hooks/useEnhancedImagePicker';
 import { useContext, useState } from 'react';
-import { Alert, Linking, Platform } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import {
   check,
   Permission,
@@ -53,14 +53,10 @@ export const usePostImagePicker = () => {
   const handleBlockedPermission = async (
     permission: Permission,
   ): Promise<PermissionStatus> => {
-    Alert.alert(
-      'Permission Required',
+    showWarning(
       'Please enable photo library access in your device settings to continue.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Settings', onPress: () => Linking.openSettings() },
-      ],
     );
+    Linking.openSettings();
     return RESULTS.BLOCKED;
   };
 

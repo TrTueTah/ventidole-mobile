@@ -1,7 +1,7 @@
 import { AppText } from '@/components/ui';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ActivityIndicator, Alert, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import WebView from 'react-native-webview';
 import { useGetOrderStatus } from './hooks/useGetOrderStatus';
 
@@ -97,7 +97,7 @@ const PaymentScreen = () => {
         onError={syntheticEvent => {
           const { nativeEvent } = syntheticEvent;
           console.error('WebView error:', nativeEvent);
-          Alert.alert('Error', 'Failed to load payment page');
+          showError('Failed to load payment page');
         }}
       />
     </View>

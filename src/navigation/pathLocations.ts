@@ -1,4 +1,8 @@
-import { ChatStackParamList, RootStackParamList } from './types';
+import {
+  ChatStackParamList,
+  MoreStackParamList,
+  RootStackParamList,
+} from './types';
 
 const signInPath: keyof RootStackParamList = 'SignIn';
 const signUpPath: keyof RootStackParamList = 'SignUp';
@@ -12,6 +16,7 @@ const homePath: keyof RootStackParamList = 'Home';
 const postStackPath: keyof RootStackParamList = 'PostStack';
 const communityStackPath: keyof RootStackParamList = 'CommunityStack';
 const chatStackPath: keyof RootStackParamList = 'ChatStack';
+const moreStackPath: keyof RootStackParamList = 'MoreStack';
 const shopPath: keyof RootStackParamList = 'Shop';
 const shopDetailPath: keyof RootStackParamList = 'ShopDetail';
 const shopProductPath: keyof RootStackParamList = 'ShopProduct';
@@ -23,6 +28,12 @@ const paymentSuccessPath: keyof RootStackParamList = 'PaymentSuccess';
 const paymentFailurePath: keyof RootStackParamList = 'PaymentFailure';
 const chatListPath: keyof ChatStackParamList = 'ChatList';
 const chatWindowPath: keyof ChatStackParamList = 'ChatWindow';
+const moreMainPath: keyof MoreStackParamList = 'MoreMain';
+const profilePath: keyof MoreStackParamList = 'Profile';
+const ordersPath: keyof MoreStackParamList = 'Orders';
+const privacyPath: keyof MoreStackParamList = 'Privacy';
+const termsPath: keyof MoreStackParamList = 'Terms';
+const settingPath: keyof MoreStackParamList = 'Settings';
 export {
   authCompletePath,
   bottomTabPath,
@@ -34,17 +45,24 @@ export {
   communityStackPath,
   confirmOrderPath,
   homePath,
+  moreMainPath,
+  moreStackPath,
+  ordersPath,
   paymentFailurePath,
   paymentPath,
   paymentStackPath,
   paymentSuccessPath,
   postStackPath,
+  privacyPath,
+  profilePath,
   resetPasswordPath,
+  settingPath,
   shopDetailPath,
   shopPath,
   shopProductPath,
   signInPath,
   signUpPath,
   termAndUsePath,
+  termsPath,
   verifyEmailPath,
 };

@@ -1,9 +1,11 @@
-import { Icon } from '@/components/ui';
+import { AppInput, Icon } from '@/components/ui';
 import { useChatChannels } from '@/hooks/useChatChannels';
 import { useColors } from '@/hooks/useColors';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
-import { RootStackScreenProps } from '@/navigation/types';
-import { useCallback, useRef } from 'react';
+import { RootStackParamList } from '@/navigation/types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, RefreshControl, TouchableOpacity, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import { Channel } from 'stream-chat';
@@ -14,11 +16,10 @@ import CreateChannelModal, {
 } from './components/CreateChannelModal';
 import CustomChannelPreview from './components/CustomChannelPreview';
 import EmptyChannels from './components/EmptyChannels';
-import SearchChannelModal, {
-  SearchChannelModalRef,
-} from './components/SearchChannelModal';
 
-const ChatListScreen = ({ navigation }: RootStackScreenProps<'Main'>) => {
+const ChatListScreen = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const colors = useColors();
   const { channels, isLoading, isFetching, refetch } = useChatChannels();
   const { user } = useGetCurrentUser();
@@ -26,9 +27,34 @@ const ChatListScreen = ({ navigation }: RootStackScreenProps<'Main'>) => {
   const lastScrollY = useRef(0);
   const headerVisible = useSharedValue(true);
   const createChannelModalRef = useRef<CreateChannelModalRef>(null);
-  const searchChannelModalRef = useRef<SearchChannelModalRef>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const isIdol = user?.role === 'IDOL';
+
+  // Check if user has already created a channel
+  const hasCreatedChannel = useMemo(() => {
+    if (!user?.id) return false;
+    return channels.some(channel => {
+      const createdById =
+        (channel.data as any)?.created_by_id || channel.data?.created_by?.id;
+      return createdById === user.id;
+    });
+  }, [channels, user?.id]);
+
+  // Filter channels based on search query
+  const filteredChannels = useMemo(() => {
+    if (!searchQuery.trim()) return channels;
+
+    const query = searchQuery.toLowerCase();
+    return channels.filter(channel => {
+      const channelName = (
+        (channel.data as any)?.name ||
+        channel.data?.name ||
+        ''
+      ).toLowerCase();
+      return channelName.includes(query);
+    });
+  }, [channels, searchQuery]);
 
   // Check if a channel is owned by current user
   const isMyChannel = (channel: Channel) => {
@@ -101,9 +127,28 @@ const ChatListScreen = ({ navigation }: RootStackScreenProps<'Main'>) => {
     <View className="flex-1 bg-background">
       <ChatHeader headerVisible={headerVisible} />
 
+      {/* Search Input */}
+      <View className="px-4 pb-3 bg-background" style={{ paddingTop: 120 }}>
+        <AppInput
+          placeholder="Search channels..."
+          variant="default"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          className="rounded-full"
+          rightIcon={
+            searchQuery ? (
+              <TouchableOpacity onPress={() => setSearchQuery('')}>
+                <Icon name="X" className="w-5 h-5 text-neutrals500" />
+              </TouchableOpacity>
+            ) : undefined
+          }
+          leftIcon={<Icon name="Search" className="w-5 h-5 text-neutrals500" />}
+        />
+      </View>
+
       <FlatList
-        data={channels}
-        extraData={channels.map(ch => ({
+        data={filteredChannels}
+        extraData={filteredChannels.map(ch => ({
           id: ch.id || ch.cid,
           lastMsg: ch.state?.messages?.[ch.state.messages.length - 1]?.id,
           unread: ch.state?.unreadCount,
@@ -119,7 +164,7 @@ const ChatListScreen = ({ navigation }: RootStackScreenProps<'Main'>) => {
         renderItem={renderItem}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        contentContainerStyle={{ paddingTop: 108 }}
+        contentContainerStyle={{ paddingBottom: 16 }}
         ListEmptyComponent={
           isLoading ? <ChannelListSkeleton count={8} /> : <EmptyChannels />
         }
@@ -133,47 +178,28 @@ const ChatListScreen = ({ navigation }: RootStackScreenProps<'Main'>) => {
         }
       />
 
-      {/* Floating Action Buttons - Idol Only */}
-      {isIdol && (
-        <View className="absolute right-4 bottom-4 gap-3">
-          {/* Search & Join Channels Button */}
-          <TouchableOpacity
-            onPress={() => searchChannelModalRef.current?.present()}
-            className="w-14 h-14 rounded-full bg-neutrals800 items-center justify-center shadow-lg"
-            style={{
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 5,
-            }}
-          >
-            <Icon name="Search" className="w-6 h-6 text-foreground" />
-          </TouchableOpacity>
-
-          {/* Create Channel Button */}
-          <TouchableOpacity
-            onPress={() => createChannelModalRef.current?.open()}
-            className="w-14 h-14 rounded-full bg-primary items-center justify-center shadow-lg"
-            style={{
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 5,
-            }}
-          >
-            <Icon name="Plus" className="w-6 h-6 text-white" />
-          </TouchableOpacity>
-        </View>
+      {/* Floating Action Button - Create Channel (Idol Only, No Channel Created) */}
+      {isIdol && !hasCreatedChannel && (
+        <TouchableOpacity
+          onPress={() => createChannelModalRef.current?.open()}
+          className="absolute right-4 bottom-4 w-14 h-14 rounded-full bg-primary items-center justify-center shadow-lg"
+          style={{
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }}
+        >
+          <Icon name="Plus" className="w-6 h-6 text-white" />
+        </TouchableOpacity>
       )}
 
-      {/* Modals */}
+      {/* Create Channel Modal */}
       <CreateChannelModal
         ref={createChannelModalRef}
         onSuccess={handleChannelCreated}
       />
-      <SearchChannelModal ref={searchChannelModalRef} />
     </View>
   );
 };

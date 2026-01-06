@@ -6,6 +6,7 @@ import {
   Badge,
   Icon,
 } from '@/components/ui';
+import { useToast } from '@/components/ui/ToastProvider';
 import { useColors } from '@/hooks/useColors';
 import { cn, formatNumber } from '@/utils';
 import {
@@ -24,7 +25,6 @@ import {
 } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Dimensions,
   TouchableOpacity,
   View,
@@ -52,6 +52,7 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
   const queryClient = useQueryClient();
+  const { showError, showWarning } = useToast();
 
   // Calculate snap point to be full screen
   const snapPoints = useMemo(() => {
@@ -193,37 +194,21 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
   const handleJoinToggle = useCallback(
     (communityId: string, isJoined: boolean) => {
       if (isJoined) {
-        Alert.alert(
-          'Leave Community',
-          'Are you sure you want to leave this community?',
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel',
+        // Show warning and leave
+        // Note: Toast doesn't support confirm dialogs
+        showWarning('Leaving community...');
+        leaveCommunity(
+          {
+            params: { path: { id: communityId } },
+          },
+          {
+            onSuccess: () => {
+              updateCommunityInCache(communityId, false);
             },
-            {
-              text: 'Leave',
-              style: 'destructive',
-              onPress: () => {
-                leaveCommunity(
-                  {
-                    params: { path: { id: communityId } },
-                  },
-                  {
-                    onSuccess: () => {
-                      updateCommunityInCache(communityId, false);
-                    },
-                    onError: (error: any) => {
-                      Alert.alert(
-                        'Error',
-                        error.message || 'Failed to leave community',
-                      );
-                    },
-                  },
-                );
-              },
+            onError: (error: any) => {
+              showError(error.message || 'Failed to leave community');
             },
-          ],
+          },
         );
       } else {
         joinCommunity(
@@ -235,21 +220,27 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
               updateCommunityInCache(communityId, true);
             },
             onError: (error: any) => {
-              Alert.alert('Error', error.message || 'Failed to join community');
+              showError(error.message || 'Failed to join community');
             },
           },
         );
       }
     },
-    [joinCommunity, leaveCommunity, updateCommunityInCache],
+    [
+      joinCommunity,
+      leaveCommunity,
+      updateCommunityInCache,
+      showWarning,
+      showError,
+    ],
   );
 
   const renderCommunityItem = ({ item }: { item: any }) => {
     const isLoadingThisItem =
       (isJoining && joinVariables?.params?.path?.id === item.id) ||
-      (isLeaving && 
-        leaveVariables?.params?.path && 
-        'id' in leaveVariables.params.path && 
+      (isLeaving &&
+        leaveVariables?.params?.path &&
+        'id' in leaveVariables.params.path &&
         leaveVariables.params.path.id === item.id);
 
     return (
