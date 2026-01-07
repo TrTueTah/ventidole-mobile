@@ -79,6 +79,7 @@ const FanTab = ({ communityId }: FanTabProps) => {
               navigation.navigate('PostStack' as any, {
                 postId: item.id,
                 communityId: item.communityId,
+                authorId: item.author.id,
               })
             }
           />

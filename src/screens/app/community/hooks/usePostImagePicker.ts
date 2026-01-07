@@ -172,6 +172,7 @@ export const usePostImagePicker = () => {
 
   return {
     selectedImages,
+    setSelectedImages,
     isUploading,
     openImagePicker,
     removeImage,

@@ -1,12 +1,13 @@
 import { AppText, Avatar, Icon } from '@/components/ui';
 import MenuList from '@/components/ui/MenuList';
+import { useToast } from '@/components/ui/ToastProvider';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { MoreStackParamList, RootStackParamList } from '@/navigation/types';
 import { useAppStore } from '@/store/appStore';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ScrollView, View } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
 
 const MoreMainScreen = () => {
   const navigation =
@@ -14,6 +15,7 @@ const MoreMainScreen = () => {
       NativeStackNavigationProp<RootStackParamList & MoreStackParamList>
     >();
   const { user } = useGetCurrentUser();
+  const { showSuccess } = useToast();
   const theme = useAppStore(state => state.theme);
   const logout = useAuthStore(state => state.logout);
 
@@ -38,11 +40,20 @@ const MoreMainScreen = () => {
   };
 
   const handleLogout = () => {
-    // Show warning and perform logout
-    // Note: Toast doesn't support confirm dialogs, but we can show warning and logout
-    // For confirmation dialogs, consider creating a custom modal component
-    showWarning('Logging out...');
-    logout();
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: () => {
+          logout();
+          showSuccess('Logged out successfully');
+        },
+      },
+    ]);
   };
 
   return (

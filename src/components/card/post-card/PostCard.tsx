@@ -42,7 +42,7 @@ const PostCard = ({ post, className, onLike, onClick }: PostCardProps) => {
             <AppText variant="label" weight="bold">
               {post.author.username}
             </AppText>
-            <Verify className="w-4 h-4" />
+            {post.author.role === 'IDOL' && <Verify size={14} />}
           </View>
           <AppText variant="labelSmall" color="muted">
             {formatISODate(post.createdAt)}

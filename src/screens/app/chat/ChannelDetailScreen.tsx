@@ -1,4 +1,5 @@
-import { AppText, Icon } from '@/components/ui';
+import type { DropdownMenuItem, DropdownMenuRef } from '@/components/ui';
+import { AppText, DropdownMenu, Icon } from '@/components/ui';
 import AppButton from '@/components/ui/AppButton';
 import { useToast } from '@/components/ui/ToastProvider';
 import { useChatChannels } from '@/hooks/useChatChannels';
@@ -47,6 +48,8 @@ const ChannelDetailScreen = () => {
   const [isLoadingInitial, setIsLoadingInitial] = useState(true);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const flatListRef = useRef<FlatList>(null);
+  const dropdownRef = useRef<DropdownMenuRef>(null);
+  const [selectedMember, setSelectedMember] = useState<any>(null);
 
   // Load channel and members
   useEffect(() => {
@@ -253,6 +256,68 @@ const ChannelDetailScreen = () => {
       }
     } catch (error) {
       console.error('[ChannelDetail] Failed to promote member:', error);
+      showError('Failed to promote member');
+    } finally {
+      setPromotingMemberId(null);
+    }
+  };
+
+  const handleDemoteToFan = async (memberId: string) => {
+    if (!channel || !canManageMembers) return;
+
+    try {
+      setPromotingMemberId(memberId);
+
+      // Demote member to default_member
+      await channel.addMembers([
+        {
+          user_id: memberId,
+          channel_role: 'default_member',
+        },
+      ]);
+
+      console.log(`[ChannelDetail] Demoted ${memberId} to default_member`);
+
+      // Move member from idols/creators to fans
+      const demotedMember = idolsAndCreators.find(f => f.user_id === memberId);
+      if (demotedMember) {
+        setIdolsAndCreators(prev => prev.filter(f => f.user_id !== memberId));
+        setFans(prev => [
+          { ...demotedMember, channel_role: 'default_member' },
+          ...prev,
+        ]);
+      }
+
+      showWarning('Member demoted to fan');
+    } catch (error) {
+      console.error('[ChannelDetail] Failed to demote member:', error);
+      showError('Failed to demote member');
+    } finally {
+      setPromotingMemberId(null);
+    }
+  };
+
+  const handleBanMember = async (memberId: string) => {
+    if (!channel || !canManageMembers) return;
+
+    try {
+      setPromotingMemberId(memberId);
+
+      // Ban member from channel
+      await channel.banUser(memberId, {
+        reason: 'Banned by moderator',
+      });
+
+      console.log(`[ChannelDetail] Banned ${memberId}`);
+
+      // Remove member from lists
+      setFans(prev => prev.filter(f => f.user_id !== memberId));
+      setIdolsAndCreators(prev => prev.filter(f => f.user_id !== memberId));
+
+      showWarning('Member banned from channel');
+    } catch (error) {
+      console.error('[ChannelDetail] Failed to ban member:', error);
+      showError('Failed to ban member');
     } finally {
       setPromotingMemberId(null);
     }
@@ -312,18 +377,22 @@ const ChannelDetailScreen = () => {
             </AppText>
           </View>
         )}
-        {canPromote && (
+        {canManageMembers && !isCurrentUser && (
           <TouchableOpacity
-            onPress={() => handlePromoteToTrusted(member.user_id)}
+            onPress={() => {
+              setSelectedMember(member);
+              dropdownRef.current?.open();
+            }}
             disabled={isPromoting}
-            className="ml-2 bg-primary/20 px-3 py-1.5 rounded"
+            className="ml-2 w-8 h-8 items-center justify-center"
           >
             {isPromoting ? (
               <ActivityIndicator size="small" color={colors.primary} />
             ) : (
-              <AppText variant="bodySmall" className="text-primary">
-                Promote
-              </AppText>
+              <Icon
+                name="EllipsisVertical"
+                className="w-5 h-5 text-foreground"
+              />
             )}
           </TouchableOpacity>
         )}
@@ -499,6 +568,41 @@ const ChannelDetailScreen = () => {
           <Icon name="ArrowUp" className="w-6 h-6 text-primary-foreground" />
         </TouchableOpacity>
       )}
+
+      {/* Member Actions Dropdown */}
+      <DropdownMenu
+        ref={dropdownRef}
+        items={[
+          ...(selectedMember?.channel_role === 'default_member'
+            ? [
+                {
+                  label: 'Promote to Trusted',
+                  icon: 'ArrowUp',
+                  onPress: () =>
+                    selectedMember &&
+                    handlePromoteToTrusted(selectedMember.user_id),
+                } as DropdownMenuItem,
+              ]
+            : []),
+          ...(selectedMember?.channel_role === 'trusted_member'
+            ? [
+                {
+                  label: 'Demote to Fan',
+                  icon: 'ArrowDown',
+                  onPress: () =>
+                    selectedMember && handleDemoteToFan(selectedMember.user_id),
+                } as DropdownMenuItem,
+              ]
+            : []),
+          {
+            label: 'Ban Member',
+            icon: 'Ban',
+            onPress: () =>
+              selectedMember && handleBanMember(selectedMember.user_id),
+            variant: 'danger' as const,
+          },
+        ]}
+      />
     </View>
   );
 };

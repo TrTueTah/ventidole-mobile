@@ -5,6 +5,7 @@ import CommunityStackNavigator from './app-stack/CommunityStackNavigator';
 import MoreStackNavigator from './app-stack/MoreStackNavigator';
 import PaymentStackNavigator from './app-stack/PaymentStackNavigator';
 import PostStackNavigator from './app-stack/PostStackNavigator';
+import ProfileStackNavigator from './app-stack/ProfileStackNavigator';
 import BottomTabNavigator from './BottomTabNavigator';
 import {
   bottomTabPath,
@@ -13,6 +14,7 @@ import {
   moreStackPath,
   paymentStackPath,
   postStackPath,
+  profileStackPath,
 } from './pathLocations';
 import { RootStackParamList } from './types';
 
@@ -49,6 +51,11 @@ const AppStackNavigator = () => {
           key={moreStackPath}
           name={moreStackPath}
           component={MoreStackNavigator}
+        />
+        <AppStack.Screen
+          key={profileStackPath}
+          name={profileStackPath}
+          component={ProfileStackNavigator}
         />
         {/* <AppStack.Screen
           key={paymentStackPath}

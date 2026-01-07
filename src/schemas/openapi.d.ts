@@ -604,6 +604,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/user/posts/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PostController_reportPost_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/user/comment/{postId}": {
         parameters: {
             query?: never;
@@ -1249,7 +1265,7 @@ export interface components {
              * @description Error code (optional)
              * @enum {string}
              */
-            errorCode?: "validation_failed" | "unauthenticated" | "unauthorized" | "http_error" | "unknown_error" | "token_expired" | "invalid_token" | "not_any_recipient" | "send_mail_failed" | "consumer_not_found" | "consumer_failed" | "process_failed" | "otp_already_exist" | "otp_spam" | "otp_expired" | "otp_incorrect" | "invalid_decode_token" | "invalid_token_issuer" | "VerificationNotFound" | "VerificationSessionExpired" | "AccountNotFound" | "ExistedEmail" | "ExistedPhoneNumber" | "ExistedUsername" | "InvalidEmailOrPassword" | "InvalidTokenSecret" | "FileNotFound" | "FileTooLarge" | "InvalidFileType" | "InvalidFileName" | "EmailAlreadyExists" | "UsernameAlreadyExists" | "FanProfileNotFound" | "IdolProfileNotFound" | "ChatChannelNotFound" | "NotChannelParticipant" | "NotChannelAdmin" | "CannotSendToAnnouncementChannel" | "InternalServerError" | "IdolNotFound" | "PostNotFound" | "PostNotOwned" | "CommentNotFound" | "CommentNotOwned" | "CommentNotBelongToPost" | "CommunityNotFound" | "AlreadyJoinedCommunity" | "NotJoinedCommunity" | "ChatChannelRetrievalFailed" | "ChatChannelCreationFailed" | "ChatMessageRetrievalFailed" | "ChatMessageSendFailed" | "ChatChannelAccessDenied" | "ChatChannelAlreadyJoined" | "ChatChannelNotJoined" | "ChatChannelOwnerCannotLeave" | "InvalidChannelId" | "KnockTokenGenerationFailed" | "KnockNotificationSendFailed" | "KnockWorkflowTriggerFailed" | "KnockUserUpsertFailed" | "KnockPreferencesFetchFailed" | "KnockPreferencesUpdateFailed" | "KnockChannelDataUpdateFailed" | "KnockPushChannelNotConfigured" | "KnockFcmTokenRegistrationFailed" | "InvalidFcmToken" | "UserNotFound" | "OrderNotFound" | "OrderAccessDenied" | "OrderInvalidStatus" | "OrderCannotRetryPayment" | "OrderAlreadyPaid" | "OrderItemsEmpty" | "OrderProductInvalid" | "OrderProductUnavailable" | "OrderVariantNotFound" | "OrderInsufficientStock" | "PaymentTransactionNotFound" | "PaymentTransactionCreateFailed" | "PaymentWebhookSignatureInvalid" | "ResourceNotFound" | "UserNotFoundInRecommendationSystem" | "RecommendationServiceError";
+            errorCode?: "validation_failed" | "unauthenticated" | "unauthorized" | "http_error" | "unknown_error" | "token_expired" | "invalid_token" | "not_any_recipient" | "send_mail_failed" | "consumer_not_found" | "consumer_failed" | "process_failed" | "otp_already_exist" | "otp_spam" | "otp_expired" | "otp_incorrect" | "invalid_decode_token" | "invalid_token_issuer" | "VerificationNotFound" | "VerificationSessionExpired" | "AccountNotFound" | "ExistedEmail" | "ExistedPhoneNumber" | "ExistedUsername" | "InvalidEmailOrPassword" | "InvalidTokenSecret" | "FileNotFound" | "FileTooLarge" | "InvalidFileType" | "InvalidFileName" | "EmailAlreadyExists" | "UsernameAlreadyExists" | "FanProfileNotFound" | "IdolProfileNotFound" | "ChatChannelNotFound" | "NotChannelParticipant" | "NotChannelAdmin" | "CannotSendToAnnouncementChannel" | "InternalServerError" | "IdolNotFound" | "PostNotFound" | "PostNotOwned" | "PostAlreadyReported" | "CommentNotFound" | "CommentNotOwned" | "CommentNotBelongToPost" | "CommunityNotFound" | "AlreadyJoinedCommunity" | "NotJoinedCommunity" | "ChatChannelRetrievalFailed" | "ChatChannelCreationFailed" | "ChatMessageRetrievalFailed" | "ChatMessageSendFailed" | "ChatChannelAccessDenied" | "ChatChannelAlreadyJoined" | "ChatChannelNotJoined" | "ChatChannelOwnerCannotLeave" | "InvalidChannelId" | "KnockTokenGenerationFailed" | "KnockNotificationSendFailed" | "KnockWorkflowTriggerFailed" | "KnockUserUpsertFailed" | "KnockPreferencesFetchFailed" | "KnockPreferencesUpdateFailed" | "KnockChannelDataUpdateFailed" | "KnockPushChannelNotConfigured" | "KnockFcmTokenRegistrationFailed" | "InvalidFcmToken" | "UserNotFound" | "AddressNotFound" | "OrderNotFound" | "OrderAccessDenied" | "OrderInvalidStatus" | "OrderCannotRetryPayment" | "OrderAlreadyPaid" | "OrderItemsEmpty" | "OrderProductInvalid" | "OrderProductUnavailable" | "OrderVariantNotFound" | "OrderInsufficientStock" | "PaymentTransactionNotFound" | "PaymentTransactionCreateFailed" | "PaymentWebhookSignatureInvalid" | "ResourceNotFound" | "UserNotFoundInRecommendationSystem" | "RecommendationServiceError";
         };
         SignInResponse: {
             /**
@@ -1776,6 +1792,12 @@ export interface components {
              * @example https://example.com/avatar.jpg
              */
             avatarUrl?: string;
+            /**
+             * @description Author role
+             * @example FAN
+             * @enum {string}
+             */
+            role: "FAN" | "ADMIN" | "IDOL";
         };
         PostDto: {
             /**
@@ -1940,7 +1962,47 @@ export interface components {
              */
             updatedAt: string;
         };
+        PostReportDto: {
+            /**
+             * @description Unique identifier of the report
+             * @example clx1234567890abcdefgh
+             */
+            id: string;
+            /**
+             * @description ID of the reported post
+             * @example clx0987654321zyxwvuts
+             */
+            postId: string;
+            /**
+             * @description ID of the user who reported the post
+             * @example clx1111222233334444
+             */
+            reportedBy: string;
+            /**
+             * @description Reason for reporting the post
+             * @example This post contains inappropriate content
+             */
+            reason?: string;
+            /**
+             * Format: date-time
+             * @description Timestamp when the report was created
+             * @example 2024-01-07T10:30:00Z
+             */
+            createdAt: string;
+        };
         PageInfo: Record<string, never>;
+        CreatePostReportDto: {
+            /**
+             * @description ID of the post being reported
+             * @example clx1234567890abcdefgh
+             */
+            postId: string;
+            /**
+             * @description Reason for reporting the post
+             * @example This post contains inappropriate content
+             */
+            reason?: string;
+        };
         CommentDto: {
             /**
              * @description Comment ID
@@ -3659,7 +3721,7 @@ export interface components {
              */
             paymentMethod: "CREDIT" | "COD";
             /** @description Shipping address */
-            shippingAddress: Record<string, never>;
+            shippingAddress: components["schemas"]["ShippingAddressDto"];
             /** @description Order items */
             items: components["schemas"]["OrderItemListDto"][];
             /**
@@ -3912,6 +3974,28 @@ export interface components {
             createdAt: string;
             /** @description Payment date */
             paidAt?: Record<string, never>;
+        };
+        ShippingAddressDto: {
+            /** @description Address ID */
+            id: string;
+            /** @description First name */
+            firstName: string;
+            /** @description Last name */
+            lastName: string;
+            /** @description Phone number */
+            phoneNumber: string;
+            /** @description Province code */
+            provinceCode: number;
+            /** @description Province name */
+            provinceName: string;
+            /** @description District code */
+            districtCode: number;
+            /** @description District name */
+            districtName: string;
+            /** @description Detail address */
+            detailAddress: string;
+            /** @description Is default address */
+            isDefaultAddress: boolean;
         };
         OrderItemListDto: {
             /** @description Order item ID */
@@ -6009,6 +6093,53 @@ export interface operations {
                          * @example null
                          */
                         data?: Record<string, never> | null;
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_reportPost_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePostReportDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["PostReportDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null

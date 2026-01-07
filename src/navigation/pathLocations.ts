@@ -17,6 +17,7 @@ const postStackPath: keyof RootStackParamList = 'PostStack';
 const communityStackPath: keyof RootStackParamList = 'CommunityStack';
 const chatStackPath: keyof RootStackParamList = 'ChatStack';
 const moreStackPath: keyof RootStackParamList = 'MoreStack';
+const profileStackPath: keyof RootStackParamList = 'ProfileStack';
 const shopPath: keyof RootStackParamList = 'Shop';
 const shopDetailPath: keyof RootStackParamList = 'ShopDetail';
 const shopProductPath: keyof RootStackParamList = 'ShopProduct';
@@ -55,6 +56,7 @@ export {
   postStackPath,
   privacyPath,
   profilePath,
+  profileStackPath,
   resetPasswordPath,
   settingPath,
   shopDetailPath,

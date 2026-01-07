@@ -114,6 +114,7 @@ const HomeScreen = () => {
               navigation.navigate('PostStack', {
                 postId: item.id,
                 communityId: item.communityId,
+                authorId: item.author.id,
               })
             }
           />

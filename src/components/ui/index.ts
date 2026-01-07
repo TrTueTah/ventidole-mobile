@@ -6,6 +6,8 @@ export { default as Avatar } from './Avatar';
 export { default as Badge } from './Badge';
 export { default as Checkbox } from './Checkbox';
 export { default as Chip } from './Chip';
+export { default as DropdownMenu } from './DropdownMenu';
+export type { DropdownMenuItem, DropdownMenuRef } from './DropdownMenu';
 export { default as Icon } from './Icon';
 export { default as MenuList } from './MenuList';
 export { default as ProgressBar } from './ProgressBar';

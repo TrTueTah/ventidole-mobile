@@ -21,7 +21,7 @@ const PaymentStackNavigator = ({ route }: { route: any }) => {
         name={paymentPath}
         component={PaymentScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           title: 'Payment',
           header: props => <CustomScreenHeader {...props} />,
         }}

@@ -1,7 +1,8 @@
 import Logo from '@/components/icons/Logo';
 import { Avatar, Icon } from '@/components/ui';
 import { useAuthStore } from '@/store/authStore';
-import { Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Pressable, TouchableOpacity } from 'react-native';
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -14,6 +15,12 @@ interface HomeHeaderProps {
 
 const HomeHeader = ({ headerVisible }: HomeHeaderProps) => {
   const userData = useAuthStore(state => state.userData);
+  const navigation = useNavigation();
+
+  const handleProfilePress = () => {
+    // Navigate to profile screen
+    navigation.navigate('ProfileStack', { userId: userData?.id || '' });
+  };
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -42,15 +49,17 @@ const HomeHeader = ({ headerVisible }: HomeHeaderProps) => {
         'px-4 py-2 pt-safe-offset-0 flex-row justify-between items-center bg-background'
       }
     >
-      <Avatar
-        text={userData?.username || 'User'}
-        source={
-          userData?.avatarUrl
-            ? { uri: userData.avatarUrl as unknown as string }
-            : undefined
-        }
-        size={'md'}
-      />
+      <TouchableOpacity onPress={handleProfilePress}>
+        <Avatar
+          text={userData?.username || 'User'}
+          source={
+            userData?.avatarUrl
+              ? { uri: userData.avatarUrl as unknown as string }
+              : undefined
+          }
+          size={'md'}
+        />
+      </TouchableOpacity>
       <Logo />
       <Pressable
         className={

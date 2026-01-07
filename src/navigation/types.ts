@@ -27,11 +27,12 @@ export type RootStackParamList = {
   TermAndUse: undefined;
   ChooseCommunity: undefined;
   Home: undefined;
-  PostStack: { postId: string; communityId?: string };
+  PostStack: { postId: string; communityId?: string; authorId?: string };
   CommunityStack: { communityId: string };
   ChatStack: NavigatorScreenParams<ChatStackParamList>;
   MoreStack: NavigatorScreenParams<MoreStackParamList>;
   PaymentStack: { orderId: string; paymentMethod: 'CREDIT' | 'COD' };
+  ProfileStack: { userId: string };
   Shop: undefined;
   ShopDetail: { shopId: string; shopName: string };
   ShopProduct: { productId: string; shopName: string };
@@ -54,6 +55,7 @@ export type MoreStackParamList = {
   MoreMain: undefined;
   Profile: undefined;
   Orders: undefined;
+  OrderDetailsScreen: { orderId: string };
   Privacy: undefined;
   Terms: undefined;
   Settings: undefined;

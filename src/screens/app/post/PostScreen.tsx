@@ -6,7 +6,7 @@ import { useColors } from '@/hooks/useColors';
 import { components } from '@/schemas/openapi';
 import { formatNumber } from '@/utils';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -23,15 +23,17 @@ import { useGetComments } from './hooks/useGetComments';
 import { useGetPostDetail } from './hooks/useGetPostDetail';
 
 type CommentDto = components['schemas']['CommentDto'];
+type PostDto = components['schemas']['PostDto'];
 
 interface PostScreenParams {
   postId: string;
   communityId?: string;
+  onPostLoaded?: (post: PostDto) => void;
 }
 
 const PostScreen = () => {
   const route = useRoute<RouteProp<{ params: PostScreenParams }, 'params'>>();
-  const { postId } = route.params;
+  const { postId, onPostLoaded } = route.params;
   const colors = useColors();
   const [commentText, setCommentText] = useState('');
 
@@ -41,6 +43,13 @@ const PostScreen = () => {
     error: postError,
     refresh: refreshPost,
   } = useGetPostDetail({ postId });
+
+  // Notify parent when post is loaded
+  useEffect(() => {
+    if (post && onPostLoaded) {
+      onPostLoaded(post);
+    }
+  }, [post, onPostLoaded]);
 
   const {
     comments,

@@ -114,12 +114,39 @@ const ConfirmOrderScreen = () => {
   // Confirm order hook
   const { confirmOrderAsync, isLoading: isConfirming } = useConfirmOrder({
     onSuccess: order => {
-      // Navigate to payment stack
-      // @ts-ignore
-      navigation.navigate('PaymentStack', {
-        orderId: order.orderId,
-        paymentMethod: paymentMethod,
-      });
+      // For CREDIT payment, navigate to payment screen
+      // For COD payment, navigate to order details in More stack
+      if (paymentMethod === 'CREDIT') {
+        // @ts-ignore
+        navigation.navigate('PaymentStack', {
+          orderId: order.orderId,
+          paymentMethod: paymentMethod,
+        });
+      } else {
+        // COD order - navigate to Shop first, then to order details in More tab
+        // @ts-ignore
+        navigation.navigate('Shop');
+
+        // Then navigate to MORE tab and order details
+        setTimeout(() => {
+          // @ts-ignore
+          const rootNavigation = navigation.getParent()?.getParent();
+          if (rootNavigation) {
+            rootNavigation.navigate('Main', {
+              screen: 'MORE',
+            });
+
+            // Navigate to OrderDetailsScreen within MoreStack
+            setTimeout(() => {
+              // @ts-ignore
+              navigation.navigate('MoreStack', {
+                screen: 'OrderDetailsScreen',
+                params: { orderId: order.orderId },
+              });
+            }, 100);
+          }
+        }, 50);
+      }
     },
     onError: error => {
       showError(error.message || 'Failed to confirm order');

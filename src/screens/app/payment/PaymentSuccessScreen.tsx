@@ -43,12 +43,21 @@ const PaymentSuccessScreen = () => {
   };
 
   const handleViewOrder = () => {
+    if (!orderDetails?.id) return;
+    
     // Navigate to order details (assuming you have an order details screen)
     // For now, just go back to shop
     navigation.getParent()?.reset({
       index: 0,
       routes: [{ name: 'Main' as never, params: { screen: 'MARKETPLACE' } }],
     });
+    setTimeout(() => {
+      // @ts-ignore
+      navigation.navigate('MoreStack', {
+        screen: 'OrderDetailsScreen',
+        params: { orderId: orderDetails.id },
+      });
+    }, 100);
   };
 
   if (isLoading) {

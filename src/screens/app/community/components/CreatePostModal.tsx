@@ -1,5 +1,6 @@
 import { AppButton, AppInput, AppText, Icon } from '@/components/ui';
 import { useColors } from '@/hooks/useColors';
+import { components } from '@/schemas/openapi';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -12,17 +13,20 @@ import {
   useRef,
   useState,
 } from 'react';
-import { ActivityIndicator, Image, Pressable, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
+import { useUpdatePost } from '../../post/hooks/useUpdatePost';
 import { useCreatePost } from '../hooks/useCreatePost';
 import { usePostImagePicker } from '../hooks/usePostImagePicker';
 
+type PostDto = components['schemas']['PostDto'];
+
 interface CreatePostModalProps {
-  communityId: string;
+  communityId?: string;
   onSuccess?: () => void;
 }
 
 export interface CreatePostModalRef {
-  open: () => void;
+  open: (post?: PostDto) => void;
   close: () => void;
 }
 
@@ -30,7 +34,10 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
   ({ communityId, onSuccess }, ref) => {
     const bottomSheetRef = useRef<BottomSheetModal>(null);
     const [content, setContent] = useState('');
+    const [editingPost, setEditingPost] = useState<PostDto | null>(null);
     const colors = useColors();
+
+    const isEditMode = !!editingPost;
 
     const {
       selectedImages,
@@ -39,20 +46,46 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
       removeImage,
       uploadAllImages,
       clearImages,
+      setSelectedImages,
     } = usePostImagePicker();
 
     const { createPost, isCreating } = useCreatePost({
       onSuccess: () => {
-        setContent('');
-        clearImages();
-        bottomSheetRef.current?.dismiss();
+        handleCloseModal();
         onSuccess?.();
       },
     });
 
+    const { updatePostAsync, isUpdating } = useUpdatePost({
+      onSuccess: () => {
+        handleCloseModal();
+        onSuccess?.();
+      },
+    });
+
+    const handleCloseModal = () => {
+      setContent('');
+      setEditingPost(null);
+      clearImages();
+      bottomSheetRef.current?.dismiss();
+    };
+
     useImperativeHandle(ref, () => ({
-      open: () => bottomSheetRef.current?.present(),
-      close: () => bottomSheetRef.current?.dismiss(),
+      open: (post?: PostDto) => {
+        if (post) {
+          // Edit mode
+          setEditingPost(post);
+          setContent(post.content || '');
+          setSelectedImages(post.mediaUrls || []);
+        } else {
+          // Create mode
+          setEditingPost(null);
+          setContent('');
+          clearImages();
+        }
+        bottomSheetRef.current?.present();
+      },
+      close: () => handleCloseModal(),
     }));
 
     const handleSubmit = useCallback(async () => {
@@ -69,12 +102,31 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
         }
       }
 
-      createPost({
-        content: content.trim(),
-        communityId,
-        mediaUrls,
-      });
-    }, [content, selectedImages, communityId, createPost, uploadAllImages]);
+      if (isEditMode && editingPost) {
+        // Edit mode
+        await updatePostAsync(
+          editingPost.id,
+          content.trim(),
+          mediaUrls.length > 0 ? mediaUrls : undefined,
+        );
+      } else {
+        // Create mode
+        createPost({
+          content: content.trim(),
+          communityId: communityId!,
+          mediaUrls,
+        });
+      }
+    }, [
+      content,
+      selectedImages,
+      isEditMode,
+      editingPost,
+      communityId,
+      createPost,
+      updatePostAsync,
+      uploadAllImages,
+    ]);
 
     const renderBackdrop = useCallback(
       (props: any) => (
@@ -90,8 +142,11 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
 
     const isSubmitDisabled =
       isCreating ||
+      isUpdating ||
       isUploading ||
       (!content.trim() && selectedImages.length === 0);
+
+    const isProcessing = isCreating || isUpdating || isUploading;
 
     return (
       <BottomSheetModal
@@ -108,10 +163,10 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
             {/* Header */}
             <View className="flex-row items-center justify-between mb-6">
               <AppText variant="heading3" weight="bold">
-                Create Post
+                {isEditMode ? 'Edit Post' : 'Create Post'}
               </AppText>
               <Pressable
-                onPress={() => bottomSheetRef.current?.dismiss()}
+                onPress={handleCloseModal}
                 className="w-8 h-8 items-center justify-center"
               >
                 <Icon name="X" className="w-6 h-6 text-foreground" />
@@ -125,7 +180,7 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
               value={content}
               onChangeText={setContent}
               multiline
-              editable={!isCreating && !isUploading}
+              editable={!isProcessing}
             />
 
             {/* Image Grid */}
@@ -154,9 +209,7 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
             <View className="flex-row gap-3 mb-6">
               <Pressable
                 onPress={openImagePicker}
-                disabled={
-                  isUploading || isCreating || selectedImages.length >= 5
-                }
+                disabled={isProcessing || selectedImages.length >= 5}
                 className="flex-row items-center gap-2 px-4 py-2 border border-neutrals800 rounded-lg active:bg-neutrals900"
               >
                 <Icon name="Image" className="w-5 h-5 text-foreground" />
@@ -170,23 +223,19 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
             <AppButton
               onPress={handleSubmit}
               disabled={isSubmitDisabled}
+              loading={isProcessing}
               className="w-full"
+              variant="primary"
             >
-              {isCreating || isUploading ? (
-                <View className="flex-row items-center gap-2">
-                  <ActivityIndicator
-                    size="small"
-                    color={colors.primaryForeground}
-                  />
-                  <AppText variant="body" className="text-primaryForeground">
-                    {isUploading ? 'Uploading...' : 'Posting...'}
-                  </AppText>
-                </View>
-              ) : (
-                <AppText variant="body" className="text-primaryForeground">
-                  Post
-                </AppText>
-              )}
+              {isProcessing
+                ? isUploading
+                  ? 'Uploading...'
+                  : isEditMode
+                  ? 'Updating...'
+                  : 'Posting...'
+                : isEditMode
+                ? 'Update'
+                : 'Post'}
             </AppButton>
           </View>
         </BottomSheetScrollView>

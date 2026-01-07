@@ -106,6 +106,12 @@ const AppImage: React.FC<AppImageProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  // Reset state when source changes
+  useEffect(() => {
+    setLoading(true);
+    setError(false);
+  }, [source]);
+
   const handleLoadStart = () => {
     setLoading(true);
     setError(false);
@@ -120,6 +126,7 @@ const AppImage: React.FC<AppImageProps> = ({
   const handleError = (e: any) => {
     setLoading(false);
     setError(true);
+    console.warn('[AppImage] Image load error:', e.nativeEvent?.error || e);
     onError?.(e);
   };
 

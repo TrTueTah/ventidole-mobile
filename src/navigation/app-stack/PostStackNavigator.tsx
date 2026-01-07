@@ -1,22 +1,32 @@
 import { Icon } from '@/components/ui';
+import { components } from '@/schemas/openapi';
+import CreatePostModal, {
+  CreatePostModalRef,
+} from '@/screens/app/community/components/CreatePostModal';
 import PostScreen from '@/screens/app/post/PostScreen';
 import PostActionsBottomSheet from '@/screens/app/post/components/PostActionsBottomSheet';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import CustomScreenHeader from '../components/ScreenHeader';
 import { postStackPath } from '../pathLocations';
+
+type PostDto = components['schemas']['PostDto'];
+
 const PostStack = createNativeStackNavigator();
 
 const PostStackNavigator = ({ route }: { route: any }) => {
   const communityId = route?.params?.communityId;
   const postId = route?.params?.postId;
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const editPostRef = useRef<CreatePostModalRef>(null);
   const navigation = useNavigation();
+  const [currentPost, setCurrentPost] = useState<PostDto | null>(null);
 
-  const handleOpenBottomSheet = () => {
+  const handleOpenBottomSheet = (post: PostDto) => {
+    setCurrentPost(post);
     bottomSheetRef.current?.expand();
   };
 
@@ -27,16 +37,16 @@ const PostStackNavigator = ({ route }: { route: any }) => {
     }
   };
 
-  const handleReport = () => {
-    bottomSheetRef.current?.close();
-    // TODO: Report logic
-    console.log('Report post:', postId);
+  const handleEditSuccess = () => {
+    // Refresh the post data
+    // The PostScreen will handle refreshing via its own hook
   };
 
-  const handleEdit = () => {
+  const handleEditPress = (post: PostDto) => {
     bottomSheetRef.current?.close();
-    // TODO: Edit logic
-    console.log('Edit post:', postId);
+    setTimeout(() => {
+      editPostRef.current?.open(post);
+    }, 300);
   };
 
   return (
@@ -49,22 +59,31 @@ const PostStackNavigator = ({ route }: { route: any }) => {
             headerShown: true,
             title: 'Post',
             headerRight: () => (
-              <TouchableOpacity onPress={handleOpenBottomSheet}>
+              <TouchableOpacity
+                onPress={() =>
+                  currentPost && handleOpenBottomSheet(currentPost)
+                }
+              >
                 <Icon name="EllipsisVertical" />
               </TouchableOpacity>
             ),
             header: props => <CustomScreenHeader {...props} />,
           }}
-          initialParams={{ communityId, postId }}
+          initialParams={{ communityId, postId, onPostLoaded: setCurrentPost }}
         />
       </PostStack.Navigator>
 
-      <PostActionsBottomSheet
-        ref={bottomSheetRef}
-        onGotoCommunity={handleGotoCommunity}
-        onReport={handleReport}
-        onEdit={handleEdit}
-      />
+      {currentPost && (
+        <PostActionsBottomSheet
+          ref={bottomSheetRef}
+          post={currentPost}
+          onGotoCommunity={handleGotoCommunity}
+          onEditSuccess={handleEditSuccess}
+          onEditPress={handleEditPress}
+        />
+      )}
+
+      <CreatePostModal ref={editPostRef} onSuccess={handleEditSuccess} />
     </>
   );
 };

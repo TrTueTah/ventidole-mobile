@@ -1,5 +1,6 @@
 import MoreMainScreen from '@/screens/app/more/MoreMainScreen';
-import OrdersScreen from '@/screens/app/more/OrdersScreen';
+import OrderDetailsScreen from '@/screens/app/more/order/OrderDetailsScreen';
+import OrdersScreen from '@/screens/app/more/order/OrdersScreen';
 import PrivacyScreen from '@/screens/app/more/PrivacyScreen';
 import ProfileScreen from '@/screens/app/more/profile/ProfileScreen';
 import SettingsScreen from '@/screens/app/more/SettingsScreen';
@@ -37,6 +38,13 @@ const MoreStackNavigator = () => {
         component={OrdersScreen}
         options={{
           title: 'My Orders',
+        }}
+      />
+      <MoreStack.Screen
+        name="OrderDetailsScreen"
+        component={OrderDetailsScreen}
+        options={{
+          title: 'Order Details',
         }}
       />
       <MoreStack.Screen

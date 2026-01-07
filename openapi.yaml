@@ -1890,6 +1890,50 @@ paths:
                   - message
       security: *ref_8
       tags: *ref_9
+  /v1/user/posts/report:
+    post:
+      operationId: PostController_reportPost_v1
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostReportDto'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: number
+                    example: 200
+                    description: HTTP status code
+                  message:
+                    type: string
+                    example: OK
+                    description: Response message
+                  data:
+                    $ref: '#/components/schemas/PostReportDto'
+                    description: Response data
+                  error:
+                    type: object
+                    nullable: true
+                    example: null
+                    description: Error information (null on success)
+                  errorCode:
+                    type: string
+                    nullable: true
+                    example: null
+                    description: Error code (null on success)
+                required:
+                  - statusCode
+                  - message
+      security: *ref_8
+      tags: *ref_9
   /v1/user/comment/{postId}:
     get:
       operationId: CommentController_getCommentsByPostId_v1
@@ -5343,6 +5387,7 @@ components:
             - IdolNotFound
             - PostNotFound
             - PostNotOwned
+            - PostAlreadyReported
             - CommentNotFound
             - CommentNotOwned
             - CommentNotBelongToPost
@@ -5369,6 +5414,7 @@ components:
             - KnockFcmTokenRegistrationFailed
             - InvalidFcmToken
             - UserNotFound
+            - AddressNotFound
             - OrderNotFound
             - OrderAccessDenied
             - OrderInvalidStatus
@@ -6008,9 +6054,18 @@ components:
           type: string
           example: https://example.com/avatar.jpg
           description: Author avatar URL
+        role:
+          type: string
+          example: FAN
+          description: Author role
+          enum:
+            - FAN
+            - ADMIN
+            - IDOL
       required:
         - id
         - username
+        - role
     PostDto:
       type: object
       properties:
@@ -6192,9 +6247,51 @@ components:
         - communityId
         - createdAt
         - updatedAt
+    PostReportDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the report
+          example: clx1234567890abcdefgh
+        postId:
+          type: string
+          description: ID of the reported post
+          example: clx0987654321zyxwvuts
+        reportedBy:
+          type: string
+          description: ID of the user who reported the post
+          example: clx1111222233334444
+        reason:
+          type: string
+          description: Reason for reporting the post
+          example: This post contains inappropriate content
+        createdAt:
+          format: date-time
+          type: string
+          description: Timestamp when the report was created
+          example: '2024-01-07T10:30:00Z'
+      required:
+        - id
+        - postId
+        - reportedBy
+        - createdAt
     PageInfo:
       type: object
       properties: {}
+    CreatePostReportDto:
+      type: object
+      properties:
+        postId:
+          type: string
+          description: ID of the post being reported
+          example: clx1234567890abcdefgh
+        reason:
+          type: string
+          description: Reason for reporting the post
+          example: This post contains inappropriate content
+      required:
+        - postId
     CommentDto:
       type: object
       properties:
@@ -8075,8 +8172,9 @@ components:
             - CREDIT
             - COD
         shippingAddress:
-          type: object
           description: Shipping address
+          allOf:
+            - $ref: '#/components/schemas/ShippingAddressDto'
         items:
           description: Order items
           type: array
@@ -8387,6 +8485,50 @@ components:
         - paymentMethod
         - itemCount
         - createdAt
+    ShippingAddressDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Address ID
+        firstName:
+          type: string
+          description: First name
+        lastName:
+          type: string
+          description: Last name
+        phoneNumber:
+          type: string
+          description: Phone number
+        provinceCode:
+          type: number
+          description: Province code
+        provinceName:
+          type: string
+          description: Province name
+        districtCode:
+          type: number
+          description: District code
+        districtName:
+          type: string
+          description: District name
+        detailAddress:
+          type: string
+          description: Detail address
+        isDefaultAddress:
+          type: boolean
+          description: Is default address
+      required:
+        - id
+        - firstName
+        - lastName
+        - phoneNumber
+        - provinceCode
+        - provinceName
+        - districtCode
+        - districtName
+        - detailAddress
+        - isDefaultAddress
     OrderItemListDto:
       type: object
       properties:

@@ -4,35 +4,63 @@ import { AppText } from '@/components/ui';
 import { useColors } from '@/hooks/useColors';
 import { components } from '@/schemas/openapi';
 import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
   RefreshControl,
   View,
 } from 'react-native';
-import { useCommunityPosts } from '../hooks/useCommunityPosts';
+import { useUserReactionPosts } from '../hooks/useUserReactionPosts';
 
-interface ArtistTabProps {
-  communityId: string;
+interface ReactionsTabProps {
+  userId: string;
 }
 
-const ArtistTab = ({ communityId }: ArtistTabProps) => {
+const ReactionsTab = ({ userId }: ReactionsTabProps) => {
   const colors = useColors();
   const navigation = useNavigation();
+  const [page, setPage] = useState(1);
+  const [allPosts, setAllPosts] = useState<components['schemas']['PostDto'][]>(
+    [],
+  );
 
-  const {
-    posts,
-    isLoading,
-    isLoadingMore,
-    isRefreshing,
-    hasMore,
-    loadMore,
-    refresh,
-  } = useCommunityPosts({ communityId, limit: 10, authorFilter: 'idol' });
+  const { reactionPosts, isLoading, refetch } = useUserReactionPosts({
+    userId,
+    page,
+    limit: 10,
+  });
 
-  const handleEndReached = () => {
-    if (hasMore && !isLoadingMore) {
-      loadMore();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  // Update allPosts when reactionPosts change
+  useEffect(() => {
+    if (reactionPosts.length > 0) {
+      if (page === 1) {
+        setAllPosts(reactionPosts);
+      } else {
+        setAllPosts(prev => {
+          const existingIds = new Set(prev.map(p => p.id));
+          const newPosts = reactionPosts.filter(p => !existingIds.has(p.id));
+          return [...prev, ...newPosts];
+        });
+      }
+      setIsLoadingMore(false);
+    }
+  }, [reactionPosts, page]);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    setPage(1);
+    await refetch();
+    setIsRefreshing(false);
+  };
+
+  const handleLoadMore = () => {
+    if (!isLoadingMore && reactionPosts.length === 10) {
+      setIsLoadingMore(true);
+      setPage(prev => prev + 1);
     }
   };
 
@@ -61,7 +89,7 @@ const ArtistTab = ({ communityId }: ArtistTabProps) => {
     return (
       <View className="flex-1 items-center justify-center py-20">
         <AppText variant="body" color="muted" className="text-center">
-          No posts from artists yet.
+          No reaction posts yet.
         </AppText>
       </View>
     );
@@ -70,7 +98,7 @@ const ArtistTab = ({ communityId }: ArtistTabProps) => {
   return (
     <View className="flex-1 bg-background">
       <FlatList
-        data={posts}
+        data={allPosts}
         keyExtractor={(item: components['schemas']['PostDto']) => item.id}
         renderItem={({ item }) => (
           <PostCard
@@ -84,14 +112,14 @@ const ArtistTab = ({ communityId }: ArtistTabProps) => {
             }
           />
         )}
-        onEndReached={handleEndReached}
+        onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         ListFooterComponent={renderFooter}
         ListEmptyComponent={renderEmpty}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
-            onRefresh={refresh}
+            onRefresh={handleRefresh}
             tintColor={colors.primary}
             colors={[colors.primary]}
           />
@@ -101,4 +129,4 @@ const ArtistTab = ({ communityId }: ArtistTabProps) => {
   );
 };
 
-export default ArtistTab;
+export default ReactionsTab;

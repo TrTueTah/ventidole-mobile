@@ -1,4 +1,5 @@
 import { BackendApiContext } from '@/components/providers/BackendApiProvider';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useContext } from 'react';
 import { components } from 'src/schemas/openapi';
 
@@ -12,6 +13,7 @@ interface UseAddToCartOptions {
 
 export const useAddToCart = (options: UseAddToCartOptions = {}) => {
   const backendApi = useContext(BackendApiContext);
+  const queryClient = useQueryClient();
   const { onSuccess, onError } = options;
 
   const {
@@ -23,6 +25,10 @@ export const useAddToCart = (options: UseAddToCartOptions = {}) => {
   } = backendApi.useMutation('post', '/v1/user/shop/cart', {
     onSuccess: response => {
       if (response.data) {
+        // Invalidate cart query to refetch cart data
+        queryClient.invalidateQueries({
+          queryKey: ['get', '/v1/user/shop/cart'],
+        });
         onSuccess?.(response.data);
       }
     },

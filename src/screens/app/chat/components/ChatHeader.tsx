@@ -1,6 +1,4 @@
 import Logo from '@/components/icons/Logo';
-import { Icon } from '@/components/ui';
-import { Pressable } from 'react-native';
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -40,13 +38,13 @@ const ChatHeader = ({ headerVisible }: ChatHeaderProps) => {
       }
     >
       <Logo />
-      <Pressable
+      {/* <Pressable
         className={
           'bg-background border border-neutrals900 w-12 h-12 rounded-full justify-center items-center'
         }
       >
         <Icon name={'Plus'} className={'text-foreground w-6 h-6'} />
-      </Pressable>
+      </Pressable> */}
     </Animated.View>
   );
 };
