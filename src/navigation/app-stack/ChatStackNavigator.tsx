@@ -1,3 +1,4 @@
+import ChannelDetailScreen from '@/screens/app/chat/ChannelDetailScreen';
 import ChatListScreen from '@/screens/app/chat/ChatListScreen';
 import ChatWindowScreen from '@/screens/app/chat/ChatWindowScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -28,6 +29,14 @@ const ChatStackNavigator = () => {
         options={{
           headerShown: true,
           title: 'Chat',
+        }}
+      />
+      <ChatStack.Screen
+        name="ChannelDetail"
+        component={ChannelDetailScreen}
+        options={{
+          headerShown: true,
+          title: 'Channel Details',
         }}
       />
     </ChatStack.Navigator>

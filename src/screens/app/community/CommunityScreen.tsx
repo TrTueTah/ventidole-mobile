@@ -1,7 +1,10 @@
 import { AppButton, AppText, Icon } from '@/components/ui';
 import { useColors } from '@/hooks/useColors';
+import { useToggleCommunity } from '@/hooks/useToggleCommunity';
+import { RootStackParamList } from '@/navigation/types';
 import { formatNumber } from '@/utils';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -20,7 +23,6 @@ import CreatePostModal, {
 } from './components/CreatePostModal';
 import FanTab from './components/FanTab';
 import { useCommunityDetail } from './hooks/useCommunityDetail';
-import { useToggleCommunity } from './hooks/useToggleCommunity';
 
 interface CommunityScreenParams {
   communityId: string;
@@ -37,6 +39,8 @@ const CommunityScreen = () => {
     useRoute<RouteProp<{ params: CommunityScreenParams }, 'params'>>();
   const { communityId } = route.params || {};
   const colors = useColors();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [activeTab, setActiveTab] = useState<TabType>('about');
   const scrollY = useRef(new Animated.Value(0)).current;
   const createPostModalRef = useRef<CreatePostModalRef>(null);
@@ -47,6 +51,15 @@ const CommunityScreen = () => {
   const handleToggleJoin = () => {
     if (community) {
       toggleCommunity(community.id, community.isJoined || false);
+    }
+  };
+
+  const handleOpenChat = () => {
+    if (community?.chatChannel?.id) {
+      navigation.navigate('ChatStack', {
+        screen: 'ChatWindow',
+        params: { channelId: community.chatChannel.id },
+      });
     }
   };
 
@@ -105,37 +118,58 @@ const CommunityScreen = () => {
             </AppText>
           </View>
 
-          <AppButton
-            onPress={handleToggleJoin}
-            disabled={isToggling}
-            variant={community.isJoined ? 'default' : 'secondary'}
-            size="sm"
-            className="min-w-24"
-          >
-            {isToggling ? (
-              <ActivityIndicator
-                size="small"
-                color={
-                  community.isJoined
-                    ? colors.foreground
-                    : colors.primaryForeground
-                }
-              />
-            ) : (
+          <View className="flex-row gap-2">
+            <AppButton
+              onPress={handleToggleJoin}
+              disabled={isToggling}
+              variant={community.isJoined ? 'default' : 'secondary'}
+              size="sm"
+              className="min-w-24"
+            >
+              {isToggling ? (
+                <ActivityIndicator
+                  size="small"
+                  color={
+                    community.isJoined
+                      ? colors.foreground
+                      : colors.primaryForeground
+                  }
+                />
+              ) : (
+                <AppText
+                  variant="bodySmall"
+                  weight="medium"
+                  className={
+                    community.isJoined
+                      ? 'text-primaryForeground'
+                      : 'text-foreground'
+                  }
+                >
+                  {community.isJoined ? 'Joined' : 'Join'}
+                </AppText>
+              )}
+            </AppButton>
+          </View>
+        </View>
+        {community.chatChannel && (
+          <View className="flex-row justify-start self-start">
+            <AppButton
+              onPress={handleOpenChat}
+              variant="ghost"
+              size="sm"
+              className="px-3"
+              icon={<Icon name="MessageCircle" className="w-4 h-4" />}
+            >
               <AppText
                 variant="bodySmall"
                 weight="medium"
-                className={
-                  community.isJoined
-                    ? 'text-primaryForeground'
-                    : 'text-foreground'
-                }
+                className="ml-2 text-foreground"
               >
-                {community.isJoined ? 'Joined' : 'Join'}
+                {community.chatChannel.name || 'Open Chat'}
               </AppText>
-            )}
-          </AppButton>
-        </View>
+            </AppButton>
+          </View>
+        )}
       </View>
 
       {/* Tab Bar */}

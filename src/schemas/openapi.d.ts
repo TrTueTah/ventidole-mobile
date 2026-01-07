@@ -246,6 +246,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/stream-chat/channels/join": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Join a chat channel
+         * @description Join a chat channel as a member. Users will be added with readonly permissions by default.
+         */
+        post: operations["StreamChatController_joinChannel_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/webhooks/getstream": {
         parameters: {
             query?: never;
@@ -424,6 +444,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/user/profile/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UserController_getUserProfile_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/user/status": {
         parameters: {
             query?: never;
@@ -480,6 +516,38 @@ export interface paths {
             cookie?: never;
         };
         get: operations["PostController_getRecommendations_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/user/posts/user/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PostController_getPostsByUserId_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/user/posts/reactions/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PostController_getReactionPostsByUserId_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1525,6 +1593,13 @@ export interface components {
              */
             image?: string;
         };
+        JoinChannelDto: {
+            /**
+             * @description Channel ID to join
+             * @example community_123_1234567890
+             */
+            channelId: string;
+        };
         UploadFileResponse: {
             /**
              * @description Public URL of the uploaded file
@@ -1658,6 +1733,32 @@ export interface components {
              * @example Passionate K-pop fan 🎵
              */
             bio?: string;
+        };
+        ChatChannelDto: {
+            id: string;
+            name: string;
+            image?: string;
+            description?: string;
+            memberCount: number;
+            /** Format: date-time */
+            lastMessageAt?: string;
+        };
+        UserProfileDto: {
+            id: string;
+            email: string;
+            username: string;
+            /** @enum {string} */
+            role: "FAN" | "ADMIN" | "IDOL";
+            avatarUrl?: string;
+            backgroundUrl?: string;
+            bio?: string;
+            communityId?: string;
+            isOnline: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            chatChannel?: components["schemas"]["ChatChannelDto"];
         };
         PostAuthorDto: {
             /**
@@ -2023,6 +2124,8 @@ export interface components {
              * @example 1250
              */
             totalMember: number;
+            /** @description Community chat channel if exists */
+            chatChannel?: components["schemas"]["ChatChannelDto"];
         };
         CommunityListDto: {
             /**
@@ -4699,6 +4802,56 @@ export interface operations {
             };
         };
     };
+    StreamChatController_joinChannel_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JoinChannelDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
     StreamChatWebhookController_handleWebhook_v1: {
         parameters: {
             query?: never;
@@ -5155,6 +5308,51 @@ export interface operations {
             };
         };
     };
+    UserController_getUserProfile_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["UserProfileDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
     UserController_updateStatus_v1: {
         parameters: {
             query?: never;
@@ -5377,6 +5575,156 @@ export interface operations {
             };
             header?: never;
             path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["PostDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_getPostsByUserId_v1: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+                /** @description Filter posts by community ID */
+                communityId?: string;
+                /** @description Filter posts by user role */
+                filter?: string;
+            };
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["PostDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_getReactionPostsByUserId_v1: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+                /** @description Filter posts by community ID */
+                communityId?: string;
+                /** @description Filter posts by user role */
+                filter?: string;
+            };
+            header?: never;
+            path: {
+                userId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;

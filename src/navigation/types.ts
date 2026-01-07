@@ -46,6 +46,7 @@ export type RootStackParamList = {
 export type ChatStackParamList = {
   ChatList: undefined;
   ChatWindow: { channelId: string };
+  ChannelDetail: { channelId: string };
 };
 
 // More Stack Navigator

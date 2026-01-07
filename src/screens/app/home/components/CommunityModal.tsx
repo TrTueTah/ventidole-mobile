@@ -1,20 +1,15 @@
-import {
-  AppButton,
-  AppInput,
-  AppText,
-  Avatar,
-  Badge,
-  Icon,
-} from '@/components/ui';
+import { AppInput, AppText, Icon } from '@/components/ui';
 import { useToast } from '@/components/ui/ToastProvider';
 import { useColors } from '@/hooks/useColors';
-import { cn, formatNumber } from '@/utils';
+import { RootStackParamList } from '@/navigation/types';
+import { cn } from '@/utils';
 import {
   BottomSheetBackdrop,
   BottomSheetFlatList,
   BottomSheetModal,
 } from '@gorhom/bottom-sheet';
-import { useQueryClient } from '@tanstack/react-query';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   forwardRef,
   useCallback,
@@ -32,8 +27,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useGetCommunitiesList } from '../hooks/useGetCommunitiesList';
 import { useGetJoinedCommunities } from '../hooks/useGetJoinedComunities';
-import { useJoinCommunity } from '../hooks/useJoinCommunity';
-import { useLeaveCommunity } from '../hooks/useLeaveCommunity';
+import CommunityItem from './CommunityItem';
 import CommunityModalSkeleton from './CommunityModalSkeleton';
 
 export interface CommunityModalRef {
@@ -48,10 +42,11 @@ const FILTERS: FilterType[] = ['All', 'Joined'];
 const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
   const colors = useColors();
   const insets = useSafeAreaInsets();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
-  const queryClient = useQueryClient();
   const { showError, showWarning } = useToast();
 
   // Calculate snap point to be full screen
@@ -94,192 +89,21 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
     );
   }, [activeFilter, rawCommunities, searchQuery]);
 
-  const {
-    mutate: joinCommunity,
-    isPending: isJoining,
-    variables: joinVariables,
-  } = useJoinCommunity();
-
-  const {
-    mutate: leaveCommunity,
-    isPending: isLeaving,
-    variables: leaveVariables,
-  } = useLeaveCommunity();
-
   useImperativeHandle(ref, () => ({
     present: () => bottomSheetModalRef.current?.present(),
     dismiss: () => bottomSheetModalRef.current?.dismiss(),
   }));
 
-  // Helper function to update community isJoined status in cache
-  const updateCommunityInCache = useCallback(
-    (communityId: string, isJoined: boolean) => {
-      let communityToJoin: any = null;
-
-      // Update all communities list
-      queryClient.setQueriesData(
-        { queryKey: ['get', '/v1/user/community'] },
-        (oldData: any) => {
-          if (!oldData?.pages) return oldData;
-
-          if (isJoined && !communityToJoin) {
-            for (const page of oldData.pages) {
-              const found = page.data?.find((c: any) => c.id === communityId);
-              if (found) {
-                communityToJoin = {
-                  ...found,
-                  isJoined: true,
-                  totalMember: (found.totalMember || 0) + 1,
-                };
-                break;
-              }
-            }
-          }
-
-          return {
-            ...oldData,
-            pages: oldData.pages.map((page: any) => ({
-              ...page,
-              data: page.data?.map((community: any) =>
-                community.id === communityId
-                  ? {
-                      ...community,
-                      isJoined,
-                      totalMember: isJoined
-                        ? (community.totalMember || 0) + 1
-                        : Math.max((community.totalMember || 0) - 1, 0),
-                    }
-                  : community,
-              ),
-            })),
-          };
-        },
-      );
-
-      // Update joined communities list
-      queryClient.setQueriesData(
-        { queryKey: ['get', '/v1/user/community/joined'] },
-        (oldData: any) => {
-          if (!oldData?.pages) return oldData;
-
-          if (isJoined && communityToJoin) {
-            return {
-              ...oldData,
-              pages: oldData.pages.map((page: any, index: number) =>
-                index === 0
-                  ? {
-                      ...page,
-                      data: [communityToJoin, ...(page.data || [])],
-                    }
-                  : page,
-              ),
-            };
-          } else {
-            return {
-              ...oldData,
-              pages: oldData.pages.map((page: any) => ({
-                ...page,
-                data: page.data?.filter(
-                  (community: any) => community.id !== communityId,
-                ),
-              })),
-            };
-          }
-        },
-      );
+  const handleCommunityPress = useCallback(
+    (communityId: string) => {
+      bottomSheetModalRef.current?.dismiss();
+      // navigation.navigate('CommunityStack', { communityId });
     },
-    [queryClient],
-  );
-
-  const handleJoinToggle = useCallback(
-    (communityId: string, isJoined: boolean) => {
-      if (isJoined) {
-        // Show warning and leave
-        // Note: Toast doesn't support confirm dialogs
-        showWarning('Leaving community...');
-        leaveCommunity(
-          {
-            params: { path: { id: communityId } },
-          },
-          {
-            onSuccess: () => {
-              updateCommunityInCache(communityId, false);
-            },
-            onError: (error: any) => {
-              showError(error.message || 'Failed to leave community');
-            },
-          },
-        );
-      } else {
-        joinCommunity(
-          {
-            params: { path: { id: communityId } },
-          },
-          {
-            onSuccess: () => {
-              updateCommunityInCache(communityId, true);
-            },
-            onError: (error: any) => {
-              showError(error.message || 'Failed to join community');
-            },
-          },
-        );
-      }
-    },
-    [
-      joinCommunity,
-      leaveCommunity,
-      updateCommunityInCache,
-      showWarning,
-      showError,
-    ],
+    [navigation],
   );
 
   const renderCommunityItem = ({ item }: { item: any }) => {
-    const isLoadingThisItem =
-      (isJoining && joinVariables?.params?.path?.id === item.id) ||
-      (isLeaving &&
-        leaveVariables?.params?.path &&
-        'id' in leaveVariables.params.path &&
-        leaveVariables.params.path.id === item.id);
-
-    return (
-      <View className="flex-row items-center px-4 py-4 border-b border-neutrals800">
-        <Avatar source={{ uri: item.avatarUrl }} size="lg" className="mr-3" />
-
-        <View className="flex-1 justify-center">
-          {item.isNew && (
-            <Badge variant="default" className="mb-1 self-start">
-              <AppText variant="labelSmall" className="text-white uppercase">
-                NEW
-              </AppText>
-            </Badge>
-          )}
-          <AppText
-            variant="body"
-            weight="bold"
-            numberOfLines={1}
-            className="mb-1"
-          >
-            {item.name}
-          </AppText>
-          <AppText variant="bodySmall" color="muted">
-            {formatNumber(item.totalMember || 0)} members
-          </AppText>
-        </View>
-
-        <AppButton
-          variant={item.isJoined ? 'outline' : 'primary'}
-          size="sm"
-          onPress={() => handleJoinToggle(item.id, item.isJoined)}
-          loading={isLoadingThisItem}
-          disabled={isLoadingThisItem}
-          className="min-w-[80px]"
-        >
-          {item.isJoined ? 'Joined' : 'Join'}
-        </AppButton>
-      </View>
-    );
+    return <CommunityItem item={item} onPress={handleCommunityPress} />;
   };
 
   const renderEmpty = () => {

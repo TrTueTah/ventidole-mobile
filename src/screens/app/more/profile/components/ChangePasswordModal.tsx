@@ -295,6 +295,7 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
           disabled={isConfirmingVerification || !isValidEmail(email) || !otp}
           loading={isConfirmingVerification}
           className="flex-1"
+          variant="primary"
         >
           {isConfirmingVerification ? 'Verifying...' : 'Verify & Continue'}
         </AppButton>

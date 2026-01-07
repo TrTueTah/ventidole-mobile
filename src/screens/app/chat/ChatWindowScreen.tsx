@@ -1,5 +1,6 @@
-import { AppText, Icon } from '@/components/ui';
+import { AppButton, AppText, Icon } from '@/components/ui';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
+import { useToggleCommunity } from '@/hooks/useToggleCommunity';
 import { ChatStackParamList } from '@/navigation/types';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -19,9 +20,6 @@ import {
   MessageList,
   useChatContext,
 } from 'stream-chat-react-native';
-import ChannelDetailModal, {
-  ChannelDetailModalRef,
-} from './components/ChannelDetailModal';
 
 type ChatWindowRouteProp = RouteProp<ChatStackParamList, 'ChatWindow'>;
 type ChatWindowNavigationProp = NativeStackNavigationProp<
@@ -36,10 +34,14 @@ const ChatWindowScreen = () => {
   const { client } = useChatContext();
   const insets = useSafeAreaInsets();
   const { user } = useGetCurrentUser();
+  const { joinCommunity } = useToggleCommunity({
+    successMessage: 'Joined chat channel successfully!',
+    errorMessage: 'Failed to join chat channel. Please try again.',
+  });
   const [channel, setChannel] = useState<StreamChannel | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const channelDetailModalRef = useRef<ChannelDetailModalRef>(null);
+  const [isJoining, setIsJoining] = useState(false);
   const currentUserIdRef = useRef<string | null>(null);
 
   // Reset channel when user changes
@@ -132,6 +134,7 @@ const ChatWindowScreen = () => {
         console.log('[ChatWindowScreen] Channel state:', {
           members: Object.keys(channelInstance.state.members || {}).length,
           watchers: Object.keys(channelInstance.state.watchers || {}).length,
+          membership: channelInstance.state.membership,
         });
 
         if (isMounted) {
@@ -163,22 +166,105 @@ const ChatWindowScreen = () => {
     if (channel) {
       const channelName =
         (channel.data as any)?.name || channel.data?.name || 'Channel';
+      const membership = channel.state?.membership;
+      const isMember = !!membership && Object.keys(membership).length > 0;
 
       navigation.setOptions({
         title: channelName,
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => channelDetailModalRef.current?.open(channel)}
-            style={{ padding: 8, marginRight: -8 }}
-          >
-            <Icon name="Info" className="w-6 h-6 text-foreground" />
-          </TouchableOpacity>
-        ),
+        headerRight: isMember
+          ? () => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('ChannelDetail', { channelId })
+                }
+                style={{ padding: 8, marginRight: -8 }}
+              >
+                <Icon name="Info" className="w-6 h-6 text-foreground" />
+              </TouchableOpacity>
+            )
+          : undefined,
       });
     }
-  }, [channel, navigation]);
+  }, [channel, navigation, user?.id, channelId]);
 
   const handleChannelLeft = () => {
+    navigation.goBack();
+  };
+
+  const handleJoinChannel = async () => {
+    if (!channel || !user?.id || !client) return;
+
+    setIsJoining(true);
+    try {
+      // Join the community which will also handle adding user to the channel on backend
+      const communityId = (channel.data as any)?.id;
+      if (communityId) {
+        // Remove the "community_" prefix if it exists
+        const cleanCommunityId = communityId.replace(/^community_/, '');
+
+        // Join community (backend handles channel membership)
+        joinCommunity(cleanCommunityId);
+
+        // Poll for membership with retries
+        const cleanId = channelId.replace('messaging:', '');
+        let freshChannel;
+        let retries = 0;
+        const maxRetries = 10;
+
+        while (retries < maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+
+          freshChannel = client.channel('messaging', cleanId);
+
+          await freshChannel.watch({
+            state: true,
+            presence: true,
+          });
+
+          await freshChannel.query({
+            messages: { limit: 30 },
+            state: true,
+          });
+
+          console.log('[ChatWindowScreen] Checking membership after join:', {
+            retry: retries + 1,
+            hasMembership: !!freshChannel.state.membership,
+            membershipKeys: Object.keys(freshChannel.state.membership || {})
+              .length,
+            members: Object.keys(freshChannel.state.members || {}).length,
+          });
+
+          // If membership exists and is not empty, break the loop
+          if (
+            freshChannel.state.membership &&
+            Object.keys(freshChannel.state.membership).length > 0
+          ) {
+            console.log('[ChatWindowScreen] Membership confirmed!');
+            setChannel(freshChannel);
+            break;
+          }
+
+          retries++;
+        }
+
+        if (!freshChannel?.state.membership && retries >= maxRetries) {
+          console.warn(
+            '[ChatWindowScreen] Membership not confirmed after retries',
+          );
+          setError('Unable to confirm membership. Please try again.');
+        }
+      } else {
+        setError('Community information not found.');
+      }
+      setIsJoining(false);
+    } catch (error) {
+      console.error('[ChatWindowScreen] Error joining channel:', error);
+      setIsJoining(false);
+      setError('Failed to join channel. Please try again.');
+    }
+  };
+
+  const handleLeaveChannel = () => {
     navigation.goBack();
   };
 
@@ -208,10 +294,47 @@ const ChatWindowScreen = () => {
   }
 
   // Check user's channel role to determine if they can send messages
-  const currentMember = channel.state?.members?.[user?.id || ''];
-  const channelRole = currentMember?.channel_role;
+  const membership = channel.state?.membership;
+  console.log('[ChatWindowScreen] User membership:', membership);
+  const isMember = !!membership && Object.keys(membership).length > 0;
+  const channelRole = membership?.channel_role;
   const canSendMessages =
     channelRole === 'moderator_member' || channelRole === 'trusted_member';
+
+  // If user is not a member, show join/leave options
+  if (!isMember) {
+    return (
+      <View className="flex-1 bg-background items-center justify-center px-6">
+        <Icon name="MessageCircle" className="w-16 h-16 text-muted mb-4" />
+        <AppText variant="heading3" weight="bold" className="mb-2 text-center">
+          {channel.data?.name || 'Channel'}
+        </AppText>
+        <AppText variant="body" color="muted" className="text-center mb-8">
+          You are not a member of this channel. Join to see messages and
+          participate in the conversation.
+        </AppText>
+
+        <View className="flex-row gap-3 w-full max-w-sm">
+          <AppButton
+            variant="outline"
+            onPress={handleLeaveChannel}
+            className="flex-1"
+          >
+            Cancel
+          </AppButton>
+          <AppButton
+            variant="primary"
+            onPress={handleJoinChannel}
+            loading={isJoining}
+            disabled={isJoining}
+            className="flex-1"
+          >
+            Join Channel
+          </AppButton>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -235,12 +358,6 @@ const ChatWindowScreen = () => {
             </View>
           )}
         </Channel>
-
-        {/* Channel Detail Modal */}
-        <ChannelDetailModal
-          ref={channelDetailModalRef}
-          onChannelLeft={handleChannelLeft}
-        />
       </View>
     </KeyboardAvoidingView>
   );

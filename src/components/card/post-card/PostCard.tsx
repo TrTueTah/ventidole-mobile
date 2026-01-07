@@ -62,12 +62,29 @@ const PostCard = ({ post, className, onLike, onClick }: PostCardProps) => {
           width={width}
           height={200}
           data={post.mediaUrls}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <AppImage
+              key={`${post.id}-${index}-${item}`}
               source={{ uri: item }}
               size="full"
               className="h-[200px]"
               resizeMode="cover"
+              onLoadStart={() => {
+                console.log(
+                  `[PostCard] Image loading started - Post ID: ${post.id}, Index: ${index}, URL: ${item}`,
+                );
+              }}
+              onLoadEnd={() => {
+                console.log(
+                  `[PostCard] Image loaded successfully - Post ID: ${post.id}, Index: ${index}`,
+                );
+              }}
+              onError={error => {
+                console.error(
+                  `[PostCard] Image failed to load - Post ID: ${post.id}, Index: ${index}, URL: ${item}`,
+                  error,
+                );
+              }}
             />
           )}
         />
