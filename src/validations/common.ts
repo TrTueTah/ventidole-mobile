@@ -42,12 +42,6 @@ export const getContactFormSchema = () =>
   });
 
 // Sign In Schema
-export const getSignInSchema = () =>
-  z.object({
-    email: getEmailSchema(),
-    password: z.string().min(1, t('VALIDATION.PASSWORD_REQUIRED')),
-  });
-
 // Sign Up Schema
 export const getSignUpSchema = () =>
   z
@@ -110,12 +104,11 @@ export const getRegisterFormSchema = () =>
       message: t('VALIDATION.PASSWORDS_DONT_MATCH'),
       path: ['confirmPassword'],
     });
-export const signInSchema = getSignInSchema();
+// signInSchema moved to login.ts
 export const signUpSchema = getSignUpSchema();
 export const verifyEmailSchema = getVerifyEmailSchema();
 export const resetPasswordSchema = getResetPasswordSchema();
 // Legacy alias for compatibility
-export const getLoginFormSchema = () => getSignInSchema();
 
 // Deprecated: Keep for backward compatibility, but prefer using getter functions
 export const emailSchema = getEmailSchema();
@@ -123,7 +116,6 @@ export const passwordSchema = getPasswordSchema();
 export const phoneSchema = getPhoneSchema();
 export const urlSchema = getUrlSchema();
 export const contactFormSchema = getContactFormSchema();
-export const loginFormSchema = getLoginFormSchema();
 export const registerFormSchema = getRegisterFormSchema();
 
 // Helper function to validate data

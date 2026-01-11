@@ -5,8 +5,8 @@ import { useAuthStore } from '@/store/authStore';
 import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
 
-type SignUpRequest = components['schemas']['SignUpRequest'];
-type SignInResponse = components['schemas']['SignInResponse'];
+type RegisterRequest = components['schemas']['RegisterDto'];
+type RegisterResponse = components['schemas']['AuthResponseDto'];
 
 export const useSignUp = () => {
   const backendApi = useContext(BackendApiContext);
@@ -20,7 +20,7 @@ export const useSignUp = () => {
   } = useAuthStore();
   const navigation = useNavigation();
 
-  const signUpMutation = backendApi.useMutation('post', '/v1/auth/sign-up', {
+  const signUpMutation = backendApi.useMutation('post', '/auth/register', {
     onSuccess: data => {
       console.log('✅ Sign up success');
 
@@ -29,16 +29,14 @@ export const useSignUp = () => {
       });
 
       if (data.data) {
-        const { accessToken, refreshToken, id, role, isChooseCommunity } =
-          data.data as SignInResponse;
+        const { accessToken, refreshToken, user } =
+          data.data as RegisterResponse;
 
         // Update auth store
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
-        setUserMetadata({ uid: id });
+        setUserMetadata({ id: user.id, email: user.email });
         setIsLogin(true);
-        setIsChooseCommunity(isChooseCommunity);
-
         showSuccess('Account created successfully!');
       }
     },
@@ -52,7 +50,7 @@ export const useSignUp = () => {
   });
 
   return {
-    signUp: (credentials: SignUpRequest) => {
+    signUp: (credentials: RegisterRequest) => {
       signUpMutation.mutate({
         body: credentials,
       });

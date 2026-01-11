@@ -68,7 +68,7 @@ export const useVerifyEmail = (options?: VerifyEmailOptions) => {
   // Send verification code mutation
   const sendVerificationMutation = backendApi.useMutation(
     'post',
-    '/v1/auth/send-verification',
+    '/auth/send-verification',
     {
       onSuccess: data => {
         showSuccess('OTP sent successfully!');
@@ -85,7 +85,7 @@ export const useVerifyEmail = (options?: VerifyEmailOptions) => {
   // Confirm verification code mutation
   const confirmVerificationMutation = backendApi.useMutation(
     'post',
-    '/v1/auth/confirm-verification',
+    '/auth/confirm-verification',
     {
       onSuccess: (data, variables) => {
         const verificationType = (variables.body as any).verificationType;

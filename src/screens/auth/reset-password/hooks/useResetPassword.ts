@@ -4,7 +4,7 @@ import { components } from '@/schemas/openapi';
 import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
 
-type ResetPasswordRequest = components['schemas']['ResetPasswordRequest'];
+type ResetPasswordRequest = components['schemas']['ResetPasswordDto'];
 
 export const useResetPassword = () => {
   const backendApi = useContext(BackendApiContext);
@@ -13,7 +13,7 @@ export const useResetPassword = () => {
 
   const resetPasswordMutation = backendApi.useMutation(
     'post',
-    '/v1/auth/reset-password',
+    '/auth/reset-password',
     {
       onSuccess: () => {
         console.log('✅ Reset password success');

@@ -22,18 +22,16 @@ const mmkvStorage = {
 
 // === Types ===
 interface UserMetadata {
-  uid: string;
-  phoneNumber: string;
+  id: string;
   email: string;
   firstLogin: boolean;
 }
 
-type UserData = components['schemas']['UserDto'];
+type UserData = components['schemas']['UserInfoDto'];
 
 interface AuthState {
   userMetadata: UserMetadata;
   userData: UserData | null;
-  userPhoneNumber: string;
   accessToken: string;
   refreshToken: string;
   isLogin: boolean;
@@ -44,7 +42,6 @@ interface AuthState {
   setIsStorageReady: (ready: boolean) => void;
   setUserMetadata: (metadata: Partial<UserMetadata>) => void;
   setUserData: (userData: UserData | null) => void;
-  setUserPhoneNumber: (phoneNumber: string) => void;
   setAccessToken: (token: string) => void;
   setRefreshToken: (token: string) => void;
   setIsLogin: (isLogin: boolean) => void;
@@ -54,8 +51,7 @@ interface AuthState {
 
 // === Initial values ===
 const initialUserMetadata: UserMetadata = {
-  uid: '',
-  phoneNumber: '',
+  id: '',
   email: '',
   firstLogin: false,
 };
@@ -66,7 +62,6 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       userMetadata: initialUserMetadata,
       userData: null,
-      userPhoneNumber: '',
       accessToken: '',
       refreshToken: '',
       isLogin: false,
@@ -82,8 +77,6 @@ export const useAuthStore = create<AuthState>()(
         })),
 
       setUserData: userData => set({ userData }),
-
-      setUserPhoneNumber: phoneNumber => set({ userPhoneNumber: phoneNumber }),
 
       setAccessToken: token => set({ accessToken: token ?? '' }),
 
@@ -112,7 +105,6 @@ export const useAuthStore = create<AuthState>()(
         refreshToken: state.refreshToken,
         userMetadata: state.userMetadata,
         userData: state.userData,
-        userPhoneNumber: state.userPhoneNumber,
         isLogin: state.isLogin,
         isChooseCommunity: state.isChooseCommunity,
       }),

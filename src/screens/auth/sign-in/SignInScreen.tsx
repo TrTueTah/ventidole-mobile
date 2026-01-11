@@ -4,7 +4,7 @@ import AppInput from '@/components/ui/AppInput';
 import AppText from '@/components/ui/AppText';
 import Icon from '@/components/ui/Icon';
 import { useForm } from '@/hooks/useForm';
-import { getSignInSchema } from '@/validations/common';
+import { getLoginSchema } from '@/validations/login';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +24,7 @@ export default function SignInScreen() {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
 
-  const signInSchema = getSignInSchema();
+  const signInSchema = getLoginSchema();
   type SignInFormData = z.infer<typeof signInSchema>;
 
   const {
@@ -33,7 +33,7 @@ export default function SignInScreen() {
     formState: { errors },
   } = useForm<SignInFormData>({
     defaultValues: {
-      email: '',
+      credential: '',
       password: '',
     },
     validationSchema: signInSchema,
@@ -42,7 +42,7 @@ export default function SignInScreen() {
 
   const onSubmit = async (data: SignInFormData) => {
     login({
-      email: data.email,
+      credential: data.credential,
       password: data.password,
     });
   };
@@ -65,18 +65,16 @@ export default function SignInScreen() {
         >
           <View className="flex-1 px-4 justify-center gap-6">
             {/* Auth Title */}
-            <AuthTitle title={t('WELCOME_BACK_TO_VENTIDOLE')} />
+            <AuthTitle title={t('AUTH.LOGIN.TITLE')} />
 
             {/* Input Fields */}
             <View className="w-full gap-2">
               <AppInput
-                {...register('email')}
-                label={t('EMAIL')}
-                placeholder="johndoe@gmail.com"
-                keyboardType="email-address"
+                {...register('credential')}
+                label={t('LABEL.EMAIL_OR_USERNAME')}
+                placeholder={t('PLACEHOLDER.EMAIL_OR_USERNAME')}
                 autoCapitalize="none"
-                autoComplete="email"
-                errorText={errors.email?.message}
+                errorText={errors.credential?.message}
                 leftIcon={
                   <Icon name="Mail" className="w-5 h-5 text-foreground" />
                 }
@@ -84,8 +82,8 @@ export default function SignInScreen() {
 
               <AppInput
                 {...register('password')}
-                label={t('PASSWORD')}
-                placeholder={t('ENTER_PASSWORD')}
+                label={t('LABEL.PASSWORD')}
+                placeholder={t('PLACEHOLDER.PASSWORD')}
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 autoComplete="password"
@@ -116,7 +114,7 @@ export default function SignInScreen() {
                 }}
               >
                 <AppText className="text-primary font-sans-medium underline">
-                  {t('FORGET_PASSWORD')}
+                  {t('BUTTON.FORGOT_PASSWORD')}
                 </AppText>
               </TouchableOpacity>
             </View>
@@ -130,14 +128,14 @@ export default function SignInScreen() {
                 loading={isLoading}
                 disabled={isLoading}
               >
-                {t('LOGIN')}
+                {t('BUTTON.LOGIN')}
               </AppButton>
             </View>
 
             {/* Sign Up Link */}
             <View className="flex-row justify-center items-center">
               <AppText className="text-foreground font-sans-medium">
-                {t('DONT_HAVE_ACCOUNT_SIGNUP')}{' '}
+                {t('AUTH.LOGIN.NO_ACCOUNT')}{' '}
               </AppText>
               <TouchableOpacity
                 onPress={() => {
@@ -147,7 +145,7 @@ export default function SignInScreen() {
                 }}
               >
                 <AppText className="text-primary font-sans-medium underline">
-                  {t('SIGNUP')}
+                  {t('BUTTON.SIGN_UP')}
                 </AppText>
               </TouchableOpacity>
             </View>

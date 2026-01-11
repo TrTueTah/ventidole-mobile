@@ -55,11 +55,16 @@ const VerifyEmailScreen = () => {
 
   // Handle countdown timer for resend OTP
   useEffect(() => {
-    if (verificationData?.waitSeconds) {
-      setCountdown(verificationData.waitSeconds);
+    if (verificationData?.expiresAt) {
+      setCountdown(
+        Math.max(
+          0,
+          Math.floor((verificationData.expiresAt - Date.now()) / 1000),
+        ),
+      );
       setCanSendOtp(false);
     }
-  }, [verificationData]);
+  }, [verificationData?.expiresAt]);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -99,8 +104,8 @@ const VerifyEmailScreen = () => {
 
   return (
     <AuthCommonContainer
-      title={header || t('VERIFY_EMAIL')}
-      bottomButtonText={t('VERIFY_CONTINUE')}
+      title={header || t('AUTH.VERIFY_EMAIL.TITLE')}
+      bottomButtonText={t('BUTTON.VERIFY_CONTINUE')}
       onBottomButtonPress={handleSubmit(onSubmit)}
       bottomButtonLoading={isConfirmingVerification}
       bottomButtonDisabled={!isValidEmail(currentEmail) || !currentOtp}
@@ -112,8 +117,8 @@ const VerifyEmailScreen = () => {
           <View className="flex-[2] overflow-visible">
             <AppInput
               {...register('email')}
-              label={t('EMAIL')}
-              placeholder="johndoe@gmail.com"
+              label={t('LABEL.EMAIL')}
+              placeholder={t('PLACEHOLDER.EMAIL')}
               keyboardType="email-address"
               autoCapitalize="none"
               errorText={errors.email?.message}
@@ -132,8 +137,8 @@ const VerifyEmailScreen = () => {
               loading={isSendingVerification}
             >
               {countdown > 0
-                ? t('WAIT_SECONDS', { seconds: countdown })
-                : t('SEND_OTP')}
+                ? t('PLACEHOLDER.WAIT_SECONDS', { seconds: countdown })
+                : t('BUTTON.SEND_OTP')}
             </AppButton>
           </View>
         </View>
@@ -141,8 +146,8 @@ const VerifyEmailScreen = () => {
         {/* OTP Input */}
         <AppInput
           {...register('otp')}
-          label={t('VERIFICATION_CODE')}
-          placeholder={t('ENTER_CODE')}
+          label={t('LABEL.VERIFICATION_CODE')}
+          placeholder={t('PLACEHOLDER.ENTER_CODE')}
           keyboardType="number-pad"
           maxLength={4}
           errorText={errors.otp?.message}

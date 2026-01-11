@@ -6,13 +6,8 @@ import { useToast } from '@/components/ui/ToastProvider';
 import { components } from '@/schemas/openapi';
 import { useAuthStore } from '@/store/authStore';
 
-type SignInRequest = components['schemas']['SignInRequest'];
-type SignInResponse = components['schemas']['SignInResponse'];
-
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
+type LoginRequest = components['schemas']['LoginDto'];
+type LoginResponse = components['schemas']['AuthResponseDto'];
 
 export const useLogin = () => {
   const backendApi = useContext(BackendApiContext);
@@ -26,25 +21,18 @@ export const useLogin = () => {
   } = useAuthStore();
   const navigation = useNavigation<any>();
 
-  const loginMutation = backendApi.useMutation('post', '/v1/auth/sign-in', {
+  const loginMutation = backendApi.useMutation('post', '/auth/login', {
     onSuccess: data => {
       if (data.data) {
-        const { accessToken, refreshToken, id, role, isChooseCommunity } =
-          data.data as SignInResponse;
+        const { accessToken, refreshToken, user } = data.data as LoginResponse;
 
         // Update auth store
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
-        setUserMetadata({ uid: id });
+        setUserMetadata({ id: user.id, email: user.email });
         setIsLogin(true);
-        setIsChooseCommunity(isChooseCommunity);
 
         showSuccess('Login successful!');
-
-        // Navigate based on community selection status
-        if (!isChooseCommunity) {
-          navigation.replace('ChooseCommunity');
-        }
       }
     },
     onError: (error: any) => {
@@ -56,9 +44,9 @@ export const useLogin = () => {
   });
 
   return {
-    login: (credentials: LoginCredentials) => {
+    login: (credentials: LoginRequest) => {
       loginMutation.mutate({
-        body: credentials as SignInRequest,
+        body: credentials as LoginRequest,
       });
     },
     isLoading: loginMutation.isPending,

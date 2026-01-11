@@ -87,7 +87,7 @@ const ChooseCommunityScreen = () => {
       <View className="py-8 items-center">
         <Icon name="Search" className="w-12 h-12 text-neutrals300 mb-2" />
         <AppText className="text-sm text-neutrals400">
-          {t('NO_COMMUNITIES_FOUND')}
+          {t('AUTH.CHOOSE_COMMUNITY.NO_COMMUNITIES_FOUND')}
         </AppText>
       </View>
     ),
@@ -118,20 +118,20 @@ const ChooseCommunityScreen = () => {
       <View className="flex-1">
         {/* Header */}
         <View className="px-4 py-4">
-          <AuthTitle title={t('CHOOSE_COMMUNITIES')} />
+          <AuthTitle title={t('AUTH.CHOOSE_COMMUNITY.TITLE')} />
         </View>
 
         {/* Search Section */}
         <View className="px-4 mb-4">
           <AppText className="text-sm text-neutrals400 mb-3">
-            {t('SELECT_AT_LEAST_3_COMMUNITIES')}
+            {t('AUTH.CHOOSE_COMMUNITY.SUBTITLE')}
           </AppText>
 
           {/* Search Input */}
           <AppInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder={t('SEARCH_COMMUNITIES')}
+            placeholder={t('AUTH.CHOOSE_COMMUNITY.SEARCH_PLACEHOLDER')}
             leftIcon={
               <Icon name="Search" className="w-5 h-5 text-neutrals400" />
             }
