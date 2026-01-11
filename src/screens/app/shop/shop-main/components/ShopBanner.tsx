@@ -1,25 +1,28 @@
 import { AppText } from '@/components/ui';
 import { useRef } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Linking,
+  Pressable,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import Carousel, {
   ICarouselInstance,
   Pagination,
 } from 'react-native-reanimated-carousel';
-
-const defaultDataWith6Colors = [
-  '#B0604D',
-  '#899F9C',
-  '#B3C680',
-  '#5C6265',
-  '#F5D399',
-  '#F1F1F1',
-];
+import {
+  Banner,
+  useGetActiveBanners,
+} from '@/screens/app/home/hooks/useGetActiveBanners';
 
 const ShopBanner = () => {
   const { width } = useWindowDimensions();
   const ref = useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
+  const { banners, isLoading } = useGetActiveBanners();
 
   const onPressPagination = (index: number) => {
     ref.current?.scrollTo({
@@ -28,56 +31,94 @@ const ShopBanner = () => {
     });
   };
 
-  const renderItem = ({ item, index }: { item: string; index: number }) => {
+  const handleBannerPress = (banner: Banner) => {
+    if (banner.link) {
+      Linking.openURL(banner.link).catch(err =>
+        console.error('Failed to open link:', err),
+      );
+    }
+  };
+
+  const renderItem = ({ item, index }: { item: Banner; index: number }) => {
     return (
-      <View
-        key={index}
-        style={{ backgroundColor: item }}
-        className="flex-1 justify-center items-center shadow-lg shadow-black/20"
+      <Pressable
+        key={item.id}
+        onPress={() => handleBannerPress(item)}
+        className="flex-1"
       >
-        <AppText className="text-white text-xl font-bold">
-          Slide {index + 1}
-        </AppText>
-      </View>
+        <Image
+          source={{ uri: item.imageUrl }}
+          className="w-full h-full"
+          resizeMode="cover"
+        />
+        {item.title && (
+          <View className="absolute bottom-0 left-0 right-0 bg-black/50 p-3">
+            <AppText className="text-white text-base font-semibold">
+              {item.title}
+            </AppText>
+            {item.description && (
+              <AppText className="text-white/90 text-sm mt-1">
+                {item.description}
+              </AppText>
+            )}
+          </View>
+        )}
+      </Pressable>
     );
   };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <View className="mb-4 h-[350px] justify-center items-center bg-gray-100 rounded-xl">
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  // Don't render if no banners
+  if (!banners || banners.length === 0) {
+    return null;
+  }
 
   return (
     <View className="mb-4 rounded-xl overflow-hidden">
       <Carousel
-        loop
+        loop={banners.length > 1}
         ref={ref}
         width={width - 16 * 2}
         height={350}
         snapEnabled
         pagingEnabled
-        autoPlay
-        autoPlayInterval={2500}
-        data={defaultDataWith6Colors}
+        autoPlay={banners.length > 1}
+        autoPlayInterval={3000}
+        data={banners}
         onProgressChange={progress}
         style={{ width: '100%' }}
         renderItem={renderItem}
       />
-      <Pagination.Basic
-        progress={progress}
-        data={defaultDataWith6Colors}
-        dotStyle={{
-          width: 25,
-          height: 4,
-          backgroundColor: '#D1D5DB',
-        }}
-        activeDotStyle={{
-          overflow: 'hidden',
-          backgroundColor: '#000000',
-        }}
-        containerStyle={{
-          marginTop: 10,
-          position: 'absolute',
-          bottom: 10,
-          alignSelf: 'center',
-        }}
-        onPress={onPressPagination}
-      />
+      {banners.length > 1 && (
+        <Pagination.Basic
+          progress={progress}
+          data={banners}
+          dotStyle={{
+            width: 25,
+            height: 4,
+            backgroundColor: '#D1D5DB',
+          }}
+          activeDotStyle={{
+            overflow: 'hidden',
+            backgroundColor: '#000000',
+          }}
+          containerStyle={{
+            marginTop: 10,
+            position: 'absolute',
+            bottom: 10,
+            alignSelf: 'center',
+          }}
+          onPress={onPressPagination}
+        />
+      )}
     </View>
   );
 };

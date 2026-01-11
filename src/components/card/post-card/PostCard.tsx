@@ -1,9 +1,10 @@
+import { usePostView } from '@/hooks/usePostView';
 import { components } from '@/schemas/openapi';
 import { cn, formatISODate, formatNumber } from '@/utils';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import Verify from '../../icons/Verify';
-import { AppImage, AppText, Avatar, Icon } from '../../ui';
+import { AppText, Avatar, Icon } from '../../ui';
 
 interface PostCardProps {
   post: components['schemas']['PostDto'];
@@ -14,6 +15,7 @@ interface PostCardProps {
 
 const PostCard = ({ post, className, onLike, onClick }: PostCardProps) => {
   const width = Dimensions.get('window').width;
+  const { trackPostView } = usePostView();
 
   const handleLikePress = () => {
     if (onLike) {
@@ -22,6 +24,9 @@ const PostCard = ({ post, className, onLike, onClick }: PostCardProps) => {
   };
 
   const handleCardPress = () => {
+    // Track the view in the background (fire-and-forget)
+    trackPostView(post.id);
+
     if (onClick) {
       onClick(post.id);
     }
@@ -63,28 +68,11 @@ const PostCard = ({ post, className, onLike, onClick }: PostCardProps) => {
           height={200}
           data={post.mediaUrls}
           renderItem={({ item, index }) => (
-            <AppImage
+            <Image
               key={`${post.id}-${index}-${item}`}
               source={{ uri: item }}
-              size="full"
-              className="h-[200px]"
+              style={{ width, height: 200 }}
               resizeMode="cover"
-              onLoadStart={() => {
-                console.log(
-                  `[PostCard] Image loading started - Post ID: ${post.id}, Index: ${index}, URL: ${item}`,
-                );
-              }}
-              onLoadEnd={() => {
-                console.log(
-                  `[PostCard] Image loaded successfully - Post ID: ${post.id}, Index: ${index}`,
-                );
-              }}
-              onError={error => {
-                console.error(
-                  `[PostCard] Image failed to load - Post ID: ${post.id}, Index: ${index}, URL: ${item}`,
-                  error,
-                );
-              }}
             />
           )}
         />

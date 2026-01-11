@@ -97,7 +97,7 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
   const handleCommunityPress = useCallback(
     (communityId: string) => {
       bottomSheetModalRef.current?.dismiss();
-      // navigation.navigate('CommunityStack', { communityId });
+      navigation.navigate('CommunityStack', { communityId });
     },
     [navigation],
   );

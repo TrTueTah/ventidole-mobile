@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/v1/auth/sign-in": {
+    "/auth/register": {
         parameters: {
             query?: never;
             header?: never;
@@ -13,14 +13,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_signIn_v1"];
+        /** Register new user */
+        post: operations["AuthController_register"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/sign-up": {
+    "/auth/login": {
         parameters: {
             query?: never;
             header?: never;
@@ -29,14 +30,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_signUp_v1"];
+        /** Login user */
+        post: operations["AuthController_login"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/send-verification": {
+    "/auth/refresh": {
         parameters: {
             query?: never;
             header?: never;
@@ -45,14 +47,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_sendVerification_v1"];
+        /** Refresh access token */
+        post: operations["AuthController_refreshToken"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/confirm-verification": {
+    "/auth/logout": {
         parameters: {
             query?: never;
             header?: never;
@@ -61,14 +64,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_confirmVerification_v1"];
+        /** Logout user (client-side token removal) */
+        post: operations["AuthController_logout"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/refresh-token": {
+    "/auth/send-verification": {
         parameters: {
             query?: never;
             header?: never;
@@ -77,14 +81,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_refreshNewToken_v1"];
+        /** Send verification code to email */
+        post: operations["AuthController_sendVerification"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/reset-password": {
+    "/auth/confirm-verification": {
         parameters: {
             query?: never;
             header?: never;
@@ -93,14 +98,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_resetPassword_v1"];
+        /** Confirm verification code */
+        post: operations["AuthController_confirmVerification"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/change-password": {
+    "/auth/reset-password": {
         parameters: {
             query?: never;
             header?: never;
@@ -109,14 +115,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_changePassword_v1"];
+        /** Reset password using verification code */
+        post: operations["AuthController_resetPassword"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/admin/sign-in": {
+    "/auth/change-password": {
         parameters: {
             query?: never;
             header?: never;
@@ -125,14 +132,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_adminSignIn_v1"];
+        /** Change password (authenticated user) */
+        post: operations["AuthController_changePassword"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/token": {
+    "/auth/me": {
         parameters: {
             query?: never;
             header?: never;
@@ -141,15 +149,69 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Generate Stream Chat authentication token for current user */
-        post: operations["StreamChatController_generateToken_v1"];
+        /** Get current authenticated user */
+        post: operations["AuthController_getCurrentUser"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/users": {
+    "/auth/stream-chat-token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Stream Chat authentication token */
+        get: operations["AuthController_getStreamChatToken"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/community": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all communities with pagination */
+        get: operations["CommunityController_getAllCommunities"];
+        put?: never;
+        /** Create new community */
+        post: operations["CommunityController_createCommunity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/community/{communityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get community by ID */
+        get: operations["CommunityController_getCommunity"];
+        put?: never;
+        post?: never;
+        /** Delete community */
+        delete: operations["CommunityController_deleteCommunity"];
+        options?: never;
+        head?: never;
+        /** Update community profile */
+        patch: operations["CommunityController_updateCommunity"];
+        trace?: never;
+    };
+    "/user/community/{communityId}/follow": {
         parameters: {
             query?: never;
             header?: never;
@@ -158,15 +220,50 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Create or update user in Stream Chat */
-        post: operations["StreamChatController_createUser_v1"];
+        /** Follow community */
+        post: operations["CommunityController_followCommunity"];
+        /** Unfollow community */
+        delete: operations["CommunityController_unfollowCommunity"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/community/my/owned": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get my communities (as owner) */
+        get: operations["CommunityController_getMyCommunities"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/channels/community": {
+    "/user/community/my/followed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get followed communities */
+        get: operations["CommunityController_getFollowedCommunities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/post": {
         parameters: {
             query?: never;
             header?: never;
@@ -175,18 +272,34 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Create a community channel (ADMIN only)
-         * @description Creates a community channel and automatically adds all idols from the community with send permissions
-         */
-        post: operations["StreamChatController_createCommunityChannel_v1"];
+        /** Create new post */
+        post: operations["PostController_createPost"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/channels/idol": {
+    "/user/post/{postId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get post by ID */
+        get: operations["PostController_getPost"];
+        put?: never;
+        post?: never;
+        /** Delete post */
+        delete: operations["PostController_deletePost"];
+        options?: never;
+        head?: never;
+        /** Update post */
+        patch: operations["PostController_updatePost"];
+        trace?: never;
+    };
+    "/user/post/{postId}/like": {
         parameters: {
             query?: never;
             header?: never;
@@ -195,18 +308,67 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Create an idol channel (IDOL only)
-         * @description Creates an idol channel where the creator becomes owner. Members join as readonly by default
-         */
-        post: operations["StreamChatController_createIdolChannel_v1"];
+        /** Like post */
+        post: operations["PostController_likePost"];
+        /** Unlike post */
+        delete: operations["PostController_unlikePost"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/post/author/{authorId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get posts by author */
+        get: operations["PostController_getPostsByAuthor"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/channels/{channelId}/members/{memberId}/grant-send-permission": {
+    "/user/post/community/{communityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get posts by community */
+        get: operations["PostController_getPostsByCommunity"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/post/feed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get feed posts */
+        get: operations["PostController_getFeedPosts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/comment": {
         parameters: {
             query?: never;
             header?: never;
@@ -215,18 +377,85 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Grant send message permission to a member
-         * @description For idol channels: only creator can grant. For community channels: any idol in the community can grant
-         */
-        post: operations["StreamChatController_grantSendPermission_v1"];
+        /** Create new comment */
+        post: operations["CommentController_createComment"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/channels/{channelId}/members/{memberId}/revoke-send-permission": {
+    "/user/comment/{commentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get comment by ID */
+        get: operations["CommentController_getComment"];
+        put?: never;
+        post?: never;
+        /** Delete comment */
+        delete: operations["CommentController_deleteComment"];
+        options?: never;
+        head?: never;
+        /** Update comment */
+        patch: operations["CommentController_updateComment"];
+        trace?: never;
+    };
+    "/user/comment/post/{postId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get comments by post */
+        get: operations["CommentController_getCommentsByPost"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/comment/{commentId}/replies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get replies to a comment */
+        get: operations["CommentController_getReplies"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/comment/author/{authorId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get comments by author */
+        get: operations["CommentController_getCommentsByAuthor"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/order": {
         parameters: {
             query?: never;
             header?: never;
@@ -235,840 +464,33 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Revoke send message permission from a member
-         * @description For idol channels: only creator can revoke. For community channels: any idol in the community can revoke
-         */
-        post: operations["StreamChatController_revokeSendPermission_v1"];
+        /** Create new order */
+        post: operations["OrderController_createOrder"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/stream-chat/channels/join": {
+    "/user/order/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /**
-         * Join a chat channel
-         * @description Join a chat channel as a member. Users will be added with readonly permissions by default.
-         */
-        post: operations["StreamChatController_joinChannel_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/webhooks/getstream": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Handle GetStream webhook events */
-        post: operations["StreamChatWebhookController_handleWebhook_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/file/upload": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["FileController_uploadFile_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/file/upload-multiple": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["FileController_uploadMultipleFiles_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/file/delete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
+        /** Get order by ID */
+        get: operations["OrderController_getOrder"];
         put?: never;
         post?: never;
-        delete: operations["FileController_deleteFile_v1"];
+        /** Cancel order */
+        delete: operations["OrderController_cancelOrder"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/file/url": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["FileController_getFileUrl_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/file/signed-url": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["FileController_getSignedUrl_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/file/exists": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["FileController_fileExists_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/file/metadata": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get file metadata */
-        get: operations["FileController_getFileMetadata_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/file/list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["FileController_listFiles_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/file/folder": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["FileController_deleteFolder_v1"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["UserController_getCurrentUser_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/profile/{userId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["UserController_getUserProfile_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/status": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["UserController_updateStatus_v1"];
-        trace?: never;
-    };
-    "/v1/user/profile": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["UserController_updateProfile_v1"];
-        trace?: never;
-    };
-    "/v1/user/posts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["PostController_getPosts_v1"];
-        put?: never;
-        post: operations["PostController_createPost_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/posts/recommendations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["PostController_getRecommendations_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/posts/user/{userId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["PostController_getPostsByUserId_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/posts/reactions/{userId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["PostController_getReactionPostsByUserId_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/posts/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["PostController_getPostById_v1"];
-        put?: never;
-        post?: never;
-        delete: operations["PostController_deletePost_v1"];
-        options?: never;
-        head?: never;
-        patch: operations["PostController_updatePost_v1"];
-        trace?: never;
-    };
-    "/v1/user/posts/{id}/like": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["PostController_likePost_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/posts/{id}/view": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["PostController_viewPost_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/posts/report": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["PostController_reportPost_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/comment/{postId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CommentController_getCommentsByPostId_v1"];
-        put?: never;
-        post: operations["CommentController_createComment_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/comment/{postId}/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["CommentController_deleteComment_v1"];
-        options?: never;
-        head?: never;
-        patch: operations["CommentController_updateComment_v1"];
-        trace?: never;
-    };
-    "/v1/user/community": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CommunityController_getAllCommunities_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/community/joined": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CommunityController_getJoinedCommunities_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/community/{id}/join": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["CommunityController_joinCommunity_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/community/bulk-follow": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["CommunityController_bulkFollowCommunities_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/community/{id}/leave": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["CommunityController_leaveCommunity_v1"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/community/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CommunityController_getDetailCommunity_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/shop/following": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ShopController_getFollowingCommunityShops_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/shop": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ShopController_getShops_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/shop/{shopId}/products": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ShopController_getShopProducts_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/shop/products/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ShopController_getProductById_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/shop/cart": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ShopController_getCart_v1"];
-        put?: never;
-        post: operations["ShopController_addToCart_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/shop/cart/{cartItemId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["ShopController_removeFromCart_v1"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/addresses": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AddressController_getAddresses_v1"];
-        put?: never;
-        post: operations["AddressController_createAddress_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/addresses/provinces": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AddressController_getProvinces_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/addresses/provinces/{provinceCode}/districts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AddressController_getDistrictsByProvinceCode_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/user/addresses/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AddressController_getAddressById_v1"];
-        put?: never;
-        post?: never;
-        delete: operations["AddressController_deleteAddress_v1"];
-        options?: never;
-        head?: never;
-        patch: operations["AddressController_updateAddress_v1"];
-        trace?: never;
-    };
-    "/v1/admin/user": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminUserController_getAllUsers_v1"];
-        put?: never;
-        post: operations["AdminUserController_createUser_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/admin/user/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminUserController_getUserById_v1"];
-        put?: never;
-        post?: never;
-        delete: operations["AdminUserController_deleteUser_v1"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminUserController_updateUser_v1"];
-        trace?: never;
-    };
-    "/v1/admin/community": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCommunityController_getAllCommunities_v1"];
-        put?: never;
-        post: operations["AdminCommunityController_createCommunity_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/admin/community/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCommunityController_getCommunityById_v1"];
-        put?: never;
-        post?: never;
-        delete: operations["AdminCommunityController_deleteCommunity_v1"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminCommunityController_updateCommunity_v1"];
-        trace?: never;
-    };
-    "/v1/admin/shop": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminShopController_getAllShops_v1"];
-        put?: never;
-        post: operations["AdminShopController_createShop_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/admin/shop/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminShopController_getShopById_v1"];
-        put?: never;
-        post?: never;
-        delete: operations["AdminShopController_deleteShop_v1"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminShopController_updateShop_v1"];
-        trace?: never;
-    };
-    "/v1/admin/product": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminProductController_getAllProducts_v1"];
-        put?: never;
-        post: operations["AdminProductController_createProduct_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/admin/product/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminProductController_getProductById_v1"];
-        put?: never;
-        post?: never;
-        delete: operations["AdminProductController_deleteProduct_v1"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminProductController_updateProduct_v1"];
-        trace?: never;
-    };
-    "/v1/admin/order": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminOrderController_getAllOrders_v1"];
-        put?: never;
-        post: operations["AdminOrderController_createOrder_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/admin/order/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminOrderController_getOrderById_v1"];
-        put?: never;
-        post?: never;
-        delete: operations["AdminOrderController_deleteOrder_v1"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminOrderController_updateOrder_v1"];
-        trace?: never;
-    };
-    "/v1/admin/order/{id}/status": {
+    "/user/order/{id}/confirm": {
         parameters: {
             query?: never;
             header?: never;
@@ -1081,10 +503,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["AdminOrderController_changeOrderStatus_v1"];
+        /** Confirm order (shop owner) */
+        patch: operations["OrderController_confirmOrder"];
         trace?: never;
     };
-    "/v1/orders/confirm": {
+    "/user/order/{id}/pay": {
         parameters: {
             query?: never;
             header?: never;
@@ -1093,18 +516,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Confirm order and create payment
-         * @description Entry point for order creation. Creates order with PENDING_PAYMENT (CREDIT) or CONFIRMED (COD) status. For CREDIT, returns PayOS payment link.
-         */
-        post: operations["OrderController_confirmOrder_v1"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /** Mark order as paid (payment confirmation) */
+        patch: operations["OrderController_markOrderAsPaid"];
         trace?: never;
     };
-    "/v1/orders/{orderId}/retry-payment": {
+    "/user/order/{id}/ship": {
         parameters: {
             query?: never;
             header?: never;
@@ -1113,29 +533,40 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Retry payment for PENDING_PAYMENT order
-         * @description Creates a new payment transaction with new orderCode and PayOS link. Only works for CREDIT orders in PENDING_PAYMENT status.
-         */
-        post: operations["OrderController_retryPayment_v1"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /** Ship order (shop owner) */
+        patch: operations["OrderController_shipOrder"];
         trace?: never;
     };
-    "/v1/orders": {
+    "/user/order/{id}/deliver": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * Get user orders
-         * @description Returns paginated list of user orders with optional status filter. Ordered by creation date (newest first).
-         */
-        get: operations["OrderController_getUserOrders_v1"];
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Mark order as delivered (shop owner) */
+        patch: operations["OrderController_deliverOrder"];
+        trace?: never;
+    };
+    "/user/order/customer/{customerId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get orders by customer */
+        get: operations["OrderController_getOrdersByCustomer"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1144,18 +575,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/orders/{orderId}/details": {
+    "/user/order/shop/{shopId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * Get order details
-         * @description Returns detailed order information including all items, shipping address, and payment status.
-         */
-        get: operations["OrderController_getOrderDetails_v1"];
+        /** Get orders by shop */
+        get: operations["OrderController_getOrdersByShop"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1164,18 +592,189 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/orders/{orderId}": {
+    "/v1/user/cart/items": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * Get order status
-         * @description Frontend polling endpoint to check order payment status. Returns current order status and payment info if applicable.
-         */
-        get: operations["OrderController_getOrderStatus_v1"];
+        get?: never;
+        put?: never;
+        /** Add item to cart */
+        post: operations["CartController_addItem_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/user/cart": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get user cart */
+        get: operations["CartController_getCart_v1"];
+        put?: never;
+        post?: never;
+        /** Clear entire cart */
+        delete: operations["CartController_clearCart_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/user/cart/items/{itemId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove item from cart */
+        delete: operations["CartController_removeItem_v1"];
+        options?: never;
+        head?: never;
+        /** Update cart item quantity */
+        patch: operations["CartController_updateItemQuantity_v1"];
+        trace?: never;
+    };
+    "/user/product": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create new product */
+        post: operations["ProductController_createProduct"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/product/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get product by ID */
+        get: operations["ProductController_getProduct"];
+        put?: never;
+        post?: never;
+        /** Delete product (soft delete) */
+        delete: operations["ProductController_deleteProduct"];
+        options?: never;
+        head?: never;
+        /** Update product */
+        patch: operations["ProductController_updateProduct"];
+        trace?: never;
+    };
+    "/user/product/{id}/variant": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add variant to product */
+        post: operations["ProductController_addVariant"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/product/{id}/variant/{variantId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update variant */
+        patch: operations["ProductController_updateVariant"];
+        trace?: never;
+    };
+    "/user/product/{id}/variant/{variantId}/stock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update variant stock */
+        patch: operations["ProductController_updateVariantStock"];
+        trace?: never;
+    };
+    "/user/product/{id}/variant/{variantId}/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Activate variant */
+        patch: operations["ProductController_activateVariant"];
+        trace?: never;
+    };
+    "/user/product/{id}/variant/{variantId}/deactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Deactivate variant */
+        patch: operations["ProductController_deactivateVariant"];
+        trace?: never;
+    };
+    "/user/product/shop/{shopId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get products by shop */
+        get: operations["ProductController_getProductsByShop"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1184,44 +783,77 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/webhooks/payos": {
+    "/user/product/search": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Search products by name */
+        get: operations["ProductController_searchProducts"];
         put?: never;
-        /**
-         * PayOS payment webhook
-         * @description Webhook endpoint for PayOS payment confirmations. Must be publicly accessible, HTTPS, and respond within 5 seconds. No authentication required.
-         */
-        post: operations["WebhookController_handlePayOSWebhook"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/knock/token": {
+    "/user/shop": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get all shops */
+        get: operations["ShopController_getAllShops"];
         put?: never;
-        /** Generate Knock authentication token for client SDK */
-        post: operations["KnockController_generateToken_v1"];
+        /** Create new shop */
+        post: operations["ShopController_createShop"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/knock/fcm-token": {
+    "/user/shop/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get my shop */
+        get: operations["ShopController_getMyShop"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/shop/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get shop by ID */
+        get: operations["ShopController_getShop"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update shop */
+        patch: operations["ShopController_updateShop"];
+        trace?: never;
+    };
+    "/user/shop/{id}/activate": {
         parameters: {
             query?: never;
             header?: never;
@@ -1230,11 +862,244 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * Register FCM token for push notifications
-         * @description Register a Firebase Cloud Messaging (FCM) device token for the authenticated user to receive push notifications
-         */
-        post: operations["KnockController_registerFcmToken_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Activate shop */
+        patch: operations["ShopController_activateShop"];
+        trace?: never;
+    };
+    "/user/shop/{id}/deactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Deactivate shop */
+        patch: operations["ShopController_deactivateShop"];
+        trace?: never;
+    };
+    "/user/membership-tier": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create membership tier (community owner only) */
+        post: operations["MembershipTierController_createTier"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/membership-tier/community/{communityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get membership tier for a community */
+        get: operations["MembershipTierController_getTierByCommunity"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/membership-tier/{tierId}/pricing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update tier pricing (community owner only) */
+        patch: operations["MembershipTierController_updatePricing"];
+        trace?: never;
+    };
+    "/user/membership-tier/{tierId}/details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update tier details (community owner only) */
+        patch: operations["MembershipTierController_updateDetails"];
+        trace?: never;
+    };
+    "/user/membership-tier/{tierId}/deactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Deactivate tier (community owner only) */
+        patch: operations["MembershipTierController_deactivate"];
+        trace?: never;
+    };
+    "/user/membership-tier/{tierId}/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Activate tier (community owner only) */
+        patch: operations["MembershipTierController_activate"];
+        trace?: never;
+    };
+    "/user/subscription": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Subscribe to a community */
+        post: operations["SubscriptionController_subscribe"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/subscription/{subscriptionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Cancel subscription */
+        delete: operations["SubscriptionController_cancelSubscription"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/subscription/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get my subscriptions */
+        get: operations["SubscriptionController_getMySubscriptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/subscription/community/{communityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get community subscribers (community owner only) */
+        get: operations["SubscriptionController_getCommunitySubscribers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/subscription/check/{communityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Check if I have access to a community */
+        get: operations["SubscriptionController_checkSubscriptionStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/webhooks/payos/subscription": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PayOSWebhookController_handleSubscriptionPayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/webhooks/payos/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PayOSWebhookController_handleOrderPayment"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1261,172 +1126,40 @@ export interface components {
             data?: Record<string, never> | null;
             /** @description Error information (null on success) */
             error?: Record<string, never>;
-            /**
-             * @description Error code (optional)
-             * @enum {string}
-             */
-            errorCode?: "validation_failed" | "unauthenticated" | "unauthorized" | "http_error" | "unknown_error" | "token_expired" | "invalid_token" | "not_any_recipient" | "send_mail_failed" | "consumer_not_found" | "consumer_failed" | "process_failed" | "otp_already_exist" | "otp_spam" | "otp_expired" | "otp_incorrect" | "invalid_decode_token" | "invalid_token_issuer" | "VerificationNotFound" | "VerificationSessionExpired" | "AccountNotFound" | "ExistedEmail" | "ExistedPhoneNumber" | "ExistedUsername" | "InvalidEmailOrPassword" | "InvalidTokenSecret" | "FileNotFound" | "FileTooLarge" | "InvalidFileType" | "InvalidFileName" | "EmailAlreadyExists" | "UsernameAlreadyExists" | "FanProfileNotFound" | "IdolProfileNotFound" | "ChatChannelNotFound" | "NotChannelParticipant" | "NotChannelAdmin" | "CannotSendToAnnouncementChannel" | "InternalServerError" | "IdolNotFound" | "PostNotFound" | "PostNotOwned" | "PostAlreadyReported" | "CommentNotFound" | "CommentNotOwned" | "CommentNotBelongToPost" | "CommunityNotFound" | "AlreadyJoinedCommunity" | "NotJoinedCommunity" | "ChatChannelRetrievalFailed" | "ChatChannelCreationFailed" | "ChatMessageRetrievalFailed" | "ChatMessageSendFailed" | "ChatChannelAccessDenied" | "ChatChannelAlreadyJoined" | "ChatChannelNotJoined" | "ChatChannelOwnerCannotLeave" | "InvalidChannelId" | "KnockTokenGenerationFailed" | "KnockNotificationSendFailed" | "KnockWorkflowTriggerFailed" | "KnockUserUpsertFailed" | "KnockPreferencesFetchFailed" | "KnockPreferencesUpdateFailed" | "KnockChannelDataUpdateFailed" | "KnockPushChannelNotConfigured" | "KnockFcmTokenRegistrationFailed" | "InvalidFcmToken" | "UserNotFound" | "AddressNotFound" | "OrderNotFound" | "OrderAccessDenied" | "OrderInvalidStatus" | "OrderCannotRetryPayment" | "OrderAlreadyPaid" | "OrderItemsEmpty" | "OrderProductInvalid" | "OrderProductUnavailable" | "OrderVariantNotFound" | "OrderInsufficientStock" | "PaymentTransactionNotFound" | "PaymentTransactionCreateFailed" | "PaymentWebhookSignatureInvalid" | "ResourceNotFound" | "UserNotFoundInRecommendationSystem" | "RecommendationServiceError";
+            /** @description Error code (optional) */
+            errorCode?: string;
         };
-        SignInResponse: {
-            /**
-             * @description User ID
-             * @example 1
-             */
+        UserInfoDto: {
+            /** @example user_123 */
             id: string;
-            /**
-             * @description User role
-             * @example FAN
-             * @enum {string}
-             */
-            role: "FAN" | "ADMIN" | "IDOL";
-            /**
-             * @description JWT access token
-             * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-             */
-            accessToken: string;
-            /**
-             * @description JWT refresh token
-             * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-             */
-            refreshToken: string;
-            /**
-             * @description Whether user has chosen their communities
-             * @example false
-             */
-            isChooseCommunity: boolean;
+            /** @example user@example.com */
+            email: string;
+            /** @example john_doe */
+            username: string;
+            /** @example FAN */
+            role: string;
         };
-        VerificationCodeResponse: {
+        AuthResponseDto: {
+            /** @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... */
+            accessToken: string;
+            /** @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... */
+            refreshToken: string;
+            user: components["schemas"]["UserInfoDto"];
+        };
+        TokenResponseDto: {
+            /** @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... */
+            accessToken: string;
+            /** @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... */
+            refreshToken: string;
+        };
+        VerificationCodeResponseDto: {
             /**
-             * @description Wait time in seconds
-             * @example 60
-             */
-            waitSeconds: number;
-            /**
-             * @description Expired at verification timestamp
+             * @description Expiration timestamp
              * @example 1740412406898
              */
-            expireAt: number;
+            expiresAt: number;
         };
-        ConfirmVerificationResponse: {
-            /**
-             * @description User ID
-             * @example 1
-             */
-            id: string;
-            /**
-             * @description User name
-             * @example Leon
-             */
-            name?: string | null;
-            /**
-             * @description User email
-             * @example example@gmail.com
-             */
-            email: string;
-            /**
-             * @description User role
-             * @example FAN
-             * @enum {string}
-             */
-            role: "FAN" | "ADMIN" | "IDOL";
-        };
-        SignInRequest: {
-            /**
-             * @description Your email
-             * @example example@gmail.com
-             */
-            email: string;
-            /**
-             * @description Your password
-             * @example Password@123456
-             */
-            password: string;
-        };
-        SignUpRequest: {
-            /**
-             * @description Your email
-             * @example example@gmail.com
-             */
-            email: string;
-            /**
-             * @description Your password
-             * @example Password@123456
-             */
-            password: string;
-            /**
-             * @description Your username
-             * @example johndoe
-             */
-            username: string;
-        };
-        SendVerificationRequest: {
-            /**
-             * @description Your email address
-             * @example user@example.com
-             */
-            email: string;
-            /**
-             * @description Verification behavior
-             * @example REGISTER_ACCOUNT
-             * @enum {string}
-             */
-            verificationType: "FIND_EMAIL" | "RESET_PASSWORD" | "REGISTER_ACCOUNT" | "UPDATE_PROFILE" | "CHANGE_PASSWORD";
-        };
-        ConfirmVerificationRequest: {
-            /**
-             * @description Your email address
-             * @example example@gmail.com
-             */
-            email: string;
-            /**
-             * @description Your verification code
-             * @example 0303
-             */
-            code: string;
-            /**
-             * @description Verification type
-             * @example FIND_EMAIL
-             * @enum {string}
-             */
-            verificationType: "FIND_EMAIL" | "RESET_PASSWORD" | "REGISTER_ACCOUNT" | "UPDATE_PROFILE" | "CHANGE_PASSWORD";
-        };
-        RefreshTokenRequest: {
-            /**
-             * @description Your access token
-             * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY4ODUwMjM0NSwiZXhwIjoxNjg4NTg4NzQ1fQ.7mXhKfXlqH3p0nO2b8jv8XzF1Zz5Y9bX5tF8vZ6xQ
-             */
-            token: string;
-            /**
-             * @description Your refresh token
-             * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY4ODUwMjM0NSwiZXhwIjoxNjg4NTg4NzQ1fQ.7mXhKfXlqH3p0nO2b8jv8XzF1Zz5Y9bX5tF8vZ6xQ
-             */
-            refreshToken: string;
-        };
-        ResetPasswordRequest: {
-            /**
-             * @description Your new password
-             * @example Password@123456
-             */
-            password: string;
-            /**
-             * @description Your email address
-             * @example example@gmail.com
-             */
-            email: string;
-        };
-        ChangePasswordRequest: {
-            /**
-             * @description Your current password
-             * @example Password@123456
-             */
-            oldPassword: string;
-            /**
-             * @description Your new password
-             * @example NewPassword@123456
-             */
-            password: string;
-        };
-        TokenDto: {
+        StreamChatTokenResponseDto: {
             /**
              * @description Stream Chat authentication token
              * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -1434,2785 +1167,532 @@ export interface components {
             token: string;
             /**
              * @description Stream Chat API key
-             * @example sy25rkkujgdv
+             * @example abc123xyz
              */
             apiKey: string;
             /**
-             * @description User ID
-             * @example user_123
+             * @description User ID for Stream Chat
+             * @example user_abc123
              */
             userId: string;
         };
-        UserDto: {
-            /**
-             * @description User ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description User email
-             * @example user@example.com
-             */
+        RegisterDto: {
+            /** @example user@example.com */
             email: string;
-            /**
-             * @description Username
-             * @example john_doe
-             */
+            /** @example john_doe */
             username: string;
+            /** @example SecurePass123! */
+            password: string;
             /**
-             * @description User role
-             * @example USER
+             * @example FAN
              * @enum {string}
              */
-            role: "FAN" | "ADMIN" | "IDOL";
+            role?: "FAN" | "IDOL";
+        };
+        LoginDto: {
+            /** @example user@example.com or john_doe */
+            credential: string;
+            /** @example SecurePass123! */
+            password: string;
+        };
+        SendVerificationDto: {
+            /** @example user@example.com */
+            email: string;
             /**
-             * @description User avatar URL
-             * @example https://example.com/avatar.jpg
+             * @example REGISTER_ACCOUNT
+             * @enum {string}
              */
-            avatarUrl?: Record<string, never>;
+            verificationType: "REGISTER_ACCOUNT" | "RESET_PASSWORD" | "CHANGE_PASSWORD" | "FIND_EMAIL";
+        };
+        ConfirmVerificationDto: {
+            /** @example user@example.com */
+            email: string;
+            /** @example 123456 */
+            code: string;
             /**
-             * @description User background URL
-             * @example https://example.com/background.jpg
+             * @example REGISTER_ACCOUNT
+             * @enum {string}
              */
-            backgroundUrl?: Record<string, never>;
+            verificationType: "REGISTER_ACCOUNT" | "RESET_PASSWORD" | "CHANGE_PASSWORD" | "FIND_EMAIL";
+        };
+        ResetPasswordDto: {
+            /** @example user@example.com */
+            email: string;
+            /** @example NewSecurePass123! */
+            password: string;
+        };
+        ChangePasswordDto: {
+            /** @example OldSecurePass123! */
+            oldPassword: string;
+            /** @example NewSecurePass123! */
+            password: string;
+        };
+        CommunityResponseDto: {
+            /** @example comm_abc123 */
+            id: string;
+            /** @example K-Pop Lovers */
+            name: string;
             /**
-             * @description User bio
-             * @example A short bio about me
+             * @example GROUP
+             * @enum {string}
              */
-            bio?: Record<string, never>;
-            /**
-             * @description Whether the user is active
-             * @example true
-             */
+            type: "SOLO" | "GROUP";
+            /** @example user_xyz789 */
+            ownerId: string;
+            /** @example A community for K-Pop enthusiasts */
+            description: Record<string, never> | null;
+            /** @example https://example.com/avatar.jpg */
+            avatarUrl: Record<string, never> | null;
+            /** @example https://example.com/background.jpg */
+            backgroundUrl: Record<string, never> | null;
+            /** @example 1250 */
+            followerCount: number;
+            /** @example 430 */
+            postCount: number;
+            /** @example true */
             isActive: boolean;
             /**
-             * @description Whether the user is online
-             * @example false
-             */
-            isOnline: boolean;
-            /**
              * Format: date-time
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
+             * @example 2024-01-15T08:30:00Z
              */
             createdAt: string;
             /**
              * Format: date-time
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
+             * @example 2024-01-20T14:45:00Z
              */
             updatedAt: string;
         };
-        StreamChannelDto: {
-            /**
-             * @description Channel type
-             * @example messaging
-             */
-            type: string;
-            /**
-             * @description Channel ID
-             * @example channel_123
-             */
-            id: string;
-            /**
-             * @description Channel CID (combination of type and id)
-             * @example messaging:channel_123
-             */
-            cid: string;
-            /**
-             * @description Channel name
-             * @example General Discussion
-             */
-            name?: string;
-            /**
-             * @description Channel description
-             * @example A place for general discussion
-             */
-            description?: string;
-            /**
-             * @description Array of member user IDs
-             * @example [
-             *       "user_1",
-             *       "user_2"
-             *     ]
-             */
-            members: string[];
-            /**
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at: string;
-            /**
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at: string;
-        };
-        CreateStreamUserDto: {
-            /**
-             * @description User ID
-             * @example user_123
-             */
-            userId: string;
-            /**
-             * @description User name
-             * @example John Doe
-             */
-            name: string;
-            /**
-             * @description User avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            image?: string;
-            /**
-             * @description User role (optional - uses GetStream default if not provided)
-             * @example admin
-             */
-            role?: string;
-        };
-        CreateCommunityChannelDto: {
-            /**
-             * @description Channel name
-             * @example BTS Community Chat
-             */
-            name: string;
-            /**
-             * @description Community ID
-             * @example comm_123
-             */
-            communityId: string;
-            /**
-             * @description Channel description
-             * @example Official chat for BTS community
-             */
-            description?: string;
-            /**
-             * @description Channel image URL
-             * @example https://example.com/image.jpg
-             */
-            image?: string;
-        };
-        CreateIdolChannelDto: {
-            /**
-             * @description Channel name
-             * @example JK Personal Chat
-             */
-            name: string;
-            /**
-             * @description Channel description
-             * @example JK's personal fan chat
-             */
-            description?: string;
-            /**
-             * @description Channel image URL
-             * @example https://example.com/image.jpg
-             */
-            image?: string;
-        };
-        JoinChannelDto: {
-            /**
-             * @description Channel ID to join
-             * @example community_123_1234567890
-             */
-            channelId: string;
-        };
-        UploadFileResponse: {
-            /**
-             * @description Public URL of the uploaded file
-             * @example https://storage.googleapis.com/my-bucket/posts/file-uuid.jpg
-             */
-            url: string;
-            /**
-             * @description Name of the uploaded file
-             * @example file-uuid.jpg
-             */
-            fileName: string;
-            /**
-             * @description Full path of the file in storage
-             * @example posts/file-uuid.jpg
-             */
-            filePath: string;
-            /**
-             * @description Size of the file in bytes
-             * @example 102400
-             */
-            size: number;
-            /**
-             * @description MIME type of the file
-             * @example image/jpeg
-             */
-            mimeType: string;
-            /**
-             * Format: date-time
-             * @description Upload timestamp
-             * @example 2025-11-06T08:00:00.000Z
-             */
-            uploadedAt: string;
-        };
-        GetFileUrlResponse: {
-            /**
-             * @description Public URL of the file
-             * @example https://storage.googleapis.com/my-bucket/posts/file-uuid.jpg
-             */
-            url: string;
-        };
-        GetSignedUrlResponse: {
-            /**
-             * @description Signed URL for temporary access
-             * @example https://storage.googleapis.com/my-bucket/posts/file-uuid.jpg?X-Goog-Algorithm=...
-             */
-            signedUrl: string;
-            /**
-             * Format: date-time
-             * @description Expiration time of the signed URL
-             * @example 2025-11-06T09:00:00.000Z
-             */
-            expiresAt: string;
-        };
-        UploadFileRequest: {
-            /**
-             * Format: binary
-             * @description File to upload
-             */
-            file: string;
-            /**
-             * @description Folder to upload the file to
-             * @example posts
-             * @enum {string}
-             */
-            folder: "profiles" | "posts" | "attachments" | "documents" | "thumbnails" | "temp";
-            /**
-             * @description Custom file name (optional)
-             * @example my-custom-name
-             */
-            customFileName: string;
-        };
-        UpdateStatusDto: {
-            /** @description Online status of the user */
-            isOnline: boolean;
-        };
-        UpdateProfileDto: {
-            /**
-             * @description Username
-             * @example john_doe
-             */
-            username?: string;
-            /**
-             * @description Avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: string;
-            /**
-             * @description Background image URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: string;
-            /**
-             * @description User bio/description
-             * @example Passionate K-pop fan 🎵
-             */
-            bio?: string;
-        };
-        UpdateProfileResponseDto: {
-            /**
-             * @description User ID
-             * @example clx123abc
-             */
-            id: string;
-            /**
-             * @description Email
-             * @example user@example.com
-             */
-            email: string;
-            /**
-             * @description Username
-             * @example john_doe
-             */
-            username: string;
-            /**
-             * @description User role
-             * @example FAN
-             */
-            role: string;
-            /**
-             * @description Avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: string;
-            /**
-             * @description Background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: string;
-            /**
-             * @description User bio
-             * @example Passionate K-pop fan 🎵
-             */
-            bio?: string;
-        };
-        ChatChannelDto: {
-            id: string;
-            name: string;
-            image?: string;
-            description?: string;
-            memberCount: number;
-            /** Format: date-time */
-            lastMessageAt?: string;
-        };
-        UserProfileDto: {
-            id: string;
-            email: string;
-            username: string;
-            /** @enum {string} */
-            role: "FAN" | "ADMIN" | "IDOL";
-            avatarUrl?: string;
-            backgroundUrl?: string;
-            bio?: string;
-            communityId?: string;
-            isOnline: boolean;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-            chatChannel?: components["schemas"]["ChatChannelDto"];
-        };
-        PostAuthorDto: {
-            /**
-             * @description Author ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Author username
-             * @example john_doe
-             */
-            username: string;
-            /**
-             * @description Author avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: string;
-            /**
-             * @description Author role
-             * @example FAN
-             * @enum {string}
-             */
-            role: "FAN" | "ADMIN" | "IDOL";
-        };
-        PostDto: {
-            /**
-             * @description Post ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Post content
-             * @example This is my post content
-             */
-            content: string;
-            /**
-             * @description Array of media URLs
-             * @example [
-             *       "https://res.cloudinary.com/dsc9afexw/image/upload/v1762054385/kt1-6905e9f7e7ad5_z2wfqq.jpg",
-             *       "https://res.cloudinary.com/dsc9afexw/image/upload/v1763017396/BTS-scaled_wdnws5.jpg"
-             *     ]
-             */
-            mediaUrls?: string[] | null;
-            /**
-             * @description Number of likes
-             * @example 100
-             */
-            likeCount: number;
-            /**
-             * @description Number of comments
-             * @example 25
-             */
-            commentCount: number;
-            /**
-             * @description Number of views
-             * @example 500
-             */
-            viewCount: number;
-            /**
-             * @description Whether the current user has liked this post
-             * @example true
-             */
-            isLiked: boolean;
-            /**
-             * @description Author ID
-             * @example clxxxxxxx
-             */
-            authorId: string;
-            /** @description Author information */
-            author: components["schemas"]["PostAuthorDto"];
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            communityId: string;
-            /**
-             * Format: date-time
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        CreatePostDto: {
-            /**
-             * @description Post content
-             * @example This is my post content
-             */
-            content: string;
-            /**
-             * @description Array of media URLs
-             * @example [
-             *       "https://res.cloudinary.com/dsc9afexw/image/upload/v1762054385/kt1-6905e9f7e7ad5_z2wfqq.jpg",
-             *       "https://res.cloudinary.com/dsc9afexw/image/upload/v1763017396/BTS-scaled_wdnws5.jpg"
-             *     ]
-             */
-            mediaUrls?: string[];
-            /**
-             * @description Community ID
-             * @example 123e4567-e89b-12d3-a456-426614174000
-             */
-            communityId: string;
-        };
-        UpdatePostDto: {
-            /**
-             * @description Post content
-             * @example Updated post content
-             */
-            content?: string;
-            /**
-             * @description Array of media URLs
-             * @example [
-             *       "https://res.cloudinary.com/dsc9afexw/image/upload/v1762054385/kt1-6905e9f7e7ad5_z2wfqq.jpg",
-             *       "https://res.cloudinary.com/dsc9afexw/image/upload/v1763017396/BTS-scaled_wdnws5.jpg"
-             *     ]
-             */
-            mediaUrls?: string[];
-        };
-        PostDetailDto: {
-            /**
-             * @description Post ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Post content
-             * @example This is my post content
-             */
-            content: string;
-            /**
-             * @description Array of media URLs
-             * @example [
-             *       "https://res.cloudinary.com/dsc9afexw/image/upload/v1762054385/kt1-6905e9f7e7ad5_z2wfqq.jpg",
-             *       "https://res.cloudinary.com/dsc9afexw/image/upload/v1763017396/BTS-scaled_wdnws5.jpg"
-             *     ]
-             */
-            mediaUrls?: string[] | null;
-            /**
-             * @description Number of likes
-             * @example 100
-             */
-            likeCount: number;
-            /**
-             * @description Number of comments
-             * @example 25
-             */
-            commentCount: number;
-            /**
-             * @description Number of views
-             * @example 500
-             */
-            viewCount: number;
-            /**
-             * @description Whether the current user has liked this post
-             * @example true
-             */
-            isLiked: boolean;
-            /**
-             * @description Author ID
-             * @example clxxxxxxx
-             */
-            authorId: string;
-            /** @description Author information */
-            author: components["schemas"]["PostAuthorDto"];
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            communityId: string;
-            /**
-             * Format: date-time
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        PostReportDto: {
-            /**
-             * @description Unique identifier of the report
-             * @example clx1234567890abcdefgh
-             */
-            id: string;
-            /**
-             * @description ID of the reported post
-             * @example clx0987654321zyxwvuts
-             */
-            postId: string;
-            /**
-             * @description ID of the user who reported the post
-             * @example clx1111222233334444
-             */
-            reportedBy: string;
-            /**
-             * @description Reason for reporting the post
-             * @example This post contains inappropriate content
-             */
-            reason?: string;
-            /**
-             * Format: date-time
-             * @description Timestamp when the report was created
-             * @example 2024-01-07T10:30:00Z
-             */
-            createdAt: string;
-        };
+        CreateCommunityDto: Record<string, never>;
+        UpdateCommunityDto: Record<string, never>;
         PageInfo: Record<string, never>;
-        CreatePostReportDto: {
+        PostMediaResponseDto: {
+            /** @example https://example.com/media/image1.jpg */
+            url: string;
+            /** @example 0 */
+            order: number;
+        };
+        PostResponseDto: {
+            /** @example post_abc123 */
+            id: string;
+            /** @example user_xyz789 */
+            authorId: string;
+            /** @example comm_def456 */
+            communityId: Record<string, never> | null;
+            /** @example This is an amazing post about K-Pop! */
+            content: string;
+            media: components["schemas"]["PostMediaResponseDto"][];
+            /** @example 245 */
+            likeCount: number;
+            /** @example 1520 */
+            viewCount: number;
+            /** @example 34 */
+            commentCount: number;
+            /** @example false */
+            isDeleted: boolean;
             /**
-             * @description ID of the post being reported
-             * @example clx1234567890abcdefgh
+             * Format: date-time
+             * @example 2024-01-15T08:30:00Z
              */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-20T14:45:00Z
+             */
+            updatedAt: string;
+        };
+        CreatePostDto: Record<string, never>;
+        UpdatePostDto: Record<string, never>;
+        CommentResponseDto: {
+            /** @example comment_abc123 */
+            id: string;
+            /** @example post_xyz789 */
             postId: string;
-            /**
-             * @description Reason for reporting the post
-             * @example This post contains inappropriate content
-             */
-            reason?: string;
-        };
-        CommentDto: {
-            /**
-             * @description Comment ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Comment content
-             * @example This is a comment
-             */
+            /** @example user_def456 */
+            authorId: string;
+            /** @example comment_parent123 */
+            parentCommentId: Record<string, never> | null;
+            /** @example This is a great post! */
             content: string;
-            /**
-             * @description Post ID
-             * @example clxxxxxxx
-             */
-            postId: string;
-            /**
-             * @description User ID
-             * @example clxxxxxxx
-             */
-            userId: string;
-            /**
-             * @description User information
-             * @example {
-             *       "id": "clxxxxxxx",
-             *       "username": "john_doe",
-             *       "avatarUrl": "https://example.com/avatar.jpg"
-             *     }
-             */
-            user: Record<string, never>;
-            /**
-             * @description Parent comment ID (for nested replies)
-             * @example clxxxxxxx
-             */
-            parentId?: Record<string, never>;
+            /** @example 5 */
+            replyCount: number;
+            /** @example false */
+            isDeleted: boolean;
             /**
              * Format: date-time
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
+             * @example 2024-01-15T08:30:00Z
              */
             createdAt: string;
             /**
              * Format: date-time
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
+             * @example 2024-01-20T14:45:00Z
              */
             updatedAt: string;
         };
-        CreateCommentDto: {
-            /**
-             * @description Comment content
-             * @example This is a comment
-             */
-            content: string;
-            /**
-             * @description Parent comment ID (for nested replies)
-             * @example clxxxxxxx
-             */
-            parentId?: string;
-        };
-        UpdateCommentDto: {
-            /**
-             * @description Comment content
-             * @example Updated comment content
-             */
-            content: string;
-        };
-        CommunityDto: {
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Community name
-             * @example K-Pop Fans Community
-             */
-            name: string;
-            /**
-             * @description Community avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description Community background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: Record<string, never>;
-            /**
-             * @description Community description
-             * @example A community for K-Pop fans
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Whether the community is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        IdolDto: {
-            /**
-             * @description Idol ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Idol username
-             * @example john_idol
-             */
-            username: string;
-            /**
-             * @description Idol avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description Idol bio
-             * @example Amazing idol from K-pop
-             */
-            bio?: Record<string, never>;
-        };
-        CommunityDetailDto: {
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Community name
-             * @example K-Pop Fans Community
-             */
-            name: string;
-            /**
-             * @description Community avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description Community background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: Record<string, never>;
-            /**
-             * @description Community description
-             * @example A community for K-Pop fans
-             */
-            description?: Record<string, never>;
-            /**
-             * Format: date-time
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-            /**
-             * @description Whether the current user has joined this community
-             * @example true
-             */
-            isJoined?: boolean;
-            /** @description List of idols belonging to the community */
-            idols: components["schemas"]["IdolDto"][];
-            /**
-             * @description Total number of members in the community
-             * @example 1250
-             */
-            totalMember: number;
-            /** @description Community chat channel if exists */
-            chatChannel?: components["schemas"]["ChatChannelDto"];
-        };
-        CommunityListDto: {
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Community name
-             * @example K-Pop Fans Community
-             */
-            name: string;
-            /**
-             * @description Community avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description Community background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: Record<string, never>;
-            /**
-             * @description Community description
-             * @example A community for K-Pop fans
-             */
-            description?: Record<string, never>;
-            /**
-             * Format: date-time
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-            /**
-             * @description Whether the current user has joined this community
-             * @example true
-             */
-            isJoined?: boolean;
-            /**
-             * @description Total number of members in the community
-             * @example 150
-             */
-            totalMember: number;
-            /**
-             * @description Indicates if the community is new
-             * @example false
-             */
-            isNew: boolean;
-        };
-        BulkFollowCommunitiesDto: {
-            /**
-             * @description Array of community IDs to follow
-             * @example [
-             *       "cm123abc",
-             *       "cm456def",
-             *       "cm789ghi"
-             *     ]
-             */
-            communityIds: string[];
-        };
-        ShopProductDto: {
-            /**
-             * @description Product ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product name
-             * @example Official T-Shirt
-             */
-            name: string;
-            /**
-             * @description Product description
-             * @example Official merchandise T-Shirt
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Product price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Stock quantity
-             * @example 100
-             */
-            stock: number;
-            /**
-             * @description Product media URLs
-             * @example [
-             *       "https://example.com/image1.jpg",
-             *       "https://example.com/image2.jpg"
-             *     ]
-             */
-            mediaUrls?: Record<string, never>;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-        };
-        ShopListDto: {
-            /**
-             * @description Shop ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Shop name
-             * @example My Shop
-             */
-            name: string;
-            /**
-             * @description Shop description
-             * @example A description of my shop
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Shop avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            communityId: string;
-            /** @description Latest 4 products from the shop */
-            products: components["schemas"]["ShopProductDto"][];
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        UserProductDto: {
-            /**
-             * @description Product ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product name
-             * @example Official T-Shirt
-             */
-            name: string;
-            /**
-             * @description Product description
-             * @example Official merchandise T-Shirt
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Product price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Stock quantity
-             * @example 100
-             */
-            stock: number;
-            /**
-             * @description Product media URLs
-             * @example [
-             *       "https://example.com/image1.jpg",
-             *       "https://example.com/image2.jpg"
-             *     ]
-             */
-            mediaUrls?: Record<string, never>;
-            /**
-             * @description Whether the product is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        UserShopDto: {
-            /**
-             * @description Shop ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Shop name
-             * @example My Shop
-             */
-            name: string;
-            /**
-             * @description Shop description
-             * @example A description of my shop
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Shop avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            communityId: string;
-            /**
-             * @description Whether the shop is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        UserProductDetailShopDto: {
-            /**
-             * @description Shop ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Shop name
-             * @example My Shop
-             */
-            name: string;
-            /**
-             * @description Shop avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-        };
-        UserProductDetailTypeDto: {
-            /**
-             * @description Product Type ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product type name
-             * @example Clothing
-             */
-            name: string;
-        };
-        UserProductVariantDto: {
-            /**
-             * @description Variant ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Variant name
-             * @example Size M - Red
-             */
-            name: string;
-            /**
-             * @description Variant price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Variant stock quantity
-             * @example 50
-             */
-            stock: number;
-            /**
-             * @description Whether the variant is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        UserProductDetailDto: {
-            /**
-             * @description Product ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product name
-             * @example Official T-Shirt
-             */
-            name: string;
-            /**
-             * @description Product description
-             * @example Official merchandise T-Shirt
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Product note
-             * @example Official merchandise T-Shirt
-             */
-            note?: Record<string, never>;
-            /**
-             * @description Product price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Stock quantity
-             * @example 100
-             */
-            stock: number;
-            /**
-             * @description Product media URLs
-             * @example [
-             *       "https://example.com/image1.jpg",
-             *       "https://example.com/image2.jpg"
-             *     ]
-             */
-            mediaUrls?: Record<string, never>;
-            /** @description Shop information */
-            shop: components["schemas"]["UserProductDetailShopDto"];
-            /** @description Product type information */
-            type?: components["schemas"]["UserProductDetailTypeDto"];
-            /** @description Product variants */
-            variants: components["schemas"]["UserProductVariantDto"][];
-            /**
-             * @description Whether the product is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        CartItemProductDto: {
-            /**
-             * @description Product ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product name
-             * @example Official T-Shirt
-             */
-            name: string;
-            /**
-             * @description Product price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Product stock quantity
-             * @example 100
-             */
-            stock: number;
-            /**
-             * @description Product media URLs
-             * @example [
-             *       "https://example.com/image1.jpg"
-             *     ]
-             */
-            mediaUrls?: Record<string, never>;
-        };
-        CartItemVariantDto: {
-            /**
-             * @description Variant ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Variant name
-             * @example Size M - Red
-             */
-            name: string;
-            /**
-             * @description Variant price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Variant stock quantity
-             * @example 50
-             */
-            stock: number;
-        };
-        CartItemDto: {
-            /**
-             * @description Cart item ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Quantity
-             * @example 2
-             */
+        CreateCommentDto: Record<string, never>;
+        UpdateCommentDto: Record<string, never>;
+        OrderItemResponseDto: {
+            /** @example prod_abc123 */
+            productId: string;
+            /** @example K-Pop Album - Limited Edition */
+            productName: string;
+            /** @example 2 */
             quantity: number;
-            /** @description Product information */
-            product: components["schemas"]["CartItemProductDto"];
-            /** @description Variant information */
-            variant?: components["schemas"]["CartItemVariantDto"];
+            /** @example 25000 */
+            unitPrice: number;
+            /** @example 50000 */
+            total: number;
+        };
+        ShippingAddressResponseDto: {
+            /** @example Nguyen Van A */
+            recipientName: string;
+            /** @example 0912345678 */
+            phoneNumber: string;
+            /** @example 123 Main Street */
+            addressLine: string;
+            /** @example Ward 10 */
+            ward: string;
+            /** @example District 3 */
+            district: string;
+            /** @example Ho Chi Minh City */
+            province: string;
+            /** @example 700000 */
+            postalCode: string;
+            /** @example 123 Main Street, Ward 10, District 3, Ho Chi Minh City, 700000 */
+            fullAddress: string;
+        };
+        OrderResponseDto: {
+            /** @example order_abc123 */
+            id: string;
+            /** @example user_xyz789 */
+            customerId: string;
+            /** @example shop_def456 */
+            shopId: string;
             /**
-             * @description Whether the product/variant is out of stock
-             * @example false
+             * @example PENDING_PAYMENT
+             * @enum {string}
              */
-            isOutOfStock: boolean;
+            status: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
+            items: components["schemas"]["OrderItemResponseDto"][];
+            shippingAddress: components["schemas"]["ShippingAddressResponseDto"];
+            /**
+             * @example CREDIT
+             * @enum {string}
+             */
+            paymentMethod: "CREDIT" | "COD";
+            /** @example payment_123456 */
+            paymentId: Record<string, never> | null;
+            /**
+             * @description PayOS orderCode for webhook lookup
+             * @example 1737500000
+             */
+            paymentOrderCode: Record<string, never> | null;
+            /**
+             * @description PayOS checkout URL
+             * @example https://pay.payos.vn/web/abc123
+             */
+            checkoutUrl: Record<string, never> | null;
+            /**
+             * @description PayOS QR code (base64)
+             * @example data:image/png;base64,iVBOR...
+             */
+            qrCode: Record<string, never> | null;
+            /**
+             * @description Payment completion timestamp
+             * @example 2024-01-15T10:30:00Z
+             */
+            paidAt: Record<string, never> | null;
+            /** @example TRACK12345 */
+            trackingNumber: Record<string, never> | null;
+            /** @example Customer changed mind */
+            cancelReason: Record<string, never> | null;
+            /** @example 75000 */
+            totalAmount: number;
             /**
              * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
+             * @example 2024-01-15T08:30:00Z
              */
             createdAt: string;
             /**
              * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
+             * @example 2024-01-20T14:45:00Z
              */
             updatedAt: string;
         };
-        CartDto: {
-            /**
-             * @description Cart ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /** @description Cart items */
-            items: components["schemas"]["CartItemDto"][];
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
+        CreateOrderDto: Record<string, never>;
+        MarkOrderAsPaidDto: {
+            /** @example pay_123456789 */
+            paymentId: string;
+        };
+        ShipOrderDto: {
+            /** @example TRACK123456789 */
+            trackingNumber?: string;
+        };
+        CancelOrderDto: {
+            /** @example Customer changed mind */
+            reason?: string;
         };
         AddToCartDto: {
             /**
              * @description Product ID
-             * @example clxxxxxxx
+             * @example prod_abc123
              */
             productId: string;
             /**
              * @description Product variant ID (optional)
-             * @example clxxxxxxx
+             * @example variant_xyz789
              */
             variantId?: string;
             /**
-             * @description Quantity to add or remove
-             * @example 1
+             * @description Quantity to add
+             * @example 2
              */
             quantity: number;
+        };
+        CartItemResponseDto: {
+            /** @example item_abc123 */
+            id: string;
+            /** @example prod_xyz789 */
+            productId: string;
+            /** @example K-Pop Album - Limited Edition */
+            productName: string;
+            /** @example variant_def456 */
+            variantId: Record<string, never> | null;
+            /** @example 2 */
+            quantity: number;
             /**
-             * @description Action to perform: increase or decrease quantity
-             * @example increase
-             * @enum {string}
+             * @description Unit price in VND
+             * @example 25000
              */
-            action: "increase" | "decrease";
+            unitPrice: number;
+            /**
+             * @description Total for this item (unitPrice * quantity)
+             * @example 50000
+             */
+            total: number;
         };
-        ProvinceDto: {
+        CartResponseDto: {
+            /** @example cart_abc123 */
             id: string;
-            name: string;
-            code: number;
-            divisionType: string;
-            phoneCode: number;
-            codename: string;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-        };
-        DistrictDto: {
-            id: string;
-            name: string;
-            code: number;
-            codename: string;
-            divisionType: string;
-            provinceCode: number;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-        };
-        AddressDto: {
-            id: string;
+            /** @example user_xyz789 */
             userId: string;
-            firstName: string;
-            lastName: string;
-            phoneNumber: string;
-            provinceCode: number;
-            districtCode: number;
-            detailAddress: string;
+            /**
+             * @example ACTIVE
+             * @enum {string}
+             */
+            status: "ACTIVE" | "CHECKED_OUT" | "ABANDONED";
+            items: components["schemas"]["CartItemResponseDto"][];
+            /**
+             * @description Number of distinct items
+             * @example 3
+             */
+            itemCount: number;
+            /**
+             * @description Total quantity of all items
+             * @example 5
+             */
+            totalQuantity: number;
+            /**
+             * @description Total amount in VND
+             * @example 125000
+             */
+            totalAmount: number;
+            /**
+             * Format: date-time
+             * @example 2024-01-15T08:30:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-20T14:45:00Z
+             */
+            updatedAt: string;
+        };
+        UpdateCartItemDto: {
+            /**
+             * @description New quantity
+             * @example 3
+             */
+            quantity: number;
+        };
+        ProductVariantResponseDto: {
+            /** @example variant_abc123 */
+            id: string;
+            /** @example Size M - Red */
+            name: string;
+            /** @example 35000 */
+            price: number;
+            /** @example 50 */
+            stock: number;
+            /** @example true */
+            isActive: boolean;
+            /**
+             * Format: date-time
+             * @example 2024-01-15T08:30:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-20T14:45:00Z
+             */
+            updatedAt: string;
+        };
+        ProductResponseDto: {
+            /** @example prod_abc123 */
+            id: string;
+            /** @example shop_xyz789 */
+            shopId: string;
+            /** @example K-Pop Official T-Shirt */
+            name: string;
+            /** @example High-quality cotton t-shirt with official group logo */
+            description: Record<string, never> | null;
+            /** @example 30000 */
+            basePrice: number;
+            /**
+             * @example [
+             *       "https://example.com/img1.jpg",
+             *       "https://example.com/img2.jpg"
+             *     ]
+             */
+            imageUrls: string[];
+            /** @example Apparel */
+            category: Record<string, never> | null;
+            variants: components["schemas"]["ProductVariantResponseDto"][];
+            /** @example true */
+            isActive: boolean;
             /** @example false */
-            isDefaultAddress: boolean;
-            options?: Record<string, never> | null;
-            province: components["schemas"]["ProvinceDto"];
-            district: components["schemas"]["DistrictDto"];
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-        };
-        CreateAddressDto: {
-            /** @example John */
-            firstName: string;
-            /** @example Doe */
-            lastName: string;
-            /** @example 0901234567 */
-            phoneNumber: string;
-            /**
-             * @description Province code
-             * @example 1
-             */
-            provinceCode: number;
-            /**
-             * @description District code
-             * @example 1
-             */
-            districtCode: number;
-            /** @example 123 Main Street, Ward 1 */
-            detailAddress: string;
-            /**
-             * @description Set as default address
-             * @example false
-             */
-            isDefaultAddress?: boolean;
-            options?: Record<string, never> | null;
-        };
-        UpdateAddressDto: {
-            /** @example John */
-            firstName?: string;
-            /** @example Doe */
-            lastName?: string;
-            /** @example 0901234567 */
-            phoneNumber?: string;
-            /**
-             * @description Province code
-             * @example 1
-             */
-            provinceCode?: number;
-            /**
-             * @description District code
-             * @example 1
-             */
-            districtCode?: number;
-            /** @example 123 Main Street, Ward 1 */
-            detailAddress?: string;
-            /**
-             * @description Set as default address
-             * @example false
-             */
-            isDefaultAddress?: boolean;
-            options?: Record<string, never> | null;
-        };
-        CommunityInfoDto: {
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            id?: Record<string, never>;
-            /**
-             * @description Community name
-             * @example K-Pop Fans Community
-             */
-            name?: Record<string, never>;
-            /**
-             * @description Community avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description Community background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: Record<string, never>;
-            /**
-             * @description Community description
-             * @example A community for K-Pop fans
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Total members in the community
-             * @example 100
-             */
-            totalMembers?: number;
-        };
-        UserDetailDto: {
-            /**
-             * @description User ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description User email
-             * @example user@example.com
-             */
-            email: string;
-            /**
-             * @description Username
-             * @example john_doe
-             */
-            username: string;
-            /**
-             * @description User role
-             * @example USER
-             * @enum {string}
-             */
-            role: "FAN" | "ADMIN" | "IDOL";
-            /**
-             * @description User avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description User background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: Record<string, never>;
-            /**
-             * @description User bio
-             * @example A short bio about me
-             */
-            bio?: Record<string, never>;
-            /**
-             * @description Whether the user is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * @description Whether the user is online
-             * @example false
-             */
-            isOnline: boolean;
+            isDeleted: boolean;
             /**
              * Format: date-time
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
+             * @example 2024-01-15T08:30:00Z
              */
             createdAt: string;
             /**
              * Format: date-time
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-            /** @description Community information (only for IDOL role) */
-            community?: components["schemas"]["CommunityInfoDto"];
-        };
-        CreateUserDto: {
-            /**
-             * @description User email
-             * @example user@example.com
-             */
-            email: string;
-            /**
-             * @description Username
-             * @example john_doe
-             */
-            username: string;
-            /**
-             * @description User password
-             * @example password123
-             */
-            password: string;
-            /**
-             * @description User role
-             * @default FAN
-             * @example FAN
-             * @enum {string}
-             */
-            role: "FAN" | "ADMIN" | "IDOL";
-            /**
-             * @description User avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: string;
-            /**
-             * @description User background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: string;
-            /**
-             * @description User bio
-             * @example A short bio about me
-             */
-            bio?: string;
-            /**
-             * @description Community ID (required for FAN role)
-             * @example clxxxxxxx
-             */
-            communityId?: string;
-        };
-        UpdateUserDto: {
-            /**
-             * @description User email
-             * @example user@example.com
-             */
-            email?: string;
-            /**
-             * @description Username
-             * @example john_doe
-             */
-            username?: string;
-            /**
-             * @description User password
-             * @example password123
-             */
-            password?: string;
-            /**
-             * @description User role
-             * @example USER
-             * @enum {string}
-             */
-            role?: "FAN" | "ADMIN" | "IDOL";
-            /**
-             * @description User avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: string;
-            /**
-             * @description User background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: string;
-            /**
-             * @description User bio
-             * @example A short bio about me
-             */
-            bio?: string;
-            /**
-             * @description Whether the user is active
-             * @example true
-             */
-            isActive?: boolean;
-        };
-        AdminCommunityDetailDto: {
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Community name
-             * @example K-Pop Fans Community
-             */
-            name: string;
-            /**
-             * @description Community avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description Community background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: Record<string, never>;
-            /**
-             * @description Community description
-             * @example A community for K-Pop fans
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Whether the community is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Creation timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Last update timestamp
-             * @example 2024-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-            /**
-             * @description Total members in the community
-             * @example 100
-             */
-            totalMembers: number;
-            /**
-             * @description Total posts in the community
-             * @example 50
-             */
-            totalPosts: number;
-        };
-        CreateCommunityDto: {
-            /**
-             * @description Community name
-             * @example K-Pop Fans Community
-             */
-            name: string;
-            /**
-             * @description Community avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: string;
-            /**
-             * @description Community background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: string;
-            /**
-             * @description Community description
-             * @example A community for K-Pop fans
-             */
-            description?: string;
-            /**
-             * @description Community type
-             * @example GROUP
-             * @enum {string}
-             */
-            communityType: "SOLO" | "GROUP";
-        };
-        UpdateCommunityDto: {
-            /**
-             * @description Community name
-             * @example K-Pop Fans Community
-             */
-            name?: string;
-            /**
-             * @description Community avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: string;
-            /**
-             * @description Community background URL
-             * @example https://example.com/background.jpg
-             */
-            backgroundUrl?: string;
-            /**
-             * @description Community description
-             * @example A community for K-Pop fans
-             */
-            description?: string;
-            /**
-             * @description Whether the community is active
-             * @example true
-             */
-            isActive?: boolean;
-        };
-        ShopCommunityDto: {
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Community name
-             * @example My Community
-             */
-            name: string;
-            /**
-             * @description Avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-        };
-        ShopOwnerDto: {
-            /**
-             * @description User ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Username
-             * @example john_doe
-             */
-            username: string;
-            /**
-             * @description Avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-        };
-        ShopDto: {
-            /**
-             * @description Shop ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Shop name
-             * @example My Shop
-             */
-            name: string;
-            /**
-             * @description Shop description
-             * @example A shop description
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Shop avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /** @description Community information */
-            community: components["schemas"]["ShopCommunityDto"];
-            /** @description Shop owner information */
-            owner?: components["schemas"]["ShopOwnerDto"];
-            /**
-             * @description Number of products in shop
-             * @example 42
-             */
-            productCount?: number;
-            /**
-             * @description Whether the shop is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
+             * @example 2024-01-20T14:45:00Z
              */
             updatedAt: string;
         };
-        ShopDetailDto: {
-            /**
-             * @description Shop ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Shop name
-             * @example My Shop
-             */
+        ProductVariantDto: {
+            /** @example Small */
             name: string;
-            /**
-             * @description Shop description
-             * @example A shop description
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Shop avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            communityId: string;
-            /** @description Community details */
-            community: components["schemas"]["ShopCommunityDto"];
-            /**
-             * @description Whether the shop is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-            /**
-             * @description Additional metadata
-             * @example {
-             *       "key": "value"
-             *     }
-             */
-            metadata?: Record<string, never>;
-            /**
-             * @description Version
-             * @example 0
-             */
-            version: number;
-        };
-        CreateShopDto: {
-            /**
-             * @description Shop name
-             * @example My Shop
-             */
-            name: string;
-            /**
-             * @description Shop description
-             * @example A shop description
-             */
-            description?: string;
-            /**
-             * @description Shop avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: string;
-            /**
-             * @description Community ID
-             * @example clxxxxxxx
-             */
-            communityId: string;
-        };
-        UpdateShopDto: {
-            /**
-             * @description Shop name
-             * @example My Shop
-             */
-            name?: string;
-            /**
-             * @description Shop description
-             * @example A shop description
-             */
-            description?: string;
-            /**
-             * @description Shop avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: string;
-            /**
-             * @description Whether the shop is active
-             * @example true
-             */
-            isActive?: boolean;
-        };
-        AdminProductShopDto: {
-            /**
-             * @description Shop ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Shop name
-             * @example My Shop
-             */
-            name: string;
-            /**
-             * @description Shop avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-        };
-        AdminProductTypeDto: {
-            /**
-             * @description Product Type ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product type name
-             * @example Clothing
-             */
-            name: string;
-        };
-        AdminProductDto: {
-            /**
-             * @description Product ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product name
-             * @example Official T-Shirt
-             */
-            name: string;
-            /**
-             * @description Product description
-             * @example Official merchandise T-Shirt
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Product price
-             * @example 29.99
-             */
+            /** @example 100000 */
             price: number;
-            /**
-             * @description Stock quantity
-             * @example 100
-             */
+            /** @example 10 */
             stock: number;
-            /**
-             * @description Product media URLs
-             * @example [
-             *       "https://example.com/image1.jpg",
-             *       "https://example.com/image2.jpg"
-             *     ]
-             */
-            mediaUrls?: string[];
-            /** @description Shop information */
-            shop: components["schemas"]["AdminProductShopDto"];
-            /** @description Product type information */
-            type?: components["schemas"]["AdminProductTypeDto"];
-            /**
-             * @description Whether the product is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        AdminProductDetailShopDto: {
-            /**
-             * @description Shop ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Shop name
-             * @example My Shop
-             */
-            name: string;
-            /**
-             * @description Shop avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
-        };
-        AdminProductDetailTypeDto: {
-            /**
-             * @description Product Type ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product type name
-             * @example Clothing
-             */
-            name: string;
-        };
-        AdminProductVariantDto: {
-            /**
-             * @description Variant ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Variant name
-             * @example Size M - Red
-             */
-            name: string;
-            /**
-             * @description Variant price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Variant stock quantity
-             * @example 50
-             */
-            stock: number;
-            /**
-             * @description Whether the variant is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-        };
-        AdminProductDetailDto: {
-            /**
-             * @description Product ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product name
-             * @example Official T-Shirt
-             */
-            name: string;
-            /**
-             * @description Product description
-             * @example Official merchandise T-Shirt
-             */
-            description?: Record<string, never>;
-            /**
-             * @description Product price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Stock quantity
-             * @example 100
-             */
-            stock: number;
-            /**
-             * @description Product media URLs
-             * @example [
-             *       "https://example.com/image1.jpg",
-             *       "https://example.com/image2.jpg"
-             *     ]
-             */
-            mediaUrls?: Record<string, never>;
-            /** @description Shop information */
-            shop: components["schemas"]["AdminProductDetailShopDto"];
-            /** @description Product type information */
-            type?: components["schemas"]["AdminProductDetailTypeDto"];
-            /** @description Product variants */
-            variants: components["schemas"]["AdminProductVariantDto"][];
-            /**
-             * @description Whether the product is active
-             * @example true
-             */
-            isActive: boolean;
-            /**
-             * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            updatedAt: string;
-            /**
-             * @description Additional metadata
-             * @example {
-             *       "key": "value"
-             *     }
-             */
-            metadata?: Record<string, never>;
-            /**
-             * @description Version
-             * @example 0
-             */
-            version: number;
         };
         CreateProductDto: {
-            /**
-             * @description Product name
-             * @example Official T-Shirt
-             */
+            /** @example shop_123 */
+            shopId: string;
+            /** @example Official T-Shirt */
             name: string;
-            /**
-             * @description Product description
-             * @example Official merchandise T-Shirt
-             */
+            /** @example High quality cotton t-shirt */
             description?: string;
+            /** @example 150000 */
+            basePrice: number;
             /**
-             * @description Product price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Stock quantity
-             * @example 100
-             */
-            stock: number;
-            /**
-             * @description Product media URLs
              * @example [
              *       "https://example.com/image1.jpg",
              *       "https://example.com/image2.jpg"
              *     ]
              */
-            mediaUrls?: string[];
+            imageUrls?: string[];
+            /** @example Apparel */
+            category?: string;
             /**
-             * @description Shop ID
-             * @example clxxxxxxx
+             * @example [
+             *       {
+             *         "name": "Small",
+             *         "price": 150000,
+             *         "stock": 10
+             *       },
+             *       {
+             *         "name": "Medium",
+             *         "price": 150000,
+             *         "stock": 15
+             *       }
+             *     ]
              */
-            shopId: string;
-            /**
-             * @description Product Type ID
-             * @example clxxxxxxx
-             */
-            typeId?: string;
+            variants?: components["schemas"]["ProductVariantDto"][];
         };
         UpdateProductDto: {
-            /**
-             * @description Product name
-             * @example Official T-Shirt
-             */
+            /** @example Updated Official T-Shirt */
             name?: string;
-            /**
-             * @description Product description
-             * @example Official merchandise T-Shirt
-             */
+            /** @example Updated description */
             description?: string;
+            /** @example 180000 */
+            basePrice?: number;
             /**
-             * @description Product price
-             * @example 29.99
-             */
-            price?: number;
-            /**
-             * @description Stock quantity
-             * @example 100
-             */
-            stock?: number;
-            /**
-             * @description Product media URLs
              * @example [
-             *       "https://example.com/image1.jpg",
-             *       "https://example.com/image2.jpg"
+             *       "https://example.com/new-image.jpg"
              *     ]
              */
-            mediaUrls?: string[];
-            /**
-             * @description Product Type ID
-             * @example clxxxxxxx
-             */
-            typeId?: string;
-            /**
-             * @description Whether the product is active
-             * @example true
-             */
-            isActive?: boolean;
+            imageUrls?: string[];
+            /** @example Merchandise */
+            category?: string;
         };
-        OrderUserDto: {
-            /**
-             * @description User ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Username
-             * @example john_doe
-             */
-            username: string;
-            /**
-             * @description Email
-             * @example user@example.com
-             */
-            email: string;
-            /**
-             * @description Avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
+        UpdateVariantDto: {
+            /** @example Medium */
+            name?: string;
+            /** @example 160000 */
+            price?: number;
         };
-        OrderDto: {
-            /**
-             * @description Order ID
-             * @example clxxxxxxx
-             */
+        UpdateStockDto: {
+            /** @example 25 */
+            stock?: number;
+        };
+        ShopResponseDto: {
+            /** @example shop_abc123 */
             id: string;
-            /** @description User information */
-            user: components["schemas"]["OrderUserDto"];
-            /**
-             * @description Total amount
-             * @example 59.98
-             */
-            totalAmount: number;
-            /**
-             * @description Order status
-             * @example PENDING_PAYMENT
-             * @enum {string}
-             */
-            status: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
-            /**
-             * @description Payment method
-             * @example CREDIT
-             * @enum {string}
-             */
-            paymentMethod: "CREDIT" | "COD";
-            /**
-             * @description Payment status from latest transaction
-             * @example PAID
-             * @enum {string}
-             */
-            paymentStatus?: "PENDING" | "PAID" | "FAILED" | "CANCELED" | "EXPIRED";
-            /**
-             * @description Paid at
-             * @example 2023-01-01T00:00:00.000Z
-             */
-            paidAt?: Record<string, never>;
-            /**
-             * @description Number of items
-             * @example 2
-             */
-            itemCount: number;
-            /**
-             * @description Whether the order is active
-             * @example true
-             */
+            /** @example user_xyz789 */
+            ownerId: string;
+            /** @example K-Pop Official Store */
+            name: string;
+            /** @example Official merchandise store for K-Pop group */
+            description: Record<string, never> | null;
+            /** @example https://example.com/logo.jpg */
+            logoUrl: Record<string, never> | null;
+            /** @example https://example.com/banner.jpg */
+            bannerUrl: Record<string, never> | null;
+            /** @example true */
             isActive: boolean;
             /**
              * Format: date-time
-             * @description Created at
-             * @example 2023-01-01T00:00:00.000Z
+             * @example 2024-01-15T08:30:00Z
              */
             createdAt: string;
             /**
              * Format: date-time
-             * @description Updated at
-             * @example 2023-01-01T00:00:00.000Z
+             * @example 2024-01-20T14:45:00Z
              */
             updatedAt: string;
         };
-        OrderDetailUserDto: {
-            /**
-             * @description User ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Username
-             * @example john_doe
-             */
-            username: string;
-            /**
-             * @description Email
-             * @example user@example.com
-             */
-            email: string;
-            /**
-             * @description Avatar URL
-             * @example https://example.com/avatar.jpg
-             */
-            avatarUrl?: Record<string, never>;
+        CreateShopDto: {
+            /** @example My Official Shop */
+            name: string;
+            /** @example Official merchandise and exclusive items */
+            description?: string;
+            /** @example https://example.com/logo.jpg */
+            logoUrl?: string;
+            /** @example https://example.com/banner.jpg */
+            bannerUrl?: string;
         };
-        OrderDetailItemDto: {
-            /**
-             * @description Order Item ID
-             * @example clxxxxxxx
-             */
-            id: string;
-            /**
-             * @description Product ID
-             * @example clxxxxxxx
-             */
-            productId: string;
-            /**
-             * @description Product name
-             * @example Official T-Shirt
-             */
-            productName: string;
-            /**
-             * @description Variant ID
-             * @example clxxxxxxx
-             */
-            variantId?: Record<string, never>;
-            /**
-             * @description Variant name
-             * @example Size L
-             */
-            variantName?: Record<string, never>;
-            /**
-             * @description Price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Quantity
-             * @example 2
-             */
-            quantity: number;
+        UpdateShopDto: {
+            /** @example Updated Shop Name */
+            name?: string;
+            /** @example Updated description */
+            description?: string;
+            /** @example https://example.com/new-logo.jpg */
+            logoUrl?: string;
+            /** @example https://example.com/new-banner.jpg */
+            bannerUrl?: string;
         };
-        OrderDetailDto: {
-            /** @description Order ID */
-            id: string;
-            /** @description Order code */
-            orderCode?: Record<string, never>;
-            /** @description Total amount */
-            totalAmount: number;
-            /**
-             * @description Order status
-             * @enum {string}
-             */
-            status: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
-            /**
-             * @description Payment method
-             * @enum {string}
-             */
-            paymentMethod: "CREDIT" | "COD";
-            /** @description Shipping address */
-            shippingAddress: components["schemas"]["ShippingAddressDto"];
-            /** @description Order items */
-            items: components["schemas"]["OrderItemListDto"][];
-            /**
-             * Format: date-time
-             * @description Order creation date
-             */
-            createdAt: string;
-            /** @description Payment date */
-            paidAt?: Record<string, never>;
-            /**
-             * Format: date-time
-             * @description Last update date
-             */
-            updatedAt: string;
-        };
-        CreateOrderItemDto: {
-            /**
-             * @description Product ID
-             * @example clxxxxxxx
-             */
-            productId: string;
-            /**
-             * @description Variant ID
-             * @example clxxxxxxx
-             */
-            variantId?: string;
-            /**
-             * @description Price
-             * @example 29.99
-             */
-            price: number;
-            /**
-             * @description Quantity
-             * @example 2
-             */
-            quantity: number;
-        };
-        CreateOrderDto: {
-            /**
-             * @description User ID
-             * @example clxxxxxxx
-             */
-            userId: string;
-            /**
-             * @description Total amount
-             * @example 59.98
-             */
-            totalAmount: number;
-            /**
-             * @description Order status
-             * @example pending
-             * @enum {string}
-             */
-            status: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
-            /**
-             * @description Shipping address
-             * @example {
-             *       "street": "123 Main St",
-             *       "city": "New York",
-             *       "state": "NY",
-             *       "zipCode": "10001",
-             *       "country": "USA"
-             *     }
-             */
-            shippingAddress: Record<string, never>;
-            /**
-             * @description Payment method
-             * @example credit_card
-             */
-            paymentMethod: string;
-            /**
-             * @description Order items
-             * @example [
-             *       {
-             *         "productId": "clxxxxxxx",
-             *         "variantId": "clxxxxxxx",
-             *         "price": 29.99,
-             *         "quantity": 2
-             *       }
-             *     ]
-             */
-            items: components["schemas"]["CreateOrderItemDto"][];
-        };
-        UpdateOrderDto: {
-            /**
-             * @description Order status
-             * @example pending
-             * @enum {string}
-             */
-            status?: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
-            /**
-             * @description Shipping address
-             * @example {
-             *       "street": "123 Main St",
-             *       "city": "New York",
-             *       "state": "NY",
-             *       "zipCode": "10001",
-             *       "country": "USA"
-             *     }
-             */
-            shippingAddress?: Record<string, never>;
-            /**
-             * @description Payment method
-             * @example credit_card
-             */
-            paymentMethod?: string;
-            /**
-             * @description Whether the order is active
-             * @example true
-             */
-            isActive?: boolean;
-        };
-        ChangeOrderStatusDto: {
-            /**
-             * @description New order status
-             * @example CONFIRMED
-             * @enum {string}
-             */
-            status: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
-            /**
-             * @description Optional note about status change
-             * @example Order confirmed by admin
-             */
-            note?: string;
-        };
-        OrderItemDto: {
-            /**
-             * @description Product ID
-             * @example cm1abc123xyz
-             */
-            productId: string;
-            /**
-             * @description Product variant ID (optional)
-             * @example cm1variant123
-             */
-            variantId?: string;
-            /**
-             * @description Quantity
-             * @example 2
-             */
-            quantity: number;
-        };
-        ConfirmOrderDto: {
-            /**
-             * @description Order items
-             * @example [
-             *       {
-             *         "productId": "cm1abc123xyz",
-             *         "quantity": 2
-             *       },
-             *       {
-             *         "productId": "cm1def456uvw",
-             *         "variantId": "cm1variant789",
-             *         "quantity": 1
-             *       }
-             *     ]
-             */
-            items: components["schemas"]["OrderItemDto"][];
-            /**
-             * @description Payment method
-             * @example CREDIT
-             * @enum {string}
-             */
-            paymentMethod: "CREDIT" | "COD";
-            /**
-             * @description Shipping address ID
-             * @example cm1address123
-             */
-            shippingAddressId: string;
-        };
-        PaymentInfoDto: {
-            /**
-             * @description Payment provider
-             * @example PAYOS
-             */
-            provider: string;
-            /**
-             * @description PayOS order code (numeric)
-             * @example 123456
-             */
-            orderCode: number;
-            /**
-             * @description Payment link ID from PayOS
-             * @example abc123xyz
-             */
-            paymentLinkId: string;
-            /**
-             * @description Checkout URL for payment
-             * @example https://pay.payos.vn/abc123xyz
-             */
-            checkoutUrl: string;
-            /**
-             * @description QR code in base64 format
-             * @example data:image/png;base64,...
-             */
-            qrCode: string;
-        };
-        OrderResponseDto: {
-            /**
-             * @description Order ID
-             * @example cm1order123xyz
-             */
-            orderId: string;
-            /**
-             * @description Order status
-             * @example PENDING_PAYMENT
-             */
-            status: Record<string, never>;
-            /**
-             * @description Payment method
-             * @example CREDIT
-             */
-            paymentMethod: Record<string, never>;
-            /**
-             * @description Total amount
-             * @example 150000
-             */
-            totalAmount: number;
-            /** @description Payment information (only for CREDIT) */
-            payment?: components["schemas"]["PaymentInfoDto"];
-            /**
-             * Format: date-time
-             * @description Order creation timestamp
-             */
-            createdAt: string;
-        };
-        OrderListDto: {
-            /** @description Order ID */
-            id: string;
-            /** @description Order code */
-            orderCode?: Record<string, never>;
-            /** @description Total amount */
-            totalAmount: number;
-            /**
-             * @description Order status
-             * @enum {string}
-             */
-            status: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
-            /**
-             * @description Payment method
-             * @enum {string}
-             */
-            paymentMethod: "CREDIT" | "COD";
-            /** @description Number of items in order */
-            itemCount: number;
-            /**
-             * Format: date-time
-             * @description Order creation date
-             */
-            createdAt: string;
-            /** @description Payment date */
-            paidAt?: Record<string, never>;
-        };
-        ShippingAddressDto: {
-            /** @description Address ID */
-            id: string;
-            /** @description First name */
-            firstName: string;
-            /** @description Last name */
-            lastName: string;
-            /** @description Phone number */
-            phoneNumber: string;
-            /** @description Province code */
-            provinceCode: number;
-            /** @description Province name */
-            provinceName: string;
-            /** @description District code */
-            districtCode: number;
-            /** @description District name */
-            districtName: string;
-            /** @description Detail address */
-            detailAddress: string;
-            /** @description Is default address */
-            isDefaultAddress: boolean;
-        };
-        OrderItemListDto: {
-            /** @description Order item ID */
-            id: string;
-            /** @description Product ID */
-            productId: string;
-            /** @description Product name */
-            productName: string;
-            /** @description Variant ID */
-            variantId?: Record<string, never>;
-            /** @description Variant name */
-            variantName?: Record<string, never>;
-            /** @description Price at order time */
-            price: number;
-            /** @description Quantity ordered */
-            quantity: number;
-            /** @description Product media URLs */
-            mediaUrls?: Record<string, never>;
-        };
-        GetOrdersDto: {
-            /** @example 1 */
-            page?: number;
-            /** @example 20 */
-            limit?: number;
-            /**
-             * @description Filter by order status
-             * @enum {string}
-             */
-            status?: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
-        };
-        PayOSWebhookDataDto: {
-            /**
-             * @description Order code from PayOS
-             * @example 123
-             */
-            orderCode: number;
-            /**
-             * @description Paid amount
-             * @example 3000
-             */
-            amount: number;
-            /**
-             * @description Payment description
-             * @example VQRIO123
-             */
-            description: string;
-            /**
-             * @description Account number
-             * @example 12345678
-             */
-            accountNumber: string;
-            /**
-             * @description Payment reference
-             * @example TF230204212323
-             */
-            reference: string;
-            /**
-             * @description Transaction date time
-             * @example 2023-02-04 18:25:00
-             */
-            transactionDateTime: string;
-            /**
-             * @description Currency
-             * @example VND
-             */
-            currency: string;
-            /**
-             * @description Payment link ID
-             * @example 124c33293c43417ab7879e14c8d9eb18
-             */
-            paymentLinkId: string;
-            /**
-             * @description Response code
-             * @example 00
-             */
-            code: string;
-            /**
-             * @description Response description
-             * @example Thành công
-             */
-            desc: string;
-            /**
-             * @description Counter account bank ID
-             * @example
-             */
-            counterAccountBankId?: string;
-            /**
-             * @description Counter account bank name
-             * @example
-             */
-            counterAccountBankName?: string;
-            /**
-             * @description Counter account name
-             * @example
-             */
-            counterAccountName?: string;
-            /**
-             * @description Counter account number
-             * @example
-             */
-            counterAccountNumber?: string;
-            /**
-             * @description Virtual account name
-             * @example
-             */
-            virtualAccountName?: string;
-            /**
-             * @description Virtual account number
-             * @example
-             */
-            virtualAccountNumber?: string;
-        };
-        PayOSWebhookDto: {
-            /**
-             * @description Response code
-             * @example 00
-             */
-            code: string;
-            /**
-             * @description Description
-             * @example success
-             */
-            desc: string;
-            /**
-             * @description Success status
-             * @example true
-             */
-            success: boolean;
-            /** @description Webhook data */
-            data: components["schemas"]["PayOSWebhookDataDto"];
-            /**
-             * @description HMAC SHA256 signature
-             * @example 8d8640d802576397a1ce45ebda7f835055768ac7ad2e0bfb77f9b8f12cca4c7f
-             */
-            signature: string;
-        };
-        GenerateKnockTokenDto: {
-            /**
-             * @description Knock authentication token
-             * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-             */
-            token: string;
-            /**
-             * @description User ID
-             * @example user_123
-             */
-            userId: string;
-            /**
-             * @description Token expiration time in seconds
-             * @example 3600
-             */
-            expiresIn: number;
-        };
-        SendNotificationDto: {
-            /**
-             * @description Array of recipient user IDs
-             * @example [
-             *       "user_123",
-             *       "user_456"
-             *     ]
-             */
-            recipients: string[];
-            /**
-             * @description Notification title
-             * @example New Message
-             */
-            title: string;
-            /**
-             * @description Notification text content
-             * @example You have a new message from John Doe
-             */
-            text: string;
-            /**
-             * @description Additional metadata for the notification
-             * @example {
-             *       "url": "/messages/123",
-             *       "type": "message"
-             *     }
-             */
-            metadata?: Record<string, never>;
-            /**
-             * @description Actor ID (who triggered the notification)
-             * @example user_789
-             */
-            actorId?: string;
-        };
-        WorkflowResponseDto: {
-            /**
-             * @description Success status
-             * @example true
-             */
-            success: boolean;
-            /**
-             * @description Workflow run ID from Knock
-             * @example 01HG2XQZV5YJ9K8M7N6P5Q4R3S
-             */
-            workflowRunId: string;
-        };
-        RegisterFcmTokenDto: {
-            /**
-             * @description FCM (Firebase Cloud Messaging) device token for push notifications
-             * @example fGHj8kL9mN0pQ1rS2tU3vW4xY5zA6bC7dE8fG9hI0jK1lM2nO3pQ4rS5tU6vW7xY8zA9
-             */
-            fcmToken: string;
-        };
-        RegisterFcmTokenResponseDto: {
-            /**
-             * @description Whether the FCM token was registered successfully
-             * @example true
-             */
-            success: boolean;
-            /**
-             * @description Success message
-             * @example FCM token registered successfully
-             */
-            message: string;
-        };
+        TierResponseDto: Record<string, never>;
+        CreateTierDto: Record<string, never>;
+        UpdateTierPricingDto: Record<string, never>;
+        UpdateTierDetailsDto: Record<string, never>;
+        SubscriptionResponseDto: Record<string, never>;
+        CreateSubscriptionDto: Record<string, never>;
+        PayOSWebhookDto: Record<string, never>;
     };
     responses: never;
     parameters: never;
@@ -4222,7 +1702,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    AuthController_signIn_v1: {
+    AuthController_register: {
         parameters: {
             query?: never;
             header?: never;
@@ -4231,7 +1711,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SignInRequest"];
+                "application/json": components["schemas"]["RegisterDto"];
             };
         };
         responses: {
@@ -4253,7 +1733,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["SignInResponse"];
+                        data?: components["schemas"]["AuthResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -4269,7 +1749,7 @@ export interface operations {
             };
         };
     };
-    AuthController_signUp_v1: {
+    AuthController_login: {
         parameters: {
             query?: never;
             header?: never;
@@ -4278,7 +1758,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SignUpRequest"];
+                "application/json": components["schemas"]["LoginDto"];
             };
         };
         responses: {
@@ -4300,7 +1780,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["SignInResponse"];
+                        data?: components["schemas"]["AuthResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -4316,295 +1796,7 @@ export interface operations {
             };
         };
     };
-    AuthController_sendVerification_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SendVerificationRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["VerificationCodeResponse"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AuthController_confirmVerification_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ConfirmVerificationRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["ConfirmVerificationResponse"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AuthController_refreshNewToken_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RefreshTokenRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["SignInResponse"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AuthController_resetPassword_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ResetPasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AuthController_changePassword_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ChangePasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AuthController_adminSignIn_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SignInRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["SignInResponse"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    StreamChatController_generateToken_v1: {
+    AuthController_refreshToken: {
         parameters: {
             query?: never;
             header?: never;
@@ -4631,7 +1823,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["TokenDto"];
+                        data?: components["schemas"]["TokenResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -4647,155 +1839,11 @@ export interface operations {
             };
         };
     };
-    StreamChatController_createUser_v1: {
+    AuthController_logout: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateStreamUserDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UserDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    StreamChatController_createCommunityChannel_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCommunityChannelDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["StreamChannelDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    StreamChatController_createIdolChannel_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateIdolChannelDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["StreamChannelDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    StreamChatController_grantSendPermission_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelId: string;
-                memberId: string;
-            };
             cookie?: never;
         };
         requestBody?: never;
@@ -4837,17 +1885,65 @@ export interface operations {
             };
         };
     };
-    StreamChatController_revokeSendPermission_v1: {
+    AuthController_sendVerification: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                channelId: string;
-                memberId: string;
-            };
+            path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SendVerificationDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["VerificationCodeResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    AuthController_confirmVerification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConfirmVerificationDto"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -4886,7 +1982,7 @@ export interface operations {
             };
         };
     };
-    StreamChatController_joinChannel_v1: {
+    AuthController_resetPassword: {
         parameters: {
             query?: never;
             header?: never;
@@ -4895,7 +1991,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["JoinChannelDto"];
+                "application/json": components["schemas"]["ResetPasswordDto"];
             };
         };
         responses: {
@@ -4936,24 +2032,7 @@ export interface operations {
             };
         };
     };
-    StreamChatWebhookController_handleWebhook_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    FileController_uploadFile_v1: {
+    AuthController_changePassword: {
         parameters: {
             query?: never;
             header?: never;
@@ -4962,7 +2041,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "multipart/form-data": components["schemas"]["UploadFileRequest"];
+                "application/json": components["schemas"]["ChangePasswordDto"];
             };
         };
         responses: {
@@ -4983,8 +2062,11 @@ export interface operations {
                          * @example OK
                          */
                         message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UploadFileResponse"];
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -5000,7 +2082,7 @@ export interface operations {
             };
         };
     };
-    FileController_uploadMultipleFiles_v1: {
+    AuthController_getCurrentUser: {
         parameters: {
             query?: never;
             header?: never;
@@ -5027,7 +2109,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["UploadFileResponse"];
+                        data?: components["schemas"]["UserInfoDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -5043,503 +2125,56 @@ export interface operations {
             };
         };
     };
-    FileController_deleteFile_v1: {
+    AuthController_getStreamChatToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["StreamChatTokenResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommunityController_getAllCommunities: {
         parameters: {
             query: {
-                filePath: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    FileController_getFileUrl_v1: {
-        parameters: {
-            query: {
-                /** @description Path to the file in storage */
-                filePath: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["GetFileUrlResponse"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    FileController_getSignedUrl_v1: {
-        parameters: {
-            query: {
-                /** @description Path to the file in storage */
-                filePath: string;
-                /** @description Expiration time in minutes */
-                expiresInMinutes: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["GetSignedUrlResponse"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    FileController_fileExists_v1: {
-        parameters: {
-            query: {
-                filePath: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    FileController_getFileMetadata_v1: {
-        parameters: {
-            query: {
-                filePath: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description File metadata retrieved successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    FileController_listFiles_v1: {
-        parameters: {
-            query: {
-                folder: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    FileController_deleteFolder_v1: {
-        parameters: {
-            query: {
-                folder: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    UserController_getCurrentUser_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UserDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    UserController_getUserProfile_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                userId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UserProfileDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    UserController_updateStatus_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateStatusDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UserDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    UserController_updateProfile_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateProfileDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UpdateProfileResponseDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_getPosts_v1: {
-        parameters: {
-            query?: {
                 page?: number;
                 limit?: number;
-                /** @description Filter posts by community ID */
-                communityId?: string;
-                /** @description Filter posts by user role */
-                filter?: string;
+                type: string;
+                search: string;
             };
             header?: never;
             path?: never;
@@ -5565,7 +2200,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Array of data items */
-                        data: components["schemas"]["PostDto"][];
+                        data: components["schemas"]["CommunityResponseDto"][];
                         /** @description Pagination metadata */
                         paging: {
                             /**
@@ -5604,2168 +2239,7 @@ export interface operations {
             };
         };
     };
-    PostController_createPost_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreatePostDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["PostDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_getRecommendations_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["PostDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_getPostsByUserId_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-                /** @description Filter posts by community ID */
-                communityId?: string;
-                /** @description Filter posts by user role */
-                filter?: string;
-            };
-            header?: never;
-            path: {
-                userId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["PostDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_getReactionPostsByUserId_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-                /** @description Filter posts by community ID */
-                communityId?: string;
-                /** @description Filter posts by user role */
-                filter?: string;
-            };
-            header?: never;
-            path: {
-                userId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["PostDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_getPostById_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["PostDetailDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_deletePost_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_updatePost_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdatePostDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["PostDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_likePost_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_viewPost_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    PostController_reportPost_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreatePostReportDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["PostReportDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommentController_getCommentsByPostId_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                postId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["CommentDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommentController_createComment_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                postId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCommentDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["CommentDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommentController_deleteComment_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                postId: string;
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommentController_updateComment_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                postId: string;
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateCommentDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["CommentDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommunityController_getAllCommunities_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-                /** @description Filter communities by search keyword (name or description) */
-                search?: string;
-                /** @description Filter to show only joined communities */
-                joined?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["CommunityListDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommunityController_getJoinedCommunities_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["CommunityDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommunityController_joinCommunity_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommunityController_bulkFollowCommunities_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BulkFollowCommunitiesDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommunityController_leaveCommunity_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    CommunityController_getDetailCommunity_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["CommunityDetailDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ShopController_getFollowingCommunityShops_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data array */
-                        data?: components["schemas"]["ShopListDto"][];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ShopController_getShops_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-                /** @description Search shops by name */
-                search?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["UserShopDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ShopController_getShopProducts_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-                /** @description Search products by name */
-                search?: string;
-            };
-            header?: never;
-            path: {
-                shopId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["UserProductDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ShopController_getProductById_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UserProductDetailDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ShopController_getCart_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["CartDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ShopController_addToCart_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AddToCartDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["CartDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    ShopController_removeFromCart_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                cartItemId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["CartDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AddressController_getAddresses_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["AddressDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AddressController_createAddress_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateAddressDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["AddressDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AddressController_getProvinces_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data array */
-                        data?: components["schemas"]["ProvinceDto"][];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AddressController_getDistrictsByProvinceCode_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                provinceCode: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data array */
-                        data?: components["schemas"]["DistrictDto"][];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AddressController_getAddressById_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["AddressDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AddressController_deleteAddress_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AddressController_updateAddress_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateAddressDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["AddressDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminUserController_getAllUsers_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-                /** @description Search by email or username */
-                search?: string;
-                /** @description Filter by role */
-                role?: "FAN" | "ADMIN" | "IDOL";
-                /** @description Filter by active status */
-                isActive?: string;
-                /** @description Sort by field */
-                sortBy?: "createdAt" | "updatedAt" | "email" | "username" | "role";
-                /** @description Sort order */
-                sortOrder?: "asc" | "desc";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["UserDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminUserController_createUser_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateUserDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UserDetailDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminUserController_getUserById_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UserDetailDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminUserController_deleteUser_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /**
-                         * @description No data returned
-                         * @example null
-                         */
-                        data?: Record<string, never> | null;
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminUserController_updateUser_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateUserDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["UserDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminCommunityController_getAllCommunities_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-                /** @description Search by community name or description */
-                search?: string;
-                /** @description Filter by active status */
-                isActive?: string;
-                /** @description Sort by field */
-                sortBy?: "createdAt" | "updatedAt" | "name";
-                /** @description Sort order */
-                sortOrder?: "asc" | "desc";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["CommunityDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminCommunityController_createCommunity_v1: {
+    CommunityController_createCommunity: {
         parameters: {
             query?: never;
             header?: never;
@@ -7796,7 +2270,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["CommunityDto"];
+                        data?: components["schemas"]["CommunityResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -7812,12 +2286,12 @@ export interface operations {
             };
         };
     };
-    AdminCommunityController_getCommunityById_v1: {
+    CommunityController_getCommunity: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                communityId: string;
             };
             cookie?: never;
         };
@@ -7841,7 +2315,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["AdminCommunityDetailDto"];
+                        data?: components["schemas"]["CommunityResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -7857,12 +2331,12 @@ export interface operations {
             };
         };
     };
-    AdminCommunityController_deleteCommunity_v1: {
+    CommunityController_deleteCommunity: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                communityId: string;
             };
             cookie?: never;
         };
@@ -7905,12 +2379,12 @@ export interface operations {
             };
         };
     };
-    AdminCommunityController_updateCommunity_v1: {
+    CommunityController_updateCommunity: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                communityId: string;
             };
             cookie?: never;
         };
@@ -7938,7 +2412,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["CommunityDto"];
+                        data?: components["schemas"]["CommunityResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -7954,183 +2428,12 @@ export interface operations {
             };
         };
     };
-    AdminShopController_getAllShops_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-                /** @description Search by shop name */
-                search?: string;
-                /** @description Filter by community ID */
-                communityId?: string;
-                /** @description Filter by active status */
-                isActive?: string;
-                /** @description Sort by field */
-                sortBy?: "createdAt" | "updatedAt" | "name";
-                /** @description Sort order */
-                sortOrder?: "asc" | "desc";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful paginated response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Array of data items */
-                        data: components["schemas"]["ShopDto"][];
-                        /** @description Pagination metadata */
-                        paging: {
-                            /**
-                             * @description Total number of items
-                             * @example 100
-                             */
-                            total: number;
-                            /**
-                             * @description Current page number
-                             * @example 1
-                             */
-                            page: number;
-                            /**
-                             * @description Items per page
-                             * @example 10
-                             */
-                            limit: number;
-                            /**
-                             * @description Total number of pages
-                             * @example 10
-                             */
-                            totalPages: number;
-                        };
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminShopController_createShop_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateShopDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["ShopDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminShopController_getShopById_v1: {
+    CommunityController_followCommunity: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["ShopDetailDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminShopController_deleteShop_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
+                communityId: string;
             };
             cookie?: never;
         };
@@ -8173,18 +2476,150 @@ export interface operations {
             };
         };
     };
-    AdminShopController_updateShop_v1: {
+    CommunityController_unfollowCommunity: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                communityId: string;
             };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommunityController_getMyCommunities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data array */
+                        data?: components["schemas"]["CommunityResponseDto"][];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommunityController_getFollowedCommunities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data array */
+                        data?: components["schemas"]["CommunityResponseDto"][];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_createPost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateShopDto"];
+                "application/json": components["schemas"]["CreatePostDto"];
             };
         };
         responses: {
@@ -8206,7 +2641,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["ShopDto"];
+                        data?: components["schemas"]["PostResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -8222,26 +2657,254 @@ export interface operations {
             };
         };
     };
-    AdminProductController_getAllProducts_v1: {
+    PostController_getPost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["PostResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_deletePost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_updatePost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePostDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["PostResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_likePost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_unlikePost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                postId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_getPostsByAuthor: {
         parameters: {
             query?: {
                 page?: number;
                 limit?: number;
-                /** @description Search by product name */
-                search?: string;
-                /** @description Filter by shop ID */
-                shopId?: string;
-                /** @description Filter by product type ID */
-                typeId?: string;
-                /** @description Filter by active status */
-                isActive?: string;
-                /** @description Sort by field */
-                sortBy?: "createdAt" | "updatedAt" | "name" | "price" | "stock";
-                /** @description Sort order */
-                sortOrder?: "asc" | "desc";
             };
             header?: never;
-            path?: never;
+            path: {
+                authorId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -8264,7 +2927,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Array of data items */
-                        data: components["schemas"]["AdminProductDto"][];
+                        data: components["schemas"]["PostResponseDto"][];
                         /** @description Pagination metadata */
                         paging: {
                             /**
@@ -8303,7 +2966,1153 @@ export interface operations {
             };
         };
     };
-    AdminProductController_createProduct_v1: {
+    PostController_getPostsByCommunity: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                communityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["PostResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    PostController_getFeedPosts: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["PostResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommentController_createComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCommentDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["CommentResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommentController_getComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                commentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["CommentResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommentController_deleteComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                commentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommentController_updateComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                commentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCommentDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["CommentResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommentController_getCommentsByPost: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                postId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["CommentResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommentController_getReplies: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                commentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["CommentResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CommentController_getCommentsByAuthor: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                authorId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["CommentResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    OrderController_createOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateOrderDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["OrderResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    OrderController_getOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["OrderResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    OrderController_cancelOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CancelOrderDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["OrderResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    OrderController_confirmOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["OrderResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    OrderController_markOrderAsPaid: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarkOrderAsPaidDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["OrderResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    OrderController_shipOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ShipOrderDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["OrderResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    OrderController_deliverOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["OrderResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    OrderController_getOrdersByCustomer: {
+        parameters: {
+            query: {
+                page?: number;
+                limit?: number;
+                status: string;
+            };
+            header?: never;
+            path: {
+                customerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["OrderResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    OrderController_getOrdersByShop: {
+        parameters: {
+            query: {
+                page?: number;
+                limit?: number;
+                status: string;
+            };
+            header?: never;
+            path: {
+                shopId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["OrderResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    CartController_addItem_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddToCartDto"];
+            };
+        };
+        responses: {
+            /** @description Item added successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CartResponseDto"];
+                };
+            };
+            /** @description Product not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CartController_getCart_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Cart retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CartResponseDto"];
+                };
+            };
+        };
+    };
+    CartController_clearCart_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Cart cleared successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CartController_removeItem_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                itemId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Item removed successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CartResponseDto"];
+                };
+            };
+            /** @description Cart or item not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CartController_updateItemQuantity_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                itemId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCartItemDto"];
+            };
+        };
+        responses: {
+            /** @description Item updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CartResponseDto"];
+                };
+            };
+            /** @description Cart or item not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProductController_createProduct: {
         parameters: {
             query?: never;
             header?: never;
@@ -8334,7 +4143,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["AdminProductDto"];
+                        data?: components["schemas"]["ProductResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -8350,7 +4159,7 @@ export interface operations {
             };
         };
     };
-    AdminProductController_getProductById_v1: {
+    ProductController_getProduct: {
         parameters: {
             query?: never;
             header?: never;
@@ -8379,7 +4188,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["AdminProductDetailDto"];
+                        data?: components["schemas"]["ProductResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -8395,7 +4204,7 @@ export interface operations {
             };
         };
     };
-    AdminProductController_deleteProduct_v1: {
+    ProductController_deleteProduct: {
         parameters: {
             query?: never;
             header?: never;
@@ -8443,7 +4252,7 @@ export interface operations {
             };
         };
     };
-    AdminProductController_updateProduct_v1: {
+    ProductController_updateProduct: {
         parameters: {
             query?: never;
             header?: never;
@@ -8476,7 +4285,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["AdminProductDto"];
+                        data?: components["schemas"]["ProductResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -8492,30 +4301,259 @@ export interface operations {
             };
         };
     };
-    AdminOrderController_getAllOrders_v1: {
+    ProductController_addVariant: {
         parameters: {
-            query?: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProductVariantDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["ProductResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ProductController_updateVariant: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                variantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateVariantDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["ProductResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ProductController_updateVariantStock: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                variantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateStockDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["ProductResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ProductController_activateVariant: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                variantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["ProductResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ProductController_deactivateVariant: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                variantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["ProductResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ProductController_getProductsByShop: {
+        parameters: {
+            query: {
                 page?: number;
                 limit?: number;
-                /** @description Search by order ID, username, or email */
-                search?: string;
-                /** @description Filter by user ID */
-                userId?: string;
-                /** @description Filter by order status */
-                orderStatus?: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
-                /** @description Filter by payment status */
-                paymentStatus?: "PENDING" | "PAID" | "FAILED" | "CANCELED" | "EXPIRED";
-                /** @description Filter by payment method */
-                paymentMethod?: "CREDIT" | "COD";
-                /** @description Filter by active status */
-                isActive?: string;
-                /** @description Sort by field */
-                sortBy?: "createdAt" | "updatedAt" | "totalAmount" | "paidAt";
-                /** @description Sort order */
-                sortOrder?: "asc" | "desc";
+                category: string;
+                isActive: boolean;
             };
             header?: never;
-            path?: never;
+            path: {
+                shopId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -8538,7 +4576,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Array of data items */
-                        data: components["schemas"]["OrderDto"][];
+                        data: components["schemas"]["ProductResponseDto"][];
                         /** @description Pagination metadata */
                         paging: {
                             /**
@@ -8577,7 +4615,148 @@ export interface operations {
             };
         };
     };
-    AdminOrderController_createOrder_v1: {
+    ProductController_searchProducts: {
+        parameters: {
+            query: {
+                q: string;
+                page?: number;
+                limit?: number;
+                category: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["ProductResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ShopController_getAllShops: {
+        parameters: {
+            query: {
+                page?: number;
+                limit?: number;
+                isActive: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["ShopResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ShopController_createShop: {
         parameters: {
             query?: never;
             header?: never;
@@ -8586,7 +4765,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateOrderDto"];
+                "application/json": components["schemas"]["CreateShopDto"];
             };
         };
         responses: {
@@ -8608,7 +4787,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["OrderDto"];
+                        data?: components["schemas"]["ShopResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -8624,7 +4803,50 @@ export interface operations {
             };
         };
     };
-    AdminOrderController_getOrderById_v1: {
+    ShopController_getMyShop: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["ShopResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ShopController_getShop: {
         parameters: {
             query?: never;
             header?: never;
@@ -8653,7 +4875,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["OrderDetailDto"];
+                        data?: components["schemas"]["ShopResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -8669,12 +4891,341 @@ export interface operations {
             };
         };
     };
-    AdminOrderController_deleteOrder_v1: {
+    ShopController_updateShop: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateShopDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["ShopResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ShopController_activateShop: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["ShopResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ShopController_deactivateShop: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["ShopResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    MembershipTierController_createTier: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTierDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["TierResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    MembershipTierController_getTierByCommunity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["TierResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    MembershipTierController_updatePricing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tierId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTierPricingDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["TierResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    MembershipTierController_updateDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tierId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTierDetailsDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["TierResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    MembershipTierController_deactivate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tierId: string;
             };
             cookie?: never;
         };
@@ -8717,157 +5268,12 @@ export interface operations {
             };
         };
     };
-    AdminOrderController_updateOrder_v1: {
+    MembershipTierController_activate: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateOrderDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["OrderDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    AdminOrderController_changeOrderStatus_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ChangeOrderStatusDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["OrderDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    OrderController_confirmOrder_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ConfirmOrderDto"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["OrderResponseDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    OrderController_retryPayment_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                orderId: string;
+                tierId: string;
             };
             cookie?: never;
         };
@@ -8890,8 +5296,11 @@ export interface operations {
                          * @example OK
                          */
                         message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["OrderResponseDto"];
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -8907,13 +5316,106 @@ export interface operations {
             };
         };
     };
-    OrderController_getUserOrders_v1: {
+    SubscriptionController_subscribe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSubscriptionDto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["SubscriptionResponseDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    SubscriptionController_cancelSubscription: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                subscriptionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    SubscriptionController_getMySubscriptions: {
         parameters: {
             query?: {
                 page?: number;
                 limit?: number;
-                /** @description Filter by order status */
-                status?: "PENDING_PAYMENT" | "CONFIRMED" | "PAID" | "SHIPPING" | "DELIVERED" | "CANCELED" | "EXPIRED";
             };
             header?: never;
             path?: never;
@@ -8939,7 +5441,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Array of data items */
-                        data: components["schemas"]["OrderListDto"][];
+                        data: components["schemas"]["SubscriptionResponseDto"][];
                         /** @description Pagination metadata */
                         paging: {
                             /**
@@ -8978,12 +5480,83 @@ export interface operations {
             };
         };
     };
-    OrderController_getOrderDetails_v1: {
+    SubscriptionController_getCommunitySubscribers: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                communityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful paginated response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Array of data items */
+                        data: components["schemas"]["SubscriptionResponseDto"][];
+                        /** @description Pagination metadata */
+                        paging: {
+                            /**
+                             * @description Total number of items
+                             * @example 100
+                             */
+                            total: number;
+                            /**
+                             * @description Current page number
+                             * @example 1
+                             */
+                            page: number;
+                            /**
+                             * @description Items per page
+                             * @example 10
+                             */
+                            limit: number;
+                            /**
+                             * @description Total number of pages
+                             * @example 10
+                             */
+                            totalPages: number;
+                        };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    SubscriptionController_checkSubscriptionStatus: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                orderId: string;
+                communityId: string;
             };
             cookie?: never;
         };
@@ -9006,8 +5579,11 @@ export interface operations {
                          * @example OK
                          */
                         message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["OrderDetailDto"];
+                        /**
+                         * @description No data returned
+                         * @example null
+                         */
+                        data?: Record<string, never> | null;
                         /**
                          * @description Error information (null on success)
                          * @example null
@@ -9023,55 +5599,12 @@ export interface operations {
             };
         };
     };
-    OrderController_getOrderStatus_v1: {
+    PayOSWebhookController_handleSubscriptionPayment: {
         parameters: {
             query?: never;
-            header?: never;
-            path: {
-                orderId: string;
+            header: {
+                "x-payos-signature": string;
             };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["OrderResponseDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
-            };
-        };
-    };
-    WebhookController_handlePayOSWebhook: {
-        parameters: {
-            query?: never;
-            header?: never;
             path?: never;
             cookie?: never;
         };
@@ -9081,15 +5614,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Webhook processed successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Invalid signature or webhook data */
-            400: {
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -9097,93 +5622,26 @@ export interface operations {
             };
         };
     };
-    KnockController_generateToken_v1: {
+    PayOSWebhookController_handleOrderPayment: {
         parameters: {
             query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["GenerateKnockTokenDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
+            header: {
+                "x-payos-signature": string;
             };
-        };
-    };
-    KnockController_registerFcmToken_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
             path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RegisterFcmTokenDto"];
+                "application/json": components["schemas"]["PayOSWebhookDto"];
             };
         };
         responses: {
-            /** @description Successful Response */
-            200: {
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description HTTP status code
-                         * @example 200
-                         */
-                        statusCode: number;
-                        /**
-                         * @description Response message
-                         * @example OK
-                         */
-                        message: string;
-                        /** @description Response data */
-                        data?: components["schemas"]["RegisterFcmTokenResponseDto"];
-                        /**
-                         * @description Error information (null on success)
-                         * @example null
-                         */
-                        error?: Record<string, never> | null;
-                        /**
-                         * @description Error code (null on success)
-                         * @example null
-                         */
-                        errorCode?: string | null;
-                    };
-                };
+                content?: never;
             };
         };
     };
