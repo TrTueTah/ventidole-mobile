@@ -354,7 +354,7 @@ paths:
       summary: Change password (authenticated user)
       tags: *ref_0
   /auth/me:
-    post:
+    get:
       operationId: AuthController_getCurrentUser
       parameters: []
       responses:
@@ -394,7 +394,7 @@ paths:
       summary: Get current authenticated user
       tags: *ref_0
   /auth/stream-chat-token:
-    get:
+    post:
       operationId: AuthController_getStreamChatToken
       parameters: []
       responses:
@@ -433,6 +433,57 @@ paths:
         - bearer: []
       summary: Get Stream Chat authentication token
       tags: *ref_0
+  /user/profile:
+    get:
+      operationId: ProfileController_getMyProfile
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: &ref_1
+        - Profile
+    patch:
+      operationId: ProfileController_updateMyProfile
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileDto'
+      responses:
+        '200':
+          description: ''
+      tags: *ref_1
+  /user/profile/{userId}:
+    get:
+      operationId: ProfileController_getProfile
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_1
+  /user/profile/online:
+    patch:
+      operationId: ProfileController_setOnline
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: *ref_1
+  /user/profile/offline:
+    patch:
+      operationId: ProfileController_setOffline
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: *ref_1
   /user/community:
     post:
       operationId: CommunityController_createCommunity
@@ -475,10 +526,10 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: &ref_1
+      security: &ref_2
         - bearer: []
       summary: Create new community
-      tags: &ref_2
+      tags: &ref_3
         - Community
     get:
       operationId: CommunityController_getAllCommunities
@@ -573,9 +624,9 @@ paths:
                   - message
                   - data
                   - paging
-      security: *ref_1
+      security: *ref_2
       summary: Get all communities with pagination
-      tags: *ref_2
+      tags: *ref_3
   /user/community/{communityId}:
     get:
       operationId: CommunityController_getCommunity
@@ -602,7 +653,7 @@ paths:
                     example: OK
                     description: Response message
                   data:
-                    $ref: '#/components/schemas/CommunityResponseDto'
+                    $ref: '#/components/schemas/CommunityDetailResponseDto'
                     description: Response data
                   error:
                     type: object
@@ -617,9 +668,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_1
-      summary: Get community by ID
-      tags: *ref_2
+      security: *ref_2
+      summary: Get community by ID with details
+      tags: *ref_3
     patch:
       operationId: CommunityController_updateCommunity
       parameters:
@@ -666,9 +717,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_1
+      security: *ref_2
       summary: Update community profile
-      tags: *ref_2
+      tags: *ref_3
     delete:
       operationId: CommunityController_deleteCommunity
       parameters:
@@ -711,9 +762,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_1
+      security: *ref_2
       summary: Delete community
-      tags: *ref_2
+      tags: *ref_3
   /user/community/{communityId}/follow:
     post:
       operationId: CommunityController_followCommunity
@@ -757,9 +808,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_1
+      security: *ref_2
       summary: Follow community
-      tags: *ref_2
+      tags: *ref_3
     delete:
       operationId: CommunityController_unfollowCommunity
       parameters:
@@ -802,9 +853,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_1
+      security: *ref_2
       summary: Unfollow community
-      tags: *ref_2
+      tags: *ref_3
   /user/community/follow/bulk:
     post:
       description: >-
@@ -850,9 +901,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_1
+      security: *ref_2
       summary: Bulk follow multiple communities
-      tags: *ref_2
+      tags: *ref_3
   /user/community/my/followed:
     get:
       operationId: CommunityController_getFollowedCommunities
@@ -891,9 +942,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_1
+      security: *ref_2
       summary: Get followed communities
-      tags: *ref_2
+      tags: *ref_3
   /user/post:
     post:
       operationId: PostController_createPost
@@ -937,7 +988,7 @@ paths:
                   - statusCode
                   - message
       summary: Create new post
-      tags: &ref_3
+      tags: &ref_4
         - Post
   /user/post/{postId}:
     get:
@@ -981,7 +1032,7 @@ paths:
                   - statusCode
                   - message
       summary: Get post by ID
-      tags: *ref_3
+      tags: *ref_4
     patch:
       operationId: PostController_updatePost
       parameters:
@@ -1029,7 +1080,7 @@ paths:
                   - statusCode
                   - message
       summary: Update post
-      tags: *ref_3
+      tags: *ref_4
     delete:
       operationId: PostController_deletePost
       parameters:
@@ -1073,7 +1124,7 @@ paths:
                   - statusCode
                   - message
       summary: Delete post
-      tags: *ref_3
+      tags: *ref_4
   /user/post/{postId}/like:
     post:
       operationId: PostController_likePost
@@ -1118,7 +1169,7 @@ paths:
                   - statusCode
                   - message
       summary: Like post
-      tags: *ref_3
+      tags: *ref_4
     delete:
       operationId: PostController_unlikePost
       parameters:
@@ -1162,7 +1213,7 @@ paths:
                   - statusCode
                   - message
       summary: Unlike post
-      tags: *ref_3
+      tags: *ref_4
   /user/post/author/{authorId}:
     get:
       operationId: PostController_getPostsByAuthor
@@ -1246,7 +1297,7 @@ paths:
                   - data
                   - paging
       summary: Get posts by author
-      tags: *ref_3
+      tags: *ref_4
   /user/post/community/{communityId}:
     get:
       operationId: PostController_getPostsByCommunity
@@ -1330,7 +1381,7 @@ paths:
                   - data
                   - paging
       summary: Get posts by community
-      tags: *ref_3
+      tags: *ref_4
   /user/post/feed:
     get:
       operationId: PostController_getFeedPosts
@@ -1409,7 +1460,7 @@ paths:
                   - data
                   - paging
       summary: Get feed posts
-      tags: *ref_3
+      tags: *ref_4
   /user/comment:
     post:
       operationId: CommentController_createComment
@@ -1453,7 +1504,7 @@ paths:
                   - statusCode
                   - message
       summary: Create new comment
-      tags: &ref_4
+      tags: &ref_5
         - Comment
   /user/comment/{commentId}:
     get:
@@ -1497,7 +1548,7 @@ paths:
                   - statusCode
                   - message
       summary: Get comment by ID
-      tags: *ref_4
+      tags: *ref_5
     patch:
       operationId: CommentController_updateComment
       parameters:
@@ -1545,7 +1596,7 @@ paths:
                   - statusCode
                   - message
       summary: Update comment
-      tags: *ref_4
+      tags: *ref_5
     delete:
       operationId: CommentController_deleteComment
       parameters:
@@ -1589,7 +1640,7 @@ paths:
                   - statusCode
                   - message
       summary: Delete comment
-      tags: *ref_4
+      tags: *ref_5
   /user/comment/post/{postId}:
     get:
       operationId: CommentController_getCommentsByPost
@@ -1673,7 +1724,7 @@ paths:
                   - data
                   - paging
       summary: Get comments by post
-      tags: *ref_4
+      tags: *ref_5
   /user/comment/{commentId}/replies:
     get:
       operationId: CommentController_getReplies
@@ -1757,7 +1808,7 @@ paths:
                   - data
                   - paging
       summary: Get replies to a comment
-      tags: *ref_4
+      tags: *ref_5
   /user/comment/author/{authorId}:
     get:
       operationId: CommentController_getCommentsByAuthor
@@ -1841,7 +1892,7 @@ paths:
                   - data
                   - paging
       summary: Get comments by author
-      tags: *ref_4
+      tags: *ref_5
   /user/order:
     post:
       operationId: OrderController_createOrder
@@ -1884,10 +1935,10 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: &ref_5
+      security: &ref_6
         - bearer: []
       summary: Create new order
-      tags: &ref_6
+      tags: &ref_7
         - Order
   /user/order/{id}:
     get:
@@ -1930,9 +1981,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_5
+      security: *ref_6
       summary: Get order by ID
-      tags: *ref_6
+      tags: *ref_7
     delete:
       operationId: OrderController_cancelOrder
       parameters:
@@ -1979,9 +2030,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_5
+      security: *ref_6
       summary: Cancel order
-      tags: *ref_6
+      tags: *ref_7
   /user/order/{id}/confirm:
     patch:
       operationId: OrderController_confirmOrder
@@ -2023,9 +2074,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_5
+      security: *ref_6
       summary: Confirm order (shop owner)
-      tags: *ref_6
+      tags: *ref_7
   /user/order/{id}/pay:
     patch:
       operationId: OrderController_markOrderAsPaid
@@ -2073,9 +2124,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_5
+      security: *ref_6
       summary: Mark order as paid (payment confirmation)
-      tags: *ref_6
+      tags: *ref_7
   /user/order/{id}/ship:
     patch:
       operationId: OrderController_shipOrder
@@ -2123,9 +2174,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_5
+      security: *ref_6
       summary: Ship order (shop owner)
-      tags: *ref_6
+      tags: *ref_7
   /user/order/{id}/deliver:
     patch:
       operationId: OrderController_deliverOrder
@@ -2167,9 +2218,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_5
+      security: *ref_6
       summary: Mark order as delivered (shop owner)
-      tags: *ref_6
+      tags: *ref_7
   /user/order/customer/{customerId}:
     get:
       operationId: OrderController_getOrdersByCustomer
@@ -2257,9 +2308,9 @@ paths:
                   - message
                   - data
                   - paging
-      security: *ref_5
+      security: *ref_6
       summary: Get orders by customer
-      tags: *ref_6
+      tags: *ref_7
   /user/order/shop/{shopId}:
     get:
       operationId: OrderController_getOrdersByShop
@@ -2347,9 +2398,9 @@ paths:
                   - message
                   - data
                   - paging
-      security: *ref_5
+      security: *ref_6
       summary: Get orders by shop
-      tags: *ref_6
+      tags: *ref_7
   /v1/user/cart/items:
     post:
       operationId: CartController_addItem_v1
@@ -2369,10 +2420,10 @@ paths:
                 $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Product not found
-      security: &ref_7
+      security: &ref_8
         - bearer: []
       summary: Add item to cart
-      tags: &ref_8
+      tags: &ref_9
         - Cart
   /v1/user/cart:
     get:
@@ -2385,18 +2436,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CartResponseDto'
-      security: *ref_7
+      security: *ref_8
       summary: Get user cart
-      tags: *ref_8
+      tags: *ref_9
     delete:
       operationId: CartController_clearCart_v1
       parameters: []
       responses:
         '200':
           description: Cart cleared successfully
-      security: *ref_7
+      security: *ref_8
       summary: Clear entire cart
-      tags: *ref_8
+      tags: *ref_9
   /v1/user/cart/items/{itemId}:
     patch:
       operationId: CartController_updateItemQuantity_v1
@@ -2421,9 +2472,9 @@ paths:
                 $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Cart or item not found
-      security: *ref_7
+      security: *ref_8
       summary: Update cart item quantity
-      tags: *ref_8
+      tags: *ref_9
     delete:
       operationId: CartController_removeItem_v1
       parameters:
@@ -2441,9 +2492,9 @@ paths:
                 $ref: '#/components/schemas/CartResponseDto'
         '404':
           description: Cart or item not found
-      security: *ref_7
+      security: *ref_8
       summary: Remove item from cart
-      tags: *ref_8
+      tags: *ref_9
   /user/product:
     post:
       operationId: ProductController_createProduct
@@ -2486,10 +2537,10 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: &ref_9
+      security: &ref_10
         - bearer: []
       summary: Create new product
-      tags: &ref_10
+      tags: &ref_11
         - Product
   /user/product/{id}:
     get:
@@ -2532,9 +2583,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_9
+      security: *ref_10
       summary: Get product by ID
-      tags: *ref_10
+      tags: *ref_11
     patch:
       operationId: ProductController_updateProduct
       parameters:
@@ -2581,9 +2632,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_9
+      security: *ref_10
       summary: Update product
-      tags: *ref_10
+      tags: *ref_11
     delete:
       operationId: ProductController_deleteProduct
       parameters:
@@ -2626,9 +2677,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_9
+      security: *ref_10
       summary: Delete product (soft delete)
-      tags: *ref_10
+      tags: *ref_11
   /user/product/{id}/variant:
     post:
       operationId: ProductController_addVariant
@@ -2676,9 +2727,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_9
+      security: *ref_10
       summary: Add variant to product
-      tags: *ref_10
+      tags: *ref_11
   /user/product/{id}/variant/{variantId}:
     patch:
       operationId: ProductController_updateVariant
@@ -2731,9 +2782,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_9
+      security: *ref_10
       summary: Update variant
-      tags: *ref_10
+      tags: *ref_11
   /user/product/{id}/variant/{variantId}/stock:
     patch:
       operationId: ProductController_updateVariantStock
@@ -2786,9 +2837,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_9
+      security: *ref_10
       summary: Update variant stock
-      tags: *ref_10
+      tags: *ref_11
   /user/product/{id}/variant/{variantId}/activate:
     patch:
       operationId: ProductController_activateVariant
@@ -2835,9 +2886,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_9
+      security: *ref_10
       summary: Activate variant
-      tags: *ref_10
+      tags: *ref_11
   /user/product/{id}/variant/{variantId}/deactivate:
     patch:
       operationId: ProductController_deactivateVariant
@@ -2884,9 +2935,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_9
+      security: *ref_10
       summary: Deactivate variant
-      tags: *ref_10
+      tags: *ref_11
   /user/product/shop/{shopId}:
     get:
       operationId: ProductController_getProductsByShop
@@ -2979,9 +3030,9 @@ paths:
                   - message
                   - data
                   - paging
-      security: *ref_9
+      security: *ref_10
       summary: Get products by shop
-      tags: *ref_10
+      tags: *ref_11
   /user/product/search:
     get:
       operationId: ProductController_searchProducts
@@ -3069,9 +3120,9 @@ paths:
                   - message
                   - data
                   - paging
-      security: *ref_9
+      security: *ref_10
       summary: Search products by name
-      tags: *ref_10
+      tags: *ref_11
   /user/shop:
     post:
       operationId: ShopController_createShop
@@ -3114,10 +3165,10 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: &ref_11
+      security: &ref_12
         - bearer: []
       summary: Create new shop
-      tags: &ref_12
+      tags: &ref_13
         - Shop
     get:
       operationId: ShopController_getAllShops
@@ -3200,9 +3251,9 @@ paths:
                   - message
                   - data
                   - paging
-      security: *ref_11
+      security: *ref_12
       summary: Get all shops
-      tags: *ref_12
+      tags: *ref_13
   /user/shop/me:
     get:
       operationId: ShopController_getMyShop
@@ -3239,9 +3290,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_11
+      security: *ref_12
       summary: Get my shop
-      tags: *ref_12
+      tags: *ref_13
   /user/shop/{id}:
     get:
       operationId: ShopController_getShop
@@ -3283,9 +3334,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_11
+      security: *ref_12
       summary: Get shop by ID
-      tags: *ref_12
+      tags: *ref_13
     patch:
       operationId: ShopController_updateShop
       parameters:
@@ -3332,9 +3383,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_11
+      security: *ref_12
       summary: Update shop
-      tags: *ref_12
+      tags: *ref_13
   /user/shop/{id}/activate:
     patch:
       operationId: ShopController_activateShop
@@ -3376,9 +3427,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_11
+      security: *ref_12
       summary: Activate shop
-      tags: *ref_12
+      tags: *ref_13
   /user/shop/{id}/deactivate:
     patch:
       operationId: ShopController_deactivateShop
@@ -3420,9 +3471,9 @@ paths:
                 required:
                   - statusCode
                   - message
-      security: *ref_11
+      security: *ref_12
       summary: Deactivate shop
-      tags: *ref_12
+      tags: *ref_13
   /user/membership-tier:
     post:
       operationId: MembershipTierController_createTier
@@ -3466,7 +3517,7 @@ paths:
                   - statusCode
                   - message
       summary: Create membership tier (community owner only)
-      tags: &ref_13
+      tags: &ref_14
         - Membership Tier
   /user/membership-tier/community/{communityId}:
     get:
@@ -3510,7 +3561,7 @@ paths:
                   - statusCode
                   - message
       summary: Get membership tier for a community
-      tags: *ref_13
+      tags: *ref_14
   /user/membership-tier/{tierId}/pricing:
     patch:
       operationId: MembershipTierController_updatePricing
@@ -3559,7 +3610,7 @@ paths:
                   - statusCode
                   - message
       summary: Update tier pricing (community owner only)
-      tags: *ref_13
+      tags: *ref_14
   /user/membership-tier/{tierId}/details:
     patch:
       operationId: MembershipTierController_updateDetails
@@ -3608,7 +3659,7 @@ paths:
                   - statusCode
                   - message
       summary: Update tier details (community owner only)
-      tags: *ref_13
+      tags: *ref_14
   /user/membership-tier/{tierId}/deactivate:
     patch:
       operationId: MembershipTierController_deactivate
@@ -3653,7 +3704,7 @@ paths:
                   - statusCode
                   - message
       summary: Deactivate tier (community owner only)
-      tags: *ref_13
+      tags: *ref_14
   /user/membership-tier/{tierId}/activate:
     patch:
       operationId: MembershipTierController_activate
@@ -3698,7 +3749,7 @@ paths:
                   - statusCode
                   - message
       summary: Activate tier (community owner only)
-      tags: *ref_13
+      tags: *ref_14
   /user/subscription:
     post:
       operationId: SubscriptionController_subscribe
@@ -3742,7 +3793,7 @@ paths:
                   - statusCode
                   - message
       summary: Subscribe to a community
-      tags: &ref_14
+      tags: &ref_15
         - Subscription
   /user/subscription/{subscriptionId}:
     delete:
@@ -3788,7 +3839,7 @@ paths:
                   - statusCode
                   - message
       summary: Cancel subscription
-      tags: *ref_14
+      tags: *ref_15
   /user/subscription/me:
     get:
       operationId: SubscriptionController_getMySubscriptions
@@ -3867,7 +3918,7 @@ paths:
                   - data
                   - paging
       summary: Get my subscriptions
-      tags: *ref_14
+      tags: *ref_15
   /user/subscription/community/{communityId}:
     get:
       operationId: SubscriptionController_getCommunitySubscribers
@@ -3951,7 +4002,7 @@ paths:
                   - data
                   - paging
       summary: Get community subscribers (community owner only)
-      tags: *ref_14
+      tags: *ref_15
   /user/subscription/check/{communityId}:
     get:
       operationId: SubscriptionController_checkSubscriptionStatus
@@ -3996,7 +4047,7 @@ paths:
                   - statusCode
                   - message
       summary: Check if I have access to a community
-      tags: *ref_14
+      tags: *ref_15
   /webhooks/payos/subscription:
     post:
       operationId: PayOSWebhookController_handleSubscriptionPayment
@@ -4015,7 +4066,7 @@ paths:
       responses:
         '201':
           description: ''
-      tags: &ref_15
+      tags: &ref_16
         - PayOSWebhook
   /webhooks/payos/order:
     post:
@@ -4035,7 +4086,7 @@ paths:
       responses:
         '201':
           description: ''
-      tags: *ref_15
+      tags: *ref_16
 info:
   title: API Docs
   description: Custom Swagger UI in NestJS
@@ -4145,6 +4196,18 @@ components:
         role:
           type: string
           example: FAN
+        avatarUrl:
+          type: object
+          example: https://example.com/avatar.jpg
+          nullable: true
+        backgroundUrl:
+          type: object
+          example: https://example.com/background.jpg
+          nullable: true
+        bio:
+          type: object
+          example: I love music and dancing!
+          nullable: true
       required:
         - id
         - email
@@ -4301,6 +4364,9 @@ components:
       required:
         - oldPassword
         - password
+    UpdateProfileDto:
+      type: object
+      properties: {}
     CommunityResponseDto:
       type: object
       properties:
@@ -4313,7 +4379,7 @@ components:
         type:
           type: string
           example: GROUP
-          enum:
+          enum: &ref_17
             - SOLO
             - GROUP
         description:
@@ -4345,10 +4411,11 @@ components:
           format: date-time
           type: string
           example: '2024-01-20T14:45:00Z'
-        isFollowing:
+        isFollowed:
           type: boolean
           example: false
           description: Whether the current user is following this community
+          nullable: true
       required:
         - id
         - name
@@ -4389,6 +4456,111 @@ components:
         - succeeded
         - failed
         - errors
+    IdolDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: clxxxxxxx
+          description: Idol ID
+        username:
+          type: string
+          example: john_idol
+          description: Idol username
+        avatarUrl:
+          type: object
+          example: https://example.com/avatar.jpg
+          description: Idol avatar URL
+        bio:
+          type: object
+          example: Amazing idol from K-pop
+          description: Idol bio
+      required:
+        - id
+        - username
+    ChatChannelDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        image:
+          type: string
+        memberCount:
+          type: number
+      required:
+        - id
+        - memberCount
+    CommunityDetailResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: comm_abc123
+        name:
+          type: string
+          example: K-Pop Lovers
+        type:
+          type: string
+          example: GROUP
+          enum: *ref_17
+        description:
+          type: object
+          example: A community for K-Pop enthusiasts
+          nullable: true
+        avatarUrl:
+          type: object
+          example: https://example.com/avatar.jpg
+          nullable: true
+        backgroundUrl:
+          type: object
+          example: https://example.com/background.jpg
+          nullable: true
+        followerCount:
+          type: number
+          example: 1250
+        postCount:
+          type: number
+          example: 430
+        isActive:
+          type: boolean
+          example: true
+        createdAt:
+          format: date-time
+          type: string
+          example: '2024-01-15T08:30:00Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2024-01-20T14:45:00Z'
+        isFollowed:
+          type: boolean
+          example: false
+          description: Whether the current user is following this community
+          nullable: true
+        idols:
+          description: List of idols belonging to the community
+          type: array
+          items:
+            $ref: '#/components/schemas/IdolDto'
+        chatChannel:
+          description: Community chat channel if exists
+          allOf:
+            - $ref: '#/components/schemas/ChatChannelDto'
+      required:
+        - id
+        - name
+        - type
+        - description
+        - avatarUrl
+        - backgroundUrl
+        - followerCount
+        - postCount
+        - isActive
+        - createdAt
+        - updatedAt
+        - idols
     CreateCommunityDto:
       type: object
       properties: {}

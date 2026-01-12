@@ -147,10 +147,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
         /** Get current authenticated user */
-        post: operations["AuthController_getCurrentUser"];
+        get: operations["AuthController_getCurrentUser"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -164,14 +164,78 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        get?: never;
+        put?: never;
         /** Get Stream Chat authentication token */
-        get: operations["AuthController_getStreamChatToken"];
+        post: operations["AuthController_getStreamChatToken"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProfileController_getMyProfile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ProfileController_updateMyProfile"];
+        trace?: never;
+    };
+    "/user/profile/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProfileController_getProfile"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/user/profile/online": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ProfileController_setOnline"];
+        trace?: never;
+    };
+    "/user/profile/offline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ProfileController_setOffline"];
         trace?: never;
     };
     "/user/community": {
@@ -199,7 +263,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get community by ID */
+        /** Get community by ID with details */
         get: operations["CommunityController_getCommunity"];
         put?: never;
         post?: never;
@@ -1141,6 +1205,12 @@ export interface components {
             username: string;
             /** @example FAN */
             role: string;
+            /** @example https://example.com/avatar.jpg */
+            avatarUrl?: Record<string, never> | null;
+            /** @example https://example.com/background.jpg */
+            backgroundUrl?: Record<string, never> | null;
+            /** @example I love music and dancing! */
+            bio?: Record<string, never> | null;
         };
         AuthResponseDto: {
             /** @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... */
@@ -1230,6 +1300,7 @@ export interface components {
             /** @example NewSecurePass123! */
             password: string;
         };
+        UpdateProfileDto: Record<string, never>;
         CommunityResponseDto: {
             /** @example comm_abc123 */
             id: string;
@@ -1266,7 +1337,7 @@ export interface components {
              * @description Whether the current user is following this community
              * @example false
              */
-            isFollowing?: boolean;
+            isFollowed?: boolean | null;
         };
         BulkFollowResultDto: {
             /**
@@ -1292,6 +1363,76 @@ export interface components {
                 communityId?: string;
                 error?: string;
             }[];
+        };
+        IdolDto: {
+            /**
+             * @description Idol ID
+             * @example clxxxxxxx
+             */
+            id: string;
+            /**
+             * @description Idol username
+             * @example john_idol
+             */
+            username: string;
+            /**
+             * @description Idol avatar URL
+             * @example https://example.com/avatar.jpg
+             */
+            avatarUrl?: Record<string, never>;
+            /**
+             * @description Idol bio
+             * @example Amazing idol from K-pop
+             */
+            bio?: Record<string, never>;
+        };
+        ChatChannelDto: {
+            id: string;
+            name?: string;
+            image?: string;
+            memberCount: number;
+        };
+        CommunityDetailResponseDto: {
+            /** @example comm_abc123 */
+            id: string;
+            /** @example K-Pop Lovers */
+            name: string;
+            /**
+             * @example GROUP
+             * @enum {string}
+             */
+            type: "SOLO" | "GROUP";
+            /** @example A community for K-Pop enthusiasts */
+            description: Record<string, never> | null;
+            /** @example https://example.com/avatar.jpg */
+            avatarUrl: Record<string, never> | null;
+            /** @example https://example.com/background.jpg */
+            backgroundUrl: Record<string, never> | null;
+            /** @example 1250 */
+            followerCount: number;
+            /** @example 430 */
+            postCount: number;
+            /** @example true */
+            isActive: boolean;
+            /**
+             * Format: date-time
+             * @example 2024-01-15T08:30:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-20T14:45:00Z
+             */
+            updatedAt: string;
+            /**
+             * @description Whether the current user is following this community
+             * @example false
+             */
+            isFollowed?: boolean | null;
+            /** @description List of idols belonging to the community */
+            idols: components["schemas"]["IdolDto"][];
+            /** @description Community chat channel if exists */
+            chatChannel?: components["schemas"]["ChatChannelDto"];
         };
         CreateCommunityDto: Record<string, never>;
         UpdateCommunityDto: Record<string, never>;
@@ -2210,6 +2351,97 @@ export interface operations {
             };
         };
     };
+    ProfileController_getMyProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProfileController_updateMyProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProfileDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProfileController_getProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProfileController_setOnline: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProfileController_setOffline: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     CommunityController_getAllCommunities: {
         parameters: {
             query?: {
@@ -2359,7 +2591,7 @@ export interface operations {
                          */
                         message: string;
                         /** @description Response data */
-                        data?: components["schemas"]["CommunityResponseDto"];
+                        data?: components["schemas"]["CommunityDetailResponseDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null

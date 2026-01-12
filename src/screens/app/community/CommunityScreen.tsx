@@ -114,7 +114,7 @@ const CommunityScreen = () => {
               {community.name}
             </AppText>
             <AppText variant="bodySmall" color="muted">
-              {formatNumber(community.totalMember)} members
+              {formatNumber(community.followerCount)} members
             </AppText>
           </View>
 
@@ -122,7 +122,7 @@ const CommunityScreen = () => {
             <AppButton
               onPress={handleToggleJoin}
               disabled={isToggling}
-              variant={community.isJoined ? 'default' : 'secondary'}
+              variant={community.isFollowed ? 'default' : 'secondary'}
               size="sm"
               className="min-w-24"
             >
@@ -130,7 +130,7 @@ const CommunityScreen = () => {
                 <ActivityIndicator
                   size="small"
                   color={
-                    community.isJoined
+                    community.isFollowed
                       ? colors.foreground
                       : colors.primaryForeground
                   }

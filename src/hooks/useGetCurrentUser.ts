@@ -15,7 +15,7 @@ export const useGetCurrentUser = () => {
     isLoading,
     error,
     refetch,
-  } = backendApi.useQuery('get', '/v1/user/me', undefined, {
+  } = backendApi.useQuery('get', '/auth/me', undefined, {
     enabled: isLogin,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
@@ -26,7 +26,7 @@ export const useGetCurrentUser = () => {
       setUserData(null);
     } else if (!prevIsLogin.current && isLogin) {
       // User just logged in - invalidate cache to force fresh data fetch
-      queryClient.invalidateQueries({ queryKey: ['get', '/v1/user/me'] });
+      queryClient.invalidateQueries({ queryKey: ['get', '/auth/me'] });
     }
     prevIsLogin.current = isLogin;
   }, [isLogin, setUserData, queryClient]);

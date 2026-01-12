@@ -4,6 +4,7 @@ import { useCallback, useContext, useMemo } from 'react';
 interface UseCommunitiesListParams {
   limit?: number;
   search?: string;
+  type?: 'ALL' | 'SOLO' | 'GROUP';
 }
 
 export const useGetCommunitiesList = (
@@ -11,7 +12,7 @@ export const useGetCommunitiesList = (
 ) => {
   const backendApi = useContext(BackendApiContext);
 
-  const { limit = 20, search } = params;
+  const { limit = 20, search, type } = params;
 
   // Build query params
   const baseQueryParams = useMemo(() => {
@@ -19,8 +20,11 @@ export const useGetCommunitiesList = (
     if (search && search.trim()) {
       params.search = search.trim();
     }
+    if (type && type !== 'ALL') {
+      params.type = type;
+    }
     return params;
-  }, [limit, search]);
+  }, [limit, search, type]);
 
   const {
     data,
@@ -33,7 +37,7 @@ export const useGetCommunitiesList = (
     refetch,
   } = backendApi.useInfiniteQuery(
     'get',
-    '/v1/user/community',
+    '/user/community',
     {
       params: {
         query: baseQueryParams,

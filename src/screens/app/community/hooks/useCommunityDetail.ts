@@ -2,7 +2,7 @@ import { BackendApiContext } from '@/components/providers/BackendApiProvider';
 import { useContext } from 'react';
 import { components } from 'src/schemas/openapi';
 
-type CommunityDetail = components['schemas']['CommunityDetailDto'];
+type CommunityDetail = components['schemas']['CommunityResponseDto'];
 
 interface UseCommunityDetailParams {
   communityId?: string;
@@ -17,11 +17,11 @@ export const useCommunityDetail = ({
 
   const { data, isLoading, error, refetch } = backendApi.useQuery(
     'get',
-    '/v1/user/community/{id}',
+    '/user/community/{communityId}',
     {
       params: {
         path: {
-          id: communityId || '',
+          communityId: communityId || '',
         },
       },
     },

@@ -32,7 +32,7 @@ const refreshTokens = async (): Promise<boolean> => {
 
       console.log('🔄 Attempting to refresh tokens...');
 
-      const response = await fetch(`${BACKEND_BASE_URL}/auth/refresh`, {
+      const response = await fetch(`${BACKEND_BASE_URL}auth/refresh`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -26,7 +26,6 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useGetCommunitiesList } from '../hooks/useGetCommunitiesList';
-import { useGetJoinedCommunities } from '../hooks/useGetJoinedComunities';
 import CommunityItem from './CommunityItem';
 import CommunityModalSkeleton from './CommunityModalSkeleton';
 
@@ -35,9 +34,9 @@ export interface CommunityModalRef {
   dismiss: () => void;
 }
 
-type FilterType = 'All' | 'Joined';
+type TypeFilter = 'ALL' | 'GROUP' | 'SOLO';
 
-const FILTERS: FilterType[] = ['All', 'Joined'];
+const TYPE_FILTERS: TypeFilter[] = ['ALL', 'GROUP', 'SOLO'];
 
 const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
   const colors = useColors();
@@ -46,7 +45,7 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState<FilterType>('All');
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>('ALL');
   const { showError, showWarning } = useToast();
 
   // Calculate snap point to be full screen
@@ -56,38 +55,12 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
   }, [insets.top]);
 
   // Fetch all communities with server-side search
-  const allCommunitiesResult = useGetCommunitiesList({
-    limit: 20,
-    search: searchQuery,
-  });
-
-  // Fetch joined communities
-  const joinedCommunitiesResult = useGetJoinedCommunities({ limit: 20 });
-
-  // Select the appropriate result based on active filter
-  const selectedResult =
-    activeFilter === 'Joined' ? joinedCommunitiesResult : allCommunitiesResult;
-
-  const {
-    communities: rawCommunities,
-    isLoading,
-    isLoadingMore,
-    hasMore,
-    loadMore,
-    refresh,
-  } = selectedResult;
-
-  // For Joined filter, apply client-side search since API doesn't support it
-  const communities = useMemo(() => {
-    if (activeFilter !== 'Joined' || !searchQuery.trim()) {
-      return rawCommunities;
-    }
-
-    const query = searchQuery.toLowerCase();
-    return rawCommunities.filter((community: any) =>
-      community.name?.toLowerCase().includes(query),
-    );
-  }, [activeFilter, rawCommunities, searchQuery]);
+  const { communities, isLoading, isLoadingMore, hasMore, loadMore, refresh } =
+    useGetCommunitiesList({
+      limit: 20,
+      search: searchQuery,
+      type: typeFilter,
+    });
 
   useImperativeHandle(ref, () => ({
     present: () => bottomSheetModalRef.current?.present(),
@@ -185,16 +158,16 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
         </View>
       </View>
 
-      {/* Filters */}
+      {/* Type Filters */}
       <View className="border-b border-neutrals800">
         <View className="flex-row px-4 py-3 gap-3">
-          {FILTERS.map(filter => (
+          {TYPE_FILTERS.map(filter => (
             <TouchableOpacity
               key={filter}
-              onPress={() => setActiveFilter(filter)}
+              onPress={() => setTypeFilter(filter)}
               className={cn(
                 'px-4 py-2 rounded-full border',
-                activeFilter === filter
+                typeFilter === filter
                   ? 'bg-foreground border-foreground'
                   : 'bg-transparent border-neutrals800',
               )}
@@ -203,12 +176,14 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
                 variant="labelSmall"
                 weight="medium"
                 className={cn(
-                  activeFilter === filter
-                    ? 'text-background'
-                    : 'text-foreground',
+                  typeFilter === filter ? 'text-background' : 'text-foreground',
                 )}
               >
-                {filter}
+                {filter === 'ALL'
+                  ? 'All'
+                  : filter === 'GROUP'
+                  ? 'Group'
+                  : 'Solo'}
               </AppText>
             </TouchableOpacity>
           ))}

@@ -1,12 +1,15 @@
-import { AppText, Avatar, Badge } from '@/components/ui';
+import { AppText, Avatar } from '@/components/ui';
 import { useToggleCommunity } from '@/hooks/useToggleCommunity';
+import { components } from '@/schemas/openapi';
 import { formatNumber } from '@/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { memo, useCallback } from 'react';
 import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 
+export type CommunityItem = components['schemas']['CommunityResponseDto'];
+
 interface CommunityItemProps {
-  item: any;
+  item: CommunityItem;
   onPress: (communityId: string) => void;
 }
 
@@ -120,12 +123,12 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
     });
 
   const handleJoinToggle = useCallback(() => {
-    if (item.isJoined) {
+    if (item.isFollowed) {
       leaveCommunity(item.id);
     } else {
       joinCommunity(item.id);
     }
-  }, [item.id, item.isJoined, joinCommunity, leaveCommunity]);
+  }, [item.id, item.isFollowed, joinCommunity, leaveCommunity]);
 
   return (
     <View className="flex-row items-center px-4 py-4 border-b border-neutrals800">
@@ -137,13 +140,13 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
         <Avatar source={{ uri: item.avatarUrl }} size="lg" className="mr-3" />
 
         <View className="flex-1 justify-center">
-          {item.isNew && (
+          {/* {item.isNew && (
             <Badge variant="default" className="mb-1 self-start">
               <AppText variant="labelSmall" className="text-white uppercase">
                 NEW
               </AppText>
             </Badge>
-          )}
+          )} */}
           <AppText
             variant="body"
             weight="bold"
@@ -153,7 +156,7 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
             {item.name}
           </AppText>
           <AppText variant="bodySmall" color="muted">
-            {formatNumber(item.totalMember || 0)} members
+            {formatNumber(item.followerCount || 0)} members
           </AppText>
         </View>
       </TouchableOpacity>
@@ -162,7 +165,7 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
         onPress={handleJoinToggle}
         disabled={isJoining || isLeaving}
         className={`h-10 px-3 flex-row items-center justify-center rounded-xl min-w-[80px] ${
-          item.isJoined
+          item.isFollowed
             ? 'bg-transparent border border-neutrals700'
             : 'bg-primary'
         } ${isJoining || isLeaving ? 'opacity-80' : ''}`}
@@ -171,15 +174,15 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
         {isJoining || isLeaving ? (
           <ActivityIndicator
             size="small"
-            color={item.isJoined ? '#e85a5a' : '#ffffff'}
+            color={item.isFollowed ? '#e85a5a' : '#ffffff'}
           />
         ) : (
           <AppText
             variant="bodySmall"
             weight="semibold"
-            className={item.isJoined ? 'text-foreground' : 'text-white'}
+            className={item.isFollowed ? 'text-foreground' : 'text-white'}
           >
-            {item.isJoined ? 'Joined' : 'Join'}
+            {item.isFollowed ? 'Joined' : 'Join'}
           </AppText>
         )}
       </TouchableOpacity>

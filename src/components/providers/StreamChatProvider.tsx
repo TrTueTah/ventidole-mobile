@@ -27,7 +27,7 @@ export const StreamChatProvider: React.FC<StreamChatProviderProps> = React.memo(
     const backendApi = useContext(BackendApiContext);
     const { mutateAsync: getStreamChatToken } = backendApi.useMutation(
       'post',
-      '/v1/stream-chat/token',
+      '/auth/stream-chat-token',
     );
 
     const [minimalClient] = useState(() =>

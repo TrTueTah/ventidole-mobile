@@ -4,7 +4,7 @@ import { formatNumber } from '@/utils';
 import { ScrollView, View } from 'react-native';
 
 interface AboutTabProps {
-  community: components['schemas']['CommunityDetailDto'];
+  community: components['schemas']['CommunityDetailResponseDto'];
 }
 
 const AboutTab = ({ community }: AboutTabProps) => {
@@ -32,7 +32,7 @@ const AboutTab = ({ community }: AboutTabProps) => {
           <View className="flex-row flex-wrap gap-4">
             <View className="gap-1">
               <AppText variant="heading4" weight="bold">
-                {formatNumber(community.totalMember)}
+                {formatNumber(community.followerCount)}
               </AppText>
               <AppText variant="bodySmall" color="muted">
                 Members

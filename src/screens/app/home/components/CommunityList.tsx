@@ -1,29 +1,18 @@
 import { AppText, Avatar, Icon } from '@/components/ui';
-import { components } from '@/schemas/openapi';
 import { useNavigation } from '@react-navigation/native';
 import { useRef } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { useGetJoinedCommunities } from '../hooks/useGetJoinedComunities';
+import { CommunityItem } from './CommunityItem';
 import CommunityListSkeleton from './CommunityListSkeleton';
 import CommunityModal, { CommunityModalRef } from './CommunityModal';
-
-type Community = components['schemas']['CommunityListDto'];
 
 const CommunityList = () => {
   const navigation = useNavigation();
   const communityModalRef = useRef<CommunityModalRef>(null);
 
-  const {
-    communities,
-    isLoading: isLoadingCommunities,
-    isLoadingMore: isLoadingMoreCommunities,
-    isRefreshing: isRefreshingCommunities,
-    hasMore: hasMoreCommunities,
-    loadMore: loadMoreCommunities,
-    refresh: refreshCommunities,
-  } = useGetJoinedCommunities({
-    limit: 8,
-  });
+  const { communities, isLoading: isLoadingCommunities } =
+    useGetJoinedCommunities();
 
   const handleCommunityPress = (communityId: string) => {
     navigation.navigate('CommunityStack', { communityId });
@@ -51,8 +40,8 @@ const CommunityList = () => {
             </View>
           }
           data={communities}
-          keyExtractor={(item: Community) => item.id}
-          renderItem={({ item }: { item: Community }) => (
+          keyExtractor={(item: CommunityItem) => item.id}
+          renderItem={({ item }: { item: CommunityItem }) => (
             <TouchableOpacity
               onPress={() => handleCommunityPress(item.id)}
               className="flex-col items-center gap-2 w-24"
