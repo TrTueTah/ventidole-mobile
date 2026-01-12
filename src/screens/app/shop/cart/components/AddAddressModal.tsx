@@ -1,4 +1,4 @@
-import { AppButton, AppInput, AppText, Icon } from '@/components/ui';
+import { AppButton, AppInput, AppText, Checkbox, Icon } from '@/components/ui';
 import { useForm } from '@/hooks/useForm';
 import { useGetDistricts } from '@/hooks/useGetDistricts';
 import { useGetProvinces } from '@/hooks/useGetProvinces';
@@ -266,32 +266,23 @@ const AddAddressModal: React.FC<AddAddressModalProps> = ({
             />
 
             {/* Default Address Checkbox */}
-            <TouchableOpacity
-              onPress={() =>
-                form.setValue(
-                  'isDefaultAddress',
-                  !form.getValue('isDefaultAddress'),
-                )
-              }
-              className="flex-row items-center mb-5"
-            >
-              <View
-                className={`w-6 h-6 rounded-md border-2 items-center justify-center mr-3 ${
-                  form.getValue('isDefaultAddress')
-                    ? 'bg-primary border-primary'
-                    : 'border-neutrals900/20'
-                }`}
-              >
-                {form.getValue('isDefaultAddress') && (
-                  <Icon name="Check" className="w-4 h-4 text-white" />
-                )}
-              </View>
-              <AppText variant="body">Set as default address</AppText>
-            </TouchableOpacity>
+            <View className="mb-5 flex-row items-center">
+              <Checkbox
+                checked={form.getValue('isDefaultAddress')}
+                onValueChange={value =>
+                  form.setValue('isDefaultAddress', value)
+                }
+                variant="primary"
+                size="lg"
+              />
+              <AppText variant="body" className="ml-2">
+                Set as default address
+              </AppText>
+            </View>
           </ScrollView>
 
           {/* Save Button */}
-          <View className="px-5 py-5 border-t border-neutrals900/10">
+          <View className="px-5 py-5 pb-safe-offset-1 border-t border-neutrals900/10">
             <AppButton
               onPress={form.handleSubmit(handleSubmit)}
               disabled={!form.formState.isValid}

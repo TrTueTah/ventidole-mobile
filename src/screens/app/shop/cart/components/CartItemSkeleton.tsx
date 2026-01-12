@@ -2,7 +2,7 @@ import { View } from 'react-native';
 
 const CartItemSkeleton = () => {
   return (
-    <View className="bg-white p-4 border-b-8 border-neutrals900/5">
+    <View className="bg-background p-4 border-b-8 border-neutrals900/5">
       {/* Header Skeleton */}
       <View className="flex-row justify-between items-center mb-1">
         <View className="w-32 h-4 bg-neutrals900 rounded animate-pulse" />

@@ -1,3 +1,4 @@
+import { useColors } from '@/hooks/useColors';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { isClientConnected } from '@/utils/streamChat/connectionUtils';
 import {
@@ -7,9 +8,14 @@ import {
   safeDisconnectUser,
 } from '@/utils/streamChat/streamChatErrorHandler';
 import { STREAM_CHAT_API_KEY } from '@env';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { StreamChat } from 'stream-chat';
-import { Chat, OverlayProvider } from 'stream-chat-react-native';
+import {
+  Chat,
+  DeepPartial,
+  OverlayProvider,
+  Theme,
+} from 'stream-chat-react-native';
 import { BackendApiContext } from './BackendApiProvider';
 
 interface StreamChatProviderProps {
@@ -390,9 +396,27 @@ export const StreamChatProvider: React.FC<StreamChatProviderProps> = React.memo(
     const activeClient = client || minimalClient;
     const isClientReady = Boolean(client && user?.id);
 
+    const AppColors = useColors();
+
+    const customTheme: DeepPartial<Theme> = useMemo(
+      () => ({
+        colors: {
+          white_snow: AppColors.background,
+        },
+        messageList: {
+          container: {
+            backgroundColor: AppColors.background,
+          },
+        },
+      }),
+      [AppColors.background],
+    );
+
     return (
       <OverlayProvider>
-        <Chat client={activeClient}>{children}</Chat>
+        <Chat client={activeClient} style={customTheme}>
+          {children}
+        </Chat>
       </OverlayProvider>
     );
   },

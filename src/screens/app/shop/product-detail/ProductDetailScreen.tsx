@@ -210,7 +210,7 @@ const ProductDetailScreen = () => {
                         ? 'bg-neutrals900/5 border-neutrals900/20'
                         : isSelected
                         ? 'bg-foreground border-foreground'
-                        : 'bg-white border-neutrals900/30'
+                        : 'bg-background border-neutrals900'
                     }`}
                     activeOpacity={0.7}
                   >

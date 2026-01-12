@@ -182,7 +182,7 @@ const CartScreen = () => {
   return (
     <View className="flex-1 bg-background">
       {/* Tab Navigation */}
-      <View className="flex-row bg-white border-b border-neutrals900/10">
+      <View className="flex-row bg-background border-b border-neutrals900/10">
         <Pressable
           onPress={() => setActiveTab('shipping')}
           className="flex-1 py-4 items-center"

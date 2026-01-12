@@ -32,11 +32,6 @@ const sections: Section[] = [
   { id: 'order', title: 'Your Order', content: 'order' },
   { id: 'customer', title: 'Customer', content: 'customer' },
   { id: 'shipping', title: 'Shipping Address', content: 'shipping' },
-  {
-    id: 'shippingOption',
-    title: 'Shipping Option',
-    content: 'shippingOption',
-  },
   { id: 'payment', title: 'Payment Method', content: 'payment' },
 ];
 
@@ -331,7 +326,7 @@ const ConfirmOrderScreen = () => {
                 </AppText>
                 <TouchableOpacity
                   onPress={handleAddShippingAddress}
-                  className="px-6 py-2 rounded-full border border-neutrals900/20 bg-white ml-2"
+                  className="px-6 py-2 rounded-full border border-neutrals900 bg-background ml-2"
                 >
                   <AppText variant="body" weight="semibold">
                     Change
@@ -348,7 +343,7 @@ const ConfirmOrderScreen = () => {
                 </AppText>
                 <TouchableOpacity
                   onPress={handleAddShippingAddress}
-                  className="px-6 py-2 rounded-full border border-neutrals900/20 bg-white ml-2"
+                  className="px-6 py-2 rounded-full border border-neutrals900 bg-background ml-2"
                 >
                   <AppText variant="body" weight="semibold">
                     Add
@@ -358,14 +353,14 @@ const ConfirmOrderScreen = () => {
             )}
           </View>
         );
-      case 'shippingOption':
-        return (
-          <View className="p-4 bg-neutrals900/5">
-            <AppText variant="bodySmall" className="text-neutrals500">
-              Standard Shipping
-            </AppText>
-          </View>
-        );
+      // case 'shippingOption':
+      //   return (
+      //     <View className="p-4 bg-neutrals900/5">
+      //       <AppText variant="bodySmall" className="text-neutrals500">
+      //         Standard Shipping
+      //       </AppText>
+      //     </View>
+      //   );
       case 'payment':
         return (
           <View className="p-4 bg-neutrals900/5 gap-2">
@@ -373,8 +368,8 @@ const ConfirmOrderScreen = () => {
               onPress={() => setPaymentMethod('CREDIT')}
               className={`border rounded-lg p-4 ${
                 paymentMethod === 'CREDIT'
-                  ? 'border-primary bg-blue-50'
-                  : 'border-neutrals900/20 bg-white'
+                  ? 'border-primary bg-background'
+                  : 'border-neutrals900/20 bg-background'
               }`}
             >
               <AppText variant="body">Credit Card / QR Code</AppText>
@@ -383,8 +378,8 @@ const ConfirmOrderScreen = () => {
               onPress={() => setPaymentMethod('COD')}
               className={`border rounded-lg p-4 ${
                 paymentMethod === 'COD'
-                  ? 'border-primary bg-blue-50'
-                  : 'border-neutrals900/20 bg-white'
+                  ? 'border-primary bg-background'
+                  : 'border-neutrals900/20 bg-background'
               }`}
             >
               <AppText variant="body">Cash on Delivery</AppText>
@@ -459,7 +454,7 @@ const ConfirmOrderScreen = () => {
       </ScrollView>
 
       {/* Bottom Button */}
-      <View className="p-4 border-t border-neutrals900/10 bg-white">
+      <View className="p-4 border-t border-neutrals900/10 bg-background">
         <AppButton
           disabled={
             !agreeToTerms || isConfirming || isLoadingCart || !selectedAddress
@@ -473,7 +468,7 @@ const ConfirmOrderScreen = () => {
       </View>
 
       {/* Scroll to Top Button */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={handleScrollToTop}
         className="absolute bottom-20 right-4 w-12 h-12 rounded-full bg-white items-center justify-center shadow-lg"
         style={{
@@ -485,7 +480,7 @@ const ConfirmOrderScreen = () => {
         }}
       >
         <Icon name="ArrowUp" className="w-5 h-5 text-foreground" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* Address Modals */}
       <SelectAddressModal

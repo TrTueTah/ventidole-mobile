@@ -158,7 +158,12 @@ const CommunityScreen = () => {
               variant="ghost"
               size="sm"
               className="px-3"
-              icon={<Icon name="MessageCircle" className="w-4 h-4" />}
+              icon={
+                <Icon
+                  name="MessageCircle"
+                  className="w-4 h-4 text-foreground"
+                />
+              }
             >
               <AppText
                 variant="bodySmall"

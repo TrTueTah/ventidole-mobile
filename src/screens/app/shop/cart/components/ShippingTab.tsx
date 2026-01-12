@@ -239,7 +239,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
     const isSelected = selectedItems.includes(item.id);
 
     return (
-      <View className="bg-white p-4 border-b-8 border-neutrals900/5">
+      <View className="bg-background p-4 border-b-8 border-neutrals900/5">
         {/* Shipping Option Header */}
         <TouchableOpacity className="flex-row justify-between items-center mb-1">
           <AppText variant="heading3" weight="bold">
@@ -312,7 +312,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
             <TouchableOpacity
               onPress={() => handleUpdateQuantity(item.id, -1)}
               disabled={isItemLoading || isAddingToCart}
-              className="w-8 h-8 rounded-full border border-neutrals900/20 items-center justify-center bg-white"
+              className="w-8 h-8 rounded-full border border-neutrals900 items-center justify-center bg-background"
             >
               <Icon name="Minus" className="w-4 h-4 text-foreground" />
             </TouchableOpacity>
@@ -332,7 +332,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
             <TouchableOpacity
               onPress={() => handleUpdateQuantity(item.id, 1)}
               disabled={isItemLoading || isAddingToCart || item.isOutOfStock}
-              className="w-8 h-8 rounded-full border border-neutrals900/20 items-center justify-center bg-white"
+              className="w-8 h-8 rounded-full border border-neutrals900 items-center justify-center bg-background"
             >
               <Icon name="Plus" className="w-4 h-4 text-foreground" />
             </TouchableOpacity>
@@ -369,7 +369,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
             {/* Add Address Button */}
             <TouchableOpacity
               onPress={onAddressClick}
-              className="flex-row items-center p-4 border-b border-neutrals900/10 bg-white"
+              className="flex-row items-center p-4 border-b border-neutrals900/10 bg-background"
             >
               <Icon name="MapPin" className="w-5 h-5 text-foreground mr-3" />
               <View className="flex-1">
@@ -444,7 +444,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
           </View>
         }
         ListFooterComponent={
-          <View className="p-4 bg-white">
+          <View className="p-4 bg-background">
             {/* Summary */}
             <View className="mb-3">
               <View className="flex-row justify-between items-center mb-3">
@@ -479,7 +479,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
       />
 
       {/* Bottom Button */}
-      <View className="p-4 border-t border-neutrals900/10 bg-white">
+      <View className="p-4 border-t border-neutrals900/10 bg-background">
         <AppButton
           onPress={handleCheckout}
           disabled={selectedItems.length === 0 || !selectedAddress}
