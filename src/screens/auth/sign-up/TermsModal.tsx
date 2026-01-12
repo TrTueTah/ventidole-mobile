@@ -8,6 +8,7 @@ import {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TouchableOpacity, View } from 'react-native';
 
 export interface TermsModalRef {
@@ -16,6 +17,7 @@ export interface TermsModalRef {
 }
 
 const TermsModal = forwardRef<TermsModalRef>((_, ref) => {
+  const { t } = useTranslation();
   const colors = useColors();
   const insets = useInsets();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
@@ -49,23 +51,27 @@ const TermsModal = forwardRef<TermsModalRef>((_, ref) => {
       backdropComponent={renderBackdrop}
       enablePanDownToClose={true}
       enableContentPanningGesture={true}
-      snapPoints={[500]}
+      snapPoints={['100%']}
+      enableOverDrag={false}
+      overDragResistanceFactor={0}
       backgroundStyle={{ backgroundColor: colors.background }}
       handleIndicatorStyle={{ backgroundColor: colors.neutrals400 }}
     >
       {/* Header with Close Button */}
-      <View className="px-6 pt-4 pb-2 flex-row items-center justify-between border-b border-neutrals800">
-        <AppText className="text-foreground font-sans-bold text-xl flex-1 text-center">
-          End User License Agreement
-        </AppText>
-        <TouchableOpacity
-          onPress={() => bottomSheetRef.current?.dismiss()}
-          className="absolute right-6 top-4"
-        >
-          <AppText className="text-primary font-sans-semibold text-base">
-            Cancel
+      <View className="px-6 pt-10 pb-2 border-b border-neutrals800">
+        <View className="flex-row items-center justify-between">
+          <AppText className="text-foreground font-sans-bold text-xl flex-1 text-center pr-16">
+            {t('EULA.TITLE')}
           </AppText>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => bottomSheetRef.current?.dismiss()}
+            className="absolute right-0 top-0"
+          >
+            <AppText className="text-primary font-sans-semibold text-base">
+              {t('EULA.CANCEL')}
+            </AppText>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Scrollable Content */}

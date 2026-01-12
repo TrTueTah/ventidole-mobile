@@ -1,9 +1,9 @@
 import { BackendApiContext } from '@/components/providers/BackendApiProvider';
 import { useDebounce } from '@/hooks/useDebounce';
 import { components } from '@/schemas/openapi';
+import { useAuthStore } from '@/store/authStore';
 import { useCallback, useContext, useMemo, useState } from 'react';
 
-type Community = components['schemas']['CommunityListDto'];
 type BulkFollowRequest = components['schemas']['BulkFollowCommunitiesDto'];
 
 interface UseChooseCommunityParams {
@@ -15,21 +15,26 @@ export const useChooseCommunity = ({
   onSuccess,
   onError,
 }: UseChooseCommunityParams = {}) => {
+  const { setIsLogin } = useAuthStore();
   const backendApi = useContext(BackendApiContext);
   const [selectedCommunities, setSelectedCommunities] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [typeFilter, setTypeFilter] = useState<'ALL' | 'SOLO' | 'GROUP'>('ALL');
 
   // Debounce search query to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   // Build query params
-  const queryParams = useMemo(
-    () => ({
+  const queryParams = useMemo(() => {
+    const params: any = {
       limit: 20,
-      search: debouncedSearchQuery || undefined,
-    }),
-    [debouncedSearchQuery],
-  );
+      search: debouncedSearchQuery || '',
+    };
+    if (typeFilter !== 'ALL') {
+      params.type = typeFilter;
+    }
+    return params;
+  }, [debouncedSearchQuery, typeFilter]);
 
   // Fetch communities with infinite scroll
   const {
@@ -41,7 +46,7 @@ export const useChooseCommunity = ({
     isRefetching,
   } = backendApi.useInfiniteQuery(
     'get',
-    '/v1/user/community',
+    '/user/community',
     {
       params: {
         query: queryParams,
@@ -77,10 +82,11 @@ export const useChooseCommunity = ({
   // Bulk follow mutation
   const bulkFollowMutation = backendApi.useMutation(
     'post',
-    '/v1/user/community/bulk-follow',
+    '/user/community/follow/bulk',
     {
       onSuccess: () => {
         onSuccess?.();
+        setIsLogin(true);
       },
       onError: (error: any) => {
         console.error('Bulk follow error:', error);
@@ -125,6 +131,8 @@ export const useChooseCommunity = ({
     isFollowing: bulkFollowMutation.isPending,
     searchQuery,
     setSearchQuery,
+    typeFilter,
+    setTypeFilter,
     loadMore,
   };
 };

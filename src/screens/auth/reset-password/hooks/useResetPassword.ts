@@ -9,7 +9,7 @@ type ResetPasswordRequest = components['schemas']['ResetPasswordDto'];
 export const useResetPassword = () => {
   const backendApi = useContext(BackendApiContext);
   const { showSuccess, showError } = useToast();
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
 
   const resetPasswordMutation = backendApi.useMutation(
     'post',
@@ -20,7 +20,7 @@ export const useResetPassword = () => {
         showSuccess('Password reset successfully!');
 
         // Navigate to sign in screen
-        navigation.navigate('SignIn');
+        navigation.navigate('AuthComplete', { type: 'resetPassword' });
       },
       onError: (error: any) => {
         console.error('❌ Reset password error:', error);

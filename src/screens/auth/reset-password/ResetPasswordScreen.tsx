@@ -2,8 +2,8 @@ import AuthCommonContainer from '@/components/auth/AuthCommonContainer';
 import AppInput from '@/components/ui/AppInput';
 import Icon from '@/components/ui/Icon';
 import { useForm } from '@/hooks/useForm';
-import { getResetPasswordWithEmailSchema } from '@/validations/common';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { getResetPasswordWithEmailSchema } from '@/validations/resetPassword';
+import { useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity, View } from 'react-native';
@@ -18,7 +18,6 @@ const ResetPasswordScreen = () => {
   const route = useRoute();
   const params = route.params as ResetPasswordRouteParams;
   const { email } = params || {};
-  const navigation = useNavigation();
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
 

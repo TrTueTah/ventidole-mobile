@@ -15,6 +15,19 @@
     },
     "RESET_PASSWORD": {
       "TITLE": "Reset your password"
+    },
+    "SIGN_UP": {
+      "TITLE": "Sign Up",
+      "TERMS_AND_CONDITIONS": "Terms & Conditions",
+      "AGREE_TO": "I agree to the"
+    },
+    "AUTH_COMPLETE": {
+      "REGISTER_TITLE": "Registration Complete!",
+      "REGISTER_SUBTITLE": "Welcome to Ventidole! Your account has been successfully created.",
+      "RESET_PASSWORD_TITLE": "Password Reset Complete!",
+      "RESET_PASSWORD_SUBTITLE": "Your password has been successfully reset. You can now sign in with your new password.",
+      "GET_STARTED": "Get Started",
+      "BACK_TO_LOGIN": "Back to Login"
     }
   },
   "LABEL": {
@@ -23,7 +36,9 @@
     "EMAIL": "Email",
     "VERIFICATION_CODE": "Verification Code",
     "NEW_PASSWORD": "New Password",
-    "CONFIRM_NEW_PASSWORD": "Confirm New Password"
+    "CONFIRM_NEW_PASSWORD": "Confirm New Password",
+    "USERNAME": "Username",
+    "CONFIRM_PASSWORD": "Confirm Password"
   },
   "VALIDATION": {
     "CREDENTIAL_REQUIRED": "Email or Username is required",
@@ -36,7 +51,9 @@
     "ENTER_CODE": "Enter code",
     "WAIT_SECONDS": "Wait {seconds} seconds",
     "NEW_PASSWORD": "Enter your new password",
-    "CONFIRM_NEW_PASSWORD": "Re-enter your new password"
+    "CONFIRM_NEW_PASSWORD": "Re-enter your new password",
+    "USERNAME": "Nhập tên người dùng của bạn",
+    "CONFIRM_PASSWORD": "Nhập lại mật khẩu của bạn"
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -44,6 +61,78 @@
     "SIGN_UP": "Sign Up",
     "SEND_OTP": "Send OTP",
     "VERIFY_CONTINUE": "Verify & Continue",
-    "RESET_PASSWORD": "Reset Password"
+    "RESET_PASSWORD": "Reset Password",
+    "CONTINUE": "Continue"
+  },
+  "COMMON": {
+    "MEMBERS": "members",
+    "ALL": "All",
+    "GROUP": "Group",
+    "SOLO": "Solo"
+  },
+  "EULA": {
+    "TITLE": "End User License Agreement",
+    "CANCEL": "Cancel",
+    "INTRO": "This End User License Agreement (\"Agreement\") is a legal contract between you (\"User\") and Ventidole Inc. (\"Licensor\"), governing your use of the Ventidole fan–idol platform (\"the App\"). By creating an account or using the App, you agree to these terms. If you do not agree, please discontinue use immediately.",
+    "LICENSE_GRANT": {
+      "TITLE": "1. LICENSE GRANT",
+      "DESCRIPTION": "Subject to this Agreement, Licensor grants you a limited, non-exclusive, non-transferable, and revocable license to use the App for personal, non-commercial purposes. You may not copy, modify, or redistribute any part of the App without permission."
+    },
+    "ACCOUNT": {
+      "TITLE": "2. ACCOUNT REGISTRATION & TERMINATION",
+      "DESCRIPTION": "You must provide accurate information when creating an account. Licensor reserves the right to suspend or terminate accounts for any violation of these terms or harmful behavior toward the community. You may terminate your account at any time through in-app settings."
+    },
+    "USER_CONTENT": {
+      "TITLE": "3. USER-GENERATED CONTENT",
+      "DESCRIPTION": "The App allows users to create and share posts, comments, images, and other content.\n\n3.1. Content Ownership\n\nYou retain ownership of your content but grant Ventidole a non-exclusive, worldwide, royalty-free license to use, display, and distribute it within the platform.\n\n3.2. Prohibited Content\n\nWe have zero tolerance for:\n\n    • Harassment, hate speech, or discrimination\n    • Pornographic, violent, or explicit content\n    • Scams, impersonation, or misleading information\nViolations may lead to immediate account suspension or removal of content."
+    },
+    "MEMBERSHIP": {
+      "TITLE": "4. MEMBERSHIP & SUBSCRIPTION OPTIONS",
+      "DESCRIPTION": "Ventidole offers optional membership plans and digital purchases such as event tickets, tokens, and idol merchandise. Pricing and benefits are displayed in-app. All payments are handled securely through third-party providers. Memberships automatically renew unless canceled before the renewal date."
+    },
+    "COMMUNITY": {
+      "TITLE": "5. COMMUNITY INTERACTIONS & BLOCKING",
+      "DESCRIPTION": "You can follow idols, comment, and message other fans. You may block users who engage in abusive behavior. Once blocked, they cannot contact or view your profile."
+    },
+    "PRIVACY": {
+      "TITLE": "6. PRIVACY & DATA USAGE",
+      "DESCRIPTION": "Your privacy is important to us. Please review our Privacy Policy for details on how your personal data is collected and processed. We never sell your personal information to third parties."
+    },
+    "CODE_OF_CONDUCT": {
+      "TITLE": "7. CODE OF CONDUCT",
+      "DESCRIPTION": "You agree to:\n\n    • Treat other users respectfully\n    • Avoid offensive or spam behavior\n    • Respect the intellectual property of idols and creators\nRepeated violations may lead to suspension or permanent ban."
+    },
+    "DIGITAL_ITEMS": {
+      "TITLE": "8. DIGITAL ITEMS & TOKENS",
+      "DESCRIPTION": "Some features may include digital collectibles, tokens, or NFT-based assets. Ownership of these assets follows the blockchain's public record. Users are responsible for securing their wallets and understanding the risks of digital transactions."
+    },
+    "LIABILITY": {
+      "TITLE": "9. LIMITATION OF LIABILITY",
+      "DESCRIPTION": "Ventidole and its affiliates are not liable for indirect or consequential damages, including loss of data or virtual goods, resulting from your use of the App. The App is provided \"AS IS\" without any warranty of uninterrupted or error-free service."
+    },
+    "ELIGIBILITY": {
+      "TITLE": "10. ELIGIBILITY",
+      "DESCRIPTION": "You must be at least 16 years old to use the App. Some regions may require parental consent for minors. Idol or creator accounts must comply with all local laws and verification procedures."
+    },
+    "GOVERNING_LAW": {
+      "TITLE": "11. GOVERNING LAW",
+      "DESCRIPTION": "This Agreement is governed by the laws of the State of Delaware, USA, without regard to its conflict of law provisions. Disputes will be resolved through binding arbitration unless prohibited by local law."
+    },
+    "THIRD_PARTY": {
+      "TITLE": "12. THIRD-PARTY SERVICES",
+      "DESCRIPTION": "The App may integrate third-party services (e.g., Google, Apple, payment gateways). You agree to follow their respective terms. Ventidole is not responsible for any external service failures."
+    },
+    "UPDATES": {
+      "TITLE": "13. UPDATES & MODIFICATIONS",
+      "DESCRIPTION": "Ventidole may update these terms periodically. Continued use of the App after changes take effect constitutes your acceptance of the revised Agreement."
+    },
+    "CONTACT": {
+      "TITLE": "14. CONTACT INFORMATION",
+      "DESCRIPTION": "If you have any questions or concerns about this Agreement, please contact us at support@ventidole.app."
+    },
+    "ACCEPTANCE": {
+      "TITLE": "ACCEPTANCE",
+      "DESCRIPTION": "By clicking \"Agree\" or continuing to use the App, you acknowledge that you have read and understood this Agreement and agree to its terms, including community guidelines, content restrictions, and digital item policies."
+    }
   }
 }

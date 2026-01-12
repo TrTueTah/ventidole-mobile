@@ -4,7 +4,7 @@ import AppInput from '@/components/ui/AppInput';
 import AppText from '@/components/ui/AppText';
 import Icon from '@/components/ui/Icon';
 import { useToast } from '@/components/ui/ToastProvider';
-import { components } from '@/schemas/openapi';
+import { useColors } from '@/hooks/useColors';
 import { useAuthStore } from '@/store/authStore';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,15 +15,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import CommunityCard from './components/CommunityCard';
+import CommunityCard, { CommunityItem } from './components/CommunityCard';
 import CommunityCardSkeleton from './components/CommunityCardSkeleton';
 import { useChooseCommunity } from './hooks/useChooseCommunity';
-
-type Community = components['schemas']['CommunityListDto'];
 
 const ChooseCommunityScreen = () => {
   const { t } = useTranslation();
   const { showSuccess, showError } = useToast();
+  const colors = useColors();
   const { setIsChooseCommunity } = useAuthStore();
 
   // Use custom hook with callbacks
@@ -37,6 +36,8 @@ const ChooseCommunityScreen = () => {
     isFollowing,
     searchQuery,
     setSearchQuery,
+    typeFilter,
+    setTypeFilter,
     loadMore,
   } = useChooseCommunity({
     onSuccess: () => {
@@ -60,7 +61,7 @@ const ChooseCommunityScreen = () => {
   const showSkeleton = isLoading && communities.length === 0;
 
   const renderCommunityItem = useCallback(
-    ({ item }: { item: Community }) => {
+    ({ item }: { item: CommunityItem }) => {
       const isSelected = selectedCommunities.includes(item.id);
       return (
         <CommunityCard
@@ -98,10 +99,10 @@ const ChooseCommunityScreen = () => {
     if (!isLoadingMore) return null;
     return (
       <View className="py-4">
-        <ActivityIndicator size="small" color="#0CF4B4" />
+        <ActivityIndicator size="small" color={colors.secondary} />
       </View>
     );
-  }, [isLoadingMore]);
+  }, [isLoadingMore, colors.secondary]);
 
   const columnWrapperStyle = useMemo(
     () => ({
@@ -145,6 +146,38 @@ const ChooseCommunityScreen = () => {
           />
         </View>
 
+        {/* Filter Chips */}
+        <View className="px-4 mb-4">
+          <View className="flex-row gap-2">
+            {(['ALL', 'GROUP', 'SOLO'] as const).map(filter => (
+              <TouchableOpacity
+                key={filter}
+                onPress={() => setTypeFilter(filter)}
+                className="px-4 py-2 rounded-full"
+                style={{
+                  backgroundColor:
+                    typeFilter === filter ? colors.secondary : 'transparent',
+                  borderWidth: 1,
+                  borderColor:
+                    typeFilter === filter ? colors.secondary : colors.border,
+                }}
+              >
+                <AppText
+                  className="text-sm"
+                  style={{
+                    color:
+                      typeFilter === filter
+                        ? colors.primaryForeground
+                        : colors.neutrals400,
+                  }}
+                >
+                  {t(`COMMON.${filter}`)}
+                </AppText>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
         {/* Communities List */}
         <FlatList
           data={showSkeleton ? Array(10).fill(null) : communities}
@@ -170,7 +203,7 @@ const ChooseCommunityScreen = () => {
             disabled={selectedCommunities.length < 3 || isFollowing}
             loading={isFollowing}
           >
-            {`${t('CONTINUE')} (${selectedCommunities.length}/3)`}
+            {`${t('BUTTON.CONTINUE')} (${selectedCommunities.length}/3)`}
           </AppButton>
         </View>
       </View>

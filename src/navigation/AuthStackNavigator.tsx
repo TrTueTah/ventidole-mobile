@@ -31,19 +31,9 @@ const AuthStackNavigator = () => {
           component={SignInScreen}
         />
         <AuthStack.Screen
-          key={signUpPath}
-          name={signUpPath}
-          component={SignUpScreen}
-        />
-        <AuthStack.Screen
-          key={resetPasswordPath}
-          name={resetPasswordPath}
-          component={ResetPasswordScreen}
-        />
-        <AuthStack.Screen
-          key={verifyEmailPath}
-          name={verifyEmailPath}
-          component={VerifyEmailScreen}
+          key={chooseCommunityPath}
+          name={chooseCommunityPath}
+          component={ChooseCommunityScreen}
         />
         <AuthStack.Screen
           key={authCompletePath}
@@ -51,14 +41,24 @@ const AuthStackNavigator = () => {
           component={AuthCompleteScreen}
         />
         <AuthStack.Screen
+          key={resetPasswordPath}
+          name={resetPasswordPath}
+          component={ResetPasswordScreen}
+        />
+        <AuthStack.Screen
+          key={signUpPath}
+          name={signUpPath}
+          component={SignUpScreen}
+        />
+        <AuthStack.Screen
+          key={verifyEmailPath}
+          name={verifyEmailPath}
+          component={VerifyEmailScreen}
+        />
+        <AuthStack.Screen
           key={termAndUsePath}
           name={termAndUsePath}
           component={TermAndUseScreen}
-        />
-        <AuthStack.Screen
-          key={chooseCommunityPath}
-          name={chooseCommunityPath}
-          component={ChooseCommunityScreen}
         />
       </AuthStack.Navigator>
     </NavigationIndependentTree>

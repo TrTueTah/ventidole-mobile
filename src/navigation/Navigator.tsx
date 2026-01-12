@@ -4,13 +4,13 @@ import AppStackNavigator from './AppStackNavigator';
 import AuthStackNavigator from './AuthStackNavigator';
 
 const Navigator = () => {
-  const { isLogin, isChooseCommunity } = useAuthStore();
+  const { isLogin } = useAuthStore();
 
   // Fetch current user data when logged in
   useGetCurrentUser();
 
   // Show AppStack only if user is logged in AND has chosen communities
-  const shouldShowApp = isLogin && isChooseCommunity;
+  const shouldShowApp = isLogin;
 
   return shouldShowApp ? <AppStackNavigator /> : <AuthStackNavigator />;
 };

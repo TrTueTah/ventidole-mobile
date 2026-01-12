@@ -12,13 +12,8 @@ type LoginResponse = components['schemas']['AuthResponseDto'];
 export const useLogin = () => {
   const backendApi = useContext(BackendApiContext);
   const { showSuccess, showWarning } = useToast();
-  const {
-    setAccessToken,
-    setRefreshToken,
-    setIsLogin,
-    setUserMetadata,
-    setIsChooseCommunity,
-  } = useAuthStore();
+  const { setAccessToken, setRefreshToken, setIsLogin, setUserMetadata } =
+    useAuthStore();
   const navigation = useNavigation<any>();
 
   const loginMutation = backendApi.useMutation('post', '/auth/login', {

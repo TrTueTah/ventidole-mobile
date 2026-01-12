@@ -4,7 +4,6 @@ import { useAuthStore } from '@/store/authStore';
 import { BACKEND_BASE_URL } from '@env';
 import createFetchClient, { Middleware } from 'openapi-fetch';
 import createClient from 'openapi-react-query';
-import { Platform } from 'react-native';
 import { paths } from 'src/schemas/openapi';
 
 // Token refresh state management
@@ -33,7 +32,7 @@ const refreshTokens = async (): Promise<boolean> => {
 
       console.log('🔄 Attempting to refresh tokens...');
 
-      const response = await fetch(`${BACKEND_BASE_URL}v1/auth/refresh-token`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/auth/refresh`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

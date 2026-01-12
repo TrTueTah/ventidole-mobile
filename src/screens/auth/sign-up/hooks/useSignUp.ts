@@ -36,7 +36,6 @@ export const useSignUp = () => {
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
         setUserMetadata({ id: user.id, email: user.email });
-        setIsLogin(true);
         showSuccess('Account created successfully!');
       }
     },

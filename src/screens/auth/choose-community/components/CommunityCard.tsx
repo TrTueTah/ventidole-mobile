@@ -5,10 +5,10 @@ import { components } from '@/schemas/openapi';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, TouchableOpacity, View } from 'react-native';
 
-type Community = components['schemas']['CommunityListDto'];
+export type CommunityItem = components['schemas']['CommunityResponseDto'];
 
 interface CommunityCardProps {
-  item: Community;
+  item: CommunityItem;
   isSelected: boolean;
   onPress: () => void;
 }
@@ -71,7 +71,7 @@ const CommunityCard = ({ item, isSelected, onPress }: CommunityCardProps) => {
             {item.name}
           </AppText>
           <AppText className="text-xs text-neutrals400 mt-1">
-            {item.totalMember} {t('MEMBERS')}
+            {item.followerCount} {t('COMMON.MEMBERS')}
           </AppText>
         </View>
       </View>

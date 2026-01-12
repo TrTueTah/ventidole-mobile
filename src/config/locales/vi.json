@@ -15,6 +15,19 @@
     },
     "RESET_PASSWORD": {
       "TITLE": "Đặt lại mật khẩu của bạn"
+    },
+    "SIGN_UP": {
+      "TITLE": "Đăng ký",
+      "TERMS_AND_CONDITIONS": "Điều khoản & Điều kiện",
+      "AGREE_TO": "Tôi đồng ý với"
+    },
+    "AUTH_COMPLETE": {
+      "REGISTER_TITLE": "Đăng ký hoàn tất!",
+      "REGISTER_SUBTITLE": "Chào mừng đến với Ventidole! Tài khoản của bạn đã được tạo thành công.",
+      "RESET_PASSWORD_TITLE": "Đặt lại mật khẩu hoàn tất!",
+      "RESET_PASSWORD_SUBTITLE": "Mật khẩu của bạn đã được đặt lại thành công. Bây giờ bạn có thể đăng nhập bằng mật khẩu mới.",
+      "GET_STARTED": "Bắt đầu",
+      "BACK_TO_LOGIN": "Quay lại đăng nhập"
     }
   },
   "LABEL": {
@@ -23,7 +36,9 @@
     "EMAIL": "Email",
     "VERIFICATION_CODE": "Mã xác minh",
     "NEW_PASSWORD": "Mật khẩu mới",
-    "CONFIRM_NEW_PASSWORD": "Xác nhận mật khẩu mới"
+    "CONFIRM_NEW_PASSWORD": "Xác nhận mật khẩu mới",
+    "USERNAME": "Tên người dùng",
+    "CONFIRM_PASSWORD": "Xác nhận mật khẩu"
   },
   "VALIDATION": {
     "CREDENTIAL_REQUIRED": "Email hoặc tên người dùng là bắt buộc",
@@ -36,7 +51,9 @@
     "ENTER_CODE": "Nhập mã",
     "WAIT_SECONDS": "Chờ {seconds} giây",
     "NEW_PASSWORD": "Nhập mật khẩu mới của bạn",
-    "CONFIRM_NEW_PASSWORD": "Nhập lại mật khẩu mới của bạn"
+    "CONFIRM_NEW_PASSWORD": "Nhập lại mật khẩu mới của bạn",
+    "USERNAME": "Nhập tên người dùng của bạn",
+    "CONFIRM_PASSWORD": "Nhập lại mật khẩu của bạn"
   },
   "BUTTON": {
     "LOGIN": "Đăng nhập",
@@ -44,6 +61,78 @@
     "SIGN_UP": "Đăng ký",
     "SEND_OTP": "Gửi mã OTP",
     "VERIFY_CONTINUE": "Xác minh & Tiếp tục",
-    "RESET_PASSWORD": "Đặt lại mật khẩu"
+    "RESET_PASSWORD": "Đặt lại mật khẩu",
+    "CONTINUE": "Tiếp tục"
+  },
+  "COMMON": {
+    "MEMBERS": "thành viên",
+    "ALL": "Tất cả",
+    "GROUP": "Nhóm",
+    "SOLO": "Solo"
+  },
+  "EULA": {
+    "TITLE": "Thỏa Thuận Cấp Phép Người Dùng Cuối",
+    "CANCEL": "Hủy",
+    "INTRO": "Thỏa Thuận Cấp Phép Người Dùng Cuối này (\"Thỏa Thuận\") là hợp đồng pháp lý giữa bạn (\"Người Dùng\") và Ventidole Inc. (\"Bên Cấp Phép\"), điều chỉnh việc bạn sử dụng nền tảng người hâm mộ-thần tượng Ventidole (\"Ứng Dụng\"). Bằng cách tạo tài khoản hoặc sử dụng Ứng Dụng, bạn đồng ý với các điều khoản này. Nếu bạn không đồng ý, vui lòng ngừng sử dụng ngay lập tức.",
+    "LICENSE_GRANT": {
+      "TITLE": "1. CẤP PHÉP SỬ DỤNG",
+      "DESCRIPTION": "Theo Thỏa Thuận này, Bên Cấp Phép cấp cho bạn giấy phép giới hạn, không độc quyền, không thể chuyển nhượng và có thể thu hồi để sử dụng Ứng Dụng cho mục đích cá nhân, phi thương mại. Bạn không được sao chép, sửa đổi hoặc phân phối lại bất kỳ phần nào của Ứng Dụng mà không có sự cho phép."
+    },
+    "ACCOUNT": {
+      "TITLE": "2. ĐĂNG KÝ & CHẤM DỨT TÀI KHOẢN",
+      "DESCRIPTION": "Bạn phải cung cấp thông tin chính xác khi tạo tài khoản. Bên Cấp Phép có quyền tạm ngưng hoặc chấm dứt tài khoản vì bất kỳ vi phạm nào đối với các điều khoản này hoặc hành vi có hại đối với cộng đồng. Bạn có thể chấm dứt tài khoản của mình bất cứ lúc nào thông qua cài đặt trong ứng dụng."
+    },
+    "USER_CONTENT": {
+      "TITLE": "3. NỘI DUNG DO NGƯỜI DÙNG TẠO",
+      "DESCRIPTION": "Ứng Dụng cho phép người dùng tạo và chia sẻ bài đăng, bình luận, hình ảnh và nội dung khác.\n\n3.1. Quyền Sở Hữu Nội Dung\n\nBạn giữ quyền sở hữu nội dung của mình nhưng cấp cho Ventidole giấy phép không độc quyền, toàn cầu, miễn phí bản quyền để sử dụng, hiển thị và phân phối nội dung đó trong nền tảng.\n\n3.2. Nội Dung Bị Cấm\n\nChúng tôi có chính sách không khoan nhượng đối với:\n\n    • Quấy rối, phát ngôn thù địch hoặc phân biệt đối xử\n    • Nội dung khiêu dâm, bạo lực hoặc thô tục\n    • Lừa đảo, mạo danh hoặc thông tin sai lệch\nVi phạm có thể dẫn đến tạm ngưng tài khoản ngay lập tức hoặc xóa nội dung."
+    },
+    "MEMBERSHIP": {
+      "TITLE": "4. THÀNH VIÊN & TÙY CHỌN ĐĂNG KÝ",
+      "DESCRIPTION": "Ventidole cung cấp các gói thành viên tùy chọn và mua sắm kỹ thuật số như vé sự kiện, token và hàng hóa thần tượng. Giá cả và lợi ích được hiển thị trong ứng dụng. Tất cả các khoản thanh toán được xử lý an toàn thông qua các nhà cung cấp bên thứ ba. Thành viên tự động gia hạn trừ khi bị hủy trước ngày gia hạn."
+    },
+    "COMMUNITY": {
+      "TITLE": "5. TƯƠNG TÁC CỘNG ĐỒNG & CHẶN",
+      "DESCRIPTION": "Bạn có thể theo dõi thần tượng, bình luận và nhắn tin cho người hâm mộ khác. Bạn có thể chặn người dùng có hành vi lạm dụng. Sau khi bị chặn, họ không thể liên hệ hoặc xem hồ sơ của bạn."
+    },
+    "PRIVACY": {
+      "TITLE": "6. QUYỀN RIÊNG TƯ & SỬ DỤNG DỮ LIỆU",
+      "DESCRIPTION": "Quyền riêng tư của bạn rất quan trọng đối với chúng tôi. Vui lòng xem Chính Sách Bảo Mật của chúng tôi để biết chi tiết về cách dữ liệu cá nhân của bạn được thu thập và xử lý. Chúng tôi không bao giờ bán thông tin cá nhân của bạn cho bên thứ ba."
+    },
+    "CODE_OF_CONDUCT": {
+      "TITLE": "7. QUY TẮC ỨNG XỬ",
+      "DESCRIPTION": "Bạn đồng ý:\n\n    • Đối xử tôn trọng với người dùng khác\n    • Tránh hành vi xúc phạm hoặc spam\n    • Tôn trọng quyền sở hữu trí tuệ của thần tượng và người sáng tạo\nVi phạm lặp lại có thể dẫn đến tạm ngưng hoặc cấm vĩnh viễn."
+    },
+    "DIGITAL_ITEMS": {
+      "TITLE": "8. VẬT PHẨM KỸ THUẬT SỐ & TOKEN",
+      "DESCRIPTION": "Một số tính năng có thể bao gồm đồ sưu tầm kỹ thuật số, token hoặc tài sản dựa trên NFT. Quyền sở hữu các tài sản này tuân theo hồ sơ công khai của blockchain. Người dùng chịu trách nhiệm bảo mật ví của họ và hiểu rõ rủi ro của giao dịch kỹ thuật số."
+    },
+    "LIABILITY": {
+      "TITLE": "9. GIỚI HẠN TRÁCH NHIỆM",
+      "DESCRIPTION": "Ventidole và các chi nhánh của nó không chịu trách nhiệm về thiệt hại gián tiếp hoặc hậu quả, bao gồm mất dữ liệu hoặc hàng hóa ảo, do việc bạn sử dụng Ứng Dụng. Ứng Dụng được cung cấp \"NGUYÊN TRẠNG\" mà không có bất kỳ bảo đảm nào về dịch vụ không bị gián đoạn hoặc không có lỗi."
+    },
+    "ELIGIBILITY": {
+      "TITLE": "10. ĐIỀU KIỆN",
+      "DESCRIPTION": "Bạn phải ít nhất 16 tuổi để sử dụng Ứng Dụng. Một số khu vực có thể yêu cầu sự đồng ý của phụ huynh đối với trẻ vị thành niên. Tài khoản thần tượng hoặc người sáng tạo phải tuân thủ tất cả các luật địa phương và quy trình xác minh."
+    },
+    "GOVERNING_LAW": {
+      "TITLE": "11. LUẬT ĐIỀU CHỈNH",
+      "DESCRIPTION": "Thỏa Thuận này được điều chỉnh bởi luật pháp của Bang Delaware, Hoa Kỳ, không xét đến các quy định về xung đột pháp luật của nó. Tranh chấp sẽ được giải quyết thông qua trọng tài ràng buộc trừ khi luật địa phương cấm."
+    },
+    "THIRD_PARTY": {
+      "TITLE": "12. DỊCH VỤ BÊN THỨ BA",
+      "DESCRIPTION": "Ứng Dụng có thể tích hợp các dịch vụ bên thứ ba (ví dụ: Google, Apple, cổng thanh toán). Bạn đồng ý tuân theo các điều khoản tương ứng của họ. Ventidole không chịu trách nhiệm về bất kỳ sự cố dịch vụ bên ngoài nào."
+    },
+    "UPDATES": {
+      "TITLE": "13. CẬP NHẬT & SỬA ĐỔI",
+      "DESCRIPTION": "Ventidole có thể cập nhật các điều khoản này định kỳ. Việc tiếp tục sử dụng Ứng Dụng sau khi các thay đổi có hiệu lực đồng nghĩa với việc bạn chấp nhận Thỏa Thuận đã sửa đổi."
+    },
+    "CONTACT": {
+      "TITLE": "14. THÔNG TIN LIÊN HỆ",
+      "DESCRIPTION": "Nếu bạn có bất kỳ câu hỏi hoặc thắc mắc nào về Thỏa Thuận này, vui lòng liên hệ với chúng tôi tại support@ventidole.app."
+    },
+    "ACCEPTANCE": {
+      "TITLE": "CHẤP NHẬN",
+      "DESCRIPTION": "Bằng cách nhấp vào \"Đồng ý\" hoặc tiếp tục sử dụng Ứng Dụng, bạn xác nhận rằng bạn đã đọc và hiểu Thỏa Thuận này và đồng ý với các điều khoản của nó, bao gồm các hướng dẫn cộng đồng, hạn chế nội dung và chính sách vật phẩm kỹ thuật số."
+    }
   }
 }

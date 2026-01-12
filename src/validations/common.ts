@@ -66,30 +66,12 @@ export const getVerifyEmailSchema = () =>
     otp: z.string().length(4, t('VALIDATION.OTP_LENGTH')),
   });
 
-// Reset Password Schema
-export const getResetPasswordSchema = () =>
-  z
-    .object({
-      password: z.string().min(8, t('VALIDATION.PASSWORD_MIN_LENGTH')),
-      confirmPassword: z.string(),
-    })
-    .refine(data => data.password === data.confirmPassword, {
-      message: t('VALIDATION.PASSWORDS_DONT_MATCH'),
-      path: ['confirmPassword'],
-    });
-
-// Reset Password with Email Schema (for API call)
-export const getResetPasswordWithEmailSchema = () =>
-  z
-    .object({
-      email: getEmailSchema(),
-      password: z.string().min(8, t('VALIDATION.PASSWORD_MIN_LENGTH')),
-      confirmPassword: z.string(),
-    })
-    .refine(data => data.password === data.confirmPassword, {
-      message: t('VALIDATION.PASSWORDS_DONT_MATCH'),
-      path: ['confirmPassword'],
-    });
+// Reset Password schemas moved to resetPassword.ts
+export {
+  getResetPasswordSchema,
+  getResetPasswordWithEmailSchema,
+  resetPasswordSchema,
+} from './resetPassword';
 
 // Legacy alias for compatibility
 export const getRegisterFormSchema = () =>
@@ -107,7 +89,7 @@ export const getRegisterFormSchema = () =>
 // signInSchema moved to login.ts
 export const signUpSchema = getSignUpSchema();
 export const verifyEmailSchema = getVerifyEmailSchema();
-export const resetPasswordSchema = getResetPasswordSchema();
+// resetPasswordSchema moved to resetPassword.ts
 // Legacy alias for compatibility
 
 // Deprecated: Keep for backward compatibility, but prefer using getter functions

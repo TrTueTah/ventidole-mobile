@@ -5,8 +5,9 @@ import Checkbox from '@/components/ui/Checkbox';
 import Icon from '@/components/ui/Icon';
 import { useForm } from '@/hooks/useForm';
 import { getSignUpSchema } from '@/validations/common';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TouchableOpacity, View } from 'react-native';
 import { z } from 'zod';
 import { useSignUp } from './hooks/useSignUp';
@@ -20,7 +21,7 @@ const SignUpScreen = () => {
   const route = useRoute();
   const params = route.params as SignUpRouteParams;
   const { email } = params || {};
-  const navigation = useNavigation();
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const termsModalRef = useRef<TermsModalRef>(null);
@@ -59,8 +60,8 @@ const SignUpScreen = () => {
 
   return (
     <AuthCommonContainer
-      title="Please, fill your information"
-      bottomButtonText="Continue"
+      title={t('AUTH.SIGN_UP.TITLE')}
+      bottomButtonText={t('BUTTON.CONTINUE')}
       onBottomButtonPress={handleSubmit(handleContinue)}
       bottomButtonLoading={isLoading}
       bottomButtonDisabled={isLoading || !termsAccepted}
@@ -68,8 +69,8 @@ const SignUpScreen = () => {
       <View className="w-full gap-2">
         <AppInput
           {...register('email')}
-          label="Email"
-          placeholder="Enter your email"
+          label={t('LABEL.EMAIL')}
+          placeholder={t('PLACEHOLDER.EMAIL')}
           keyboardType="email-address"
           autoCapitalize="none"
           editable={false}
@@ -79,16 +80,16 @@ const SignUpScreen = () => {
 
         <AppInput
           {...register('username')}
-          label="Username"
-          placeholder="Enter your username"
+          label={t('LABEL.USERNAME')}
+          placeholder={t('PLACEHOLDER.USERNAME')}
           autoCapitalize="none"
           errorText={errors.username?.message}
         />
 
         <AppInput
           {...register('password')}
-          label="Password"
-          placeholder="Enter your password"
+          label={t('LABEL.PASSWORD')}
+          placeholder={t('PLACEHOLDER.PASSWORD')}
           secureTextEntry={!showPassword}
           autoCapitalize="none"
           errorText={errors.password?.message}
@@ -104,8 +105,8 @@ const SignUpScreen = () => {
 
         <AppInput
           {...register('confirmPassword')}
-          label="Confirm Password"
-          placeholder="Re-enter your password"
+          label={t('LABEL.CONFIRM_PASSWORD')}
+          placeholder={t('PLACEHOLDER.CONFIRM_PASSWORD')}
           secureTextEntry={!showPassword}
           autoCapitalize="none"
           errorText={errors.confirmPassword?.message}
@@ -129,11 +130,11 @@ const SignUpScreen = () => {
         />
         <View className="flex-1 ml-2 flex-row flex-wrap">
           <AppText className="text-sm text-neutrals300">
-            I agree to the{' '}
+            {t('AUTH.SIGN_UP.AGREE_TO')}{' '}
           </AppText>
           <TouchableOpacity onPress={() => termsModalRef.current?.show()}>
             <AppText className="text-sm text-primary underline">
-              Terms & Conditions
+              {t('AUTH.SIGN_UP.TERMS_AND_CONDITIONS')}
             </AppText>
           </TouchableOpacity>
         </View>

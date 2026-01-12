@@ -229,17 +229,20 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/user/community/my/owned": {
+    "/user/community/follow/bulk": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get my communities (as owner) */
-        get: operations["CommunityController_getMyCommunities"];
+        get?: never;
         put?: never;
-        post?: never;
+        /**
+         * Bulk follow multiple communities
+         * @description Follow multiple communities at once. Used for "Choose Community" onboarding screen. Returns success/failure counts and any errors.
+         */
+        post: operations["CommunityController_bulkFollowCommunities"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1237,8 +1240,6 @@ export interface components {
              * @enum {string}
              */
             type: "SOLO" | "GROUP";
-            /** @example user_xyz789 */
-            ownerId: string;
             /** @example A community for K-Pop enthusiasts */
             description: Record<string, never> | null;
             /** @example https://example.com/avatar.jpg */
@@ -1261,9 +1262,50 @@ export interface components {
              * @example 2024-01-20T14:45:00Z
              */
             updatedAt: string;
+            /**
+             * @description Whether the current user is following this community
+             * @example false
+             */
+            isFollowing?: boolean;
+        };
+        BulkFollowResultDto: {
+            /**
+             * @description Number of communities successfully followed
+             * @example 3
+             */
+            succeeded: number;
+            /**
+             * @description Number of communities that failed to follow
+             * @example 1
+             */
+            failed: number;
+            /**
+             * @description Array of errors for failed operations
+             * @example [
+             *       {
+             *         "communityId": "cm123abc",
+             *         "error": "Community not found"
+             *       }
+             *     ]
+             */
+            errors: {
+                communityId?: string;
+                error?: string;
+            }[];
         };
         CreateCommunityDto: Record<string, never>;
         UpdateCommunityDto: Record<string, never>;
+        BulkFollowCommunitiesDto: {
+            /**
+             * @description Array of community IDs to follow
+             * @example [
+             *       "cm123abc",
+             *       "cm456def",
+             *       "cm789ghi"
+             *     ]
+             */
+            communityIds: string[];
+        };
         PageInfo: Record<string, never>;
         PostMediaResponseDto: {
             /** @example https://example.com/media/image1.jpg */
@@ -2170,11 +2212,13 @@ export interface operations {
     };
     CommunityController_getAllCommunities: {
         parameters: {
-            query: {
+            query?: {
                 page?: number;
                 limit?: number;
-                type: string;
-                search: string;
+                /** @description Filter by community type (SOLO or GROUP) */
+                type?: "SOLO" | "GROUP";
+                /** @description Search term for community name or description */
+                search?: string;
             };
             header?: never;
             path?: never;
@@ -2524,14 +2568,18 @@ export interface operations {
             };
         };
     };
-    CommunityController_getMyCommunities: {
+    CommunityController_bulkFollowCommunities: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BulkFollowCommunitiesDto"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -2550,8 +2598,8 @@ export interface operations {
                          * @example OK
                          */
                         message: string;
-                        /** @description Response data array */
-                        data?: components["schemas"]["CommunityResponseDto"][];
+                        /** @description Response data */
+                        data?: components["schemas"]["BulkFollowResultDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null

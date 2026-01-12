@@ -4,6 +4,7 @@ import type { RootStackScreenProps } from '@/navigation/types';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import { Check } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import Animated, { FadeInDown, SlideInRight } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,6 +15,7 @@ type AuthCompleteRouteParams =
   RootStackScreenProps<'AuthComplete'>['route']['params'];
 
 const AuthCompleteScreen = () => {
+  const { t } = useTranslation();
   const route = useRoute();
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
@@ -23,12 +25,14 @@ const AuthCompleteScreen = () => {
   const isRegister = type === 'register';
 
   const title = isRegister
-    ? 'Registration Complete!'
-    : 'Password Reset Complete!';
+    ? t('AUTH.AUTH_COMPLETE.REGISTER_TITLE')
+    : t('AUTH.AUTH_COMPLETE.RESET_PASSWORD_TITLE');
   const subtitle = isRegister
-    ? 'Welcome to Ventidole! Your account has been successfully created.'
-    : 'Your password has been successfully reset. You can now sign in with your new password.';
-  const buttonText = isRegister ? 'Get Started' : 'Back to Login';
+    ? t('AUTH.AUTH_COMPLETE.REGISTER_SUBTITLE')
+    : t('AUTH.AUTH_COMPLETE.RESET_PASSWORD_SUBTITLE');
+  const buttonText = isRegister
+    ? t('AUTH.AUTH_COMPLETE.GET_STARTED')
+    : t('AUTH.AUTH_COMPLETE.BACK_TO_LOGIN');
 
   const handleOnPress = () => {
     if (isRegister) {
