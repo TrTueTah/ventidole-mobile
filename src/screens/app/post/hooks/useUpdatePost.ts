@@ -69,7 +69,12 @@ export const useUpdatePost = ({
   );
 
   const updatePostAsync = useCallback(
-    async (postId: string, content?: string, mediaUrls?: string[]) => {
+    async (
+      postId: string,
+      content?: string,
+      mediaUrls?: string[],
+      tags?: string[],
+    ) => {
       const data: UpdatePostDto = {};
 
       if (content !== undefined) {
@@ -78,6 +83,10 @@ export const useUpdatePost = ({
 
       if (mediaUrls !== undefined) {
         data.mediaUrls = mediaUrls;
+      }
+
+      if (tags !== undefined) {
+        data.tags = tags;
       }
 
       return new Promise((resolve, reject) => {

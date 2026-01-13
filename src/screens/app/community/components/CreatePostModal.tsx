@@ -9,7 +9,9 @@ import {
 import {
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -38,6 +40,17 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
     const colors = useColors();
 
     const isEditMode = !!editingPost;
+
+    // Extract hashtags from content
+    const detectedTags = useMemo(() => {
+      const hashtagRegex = /#[\w\u00C0-\u024F\u1E00-\u1EFF]+/g;
+      const matches = content.match(hashtagRegex);
+      if (!matches) return [];
+
+      // Remove # symbol and remove duplicates
+      const tags = matches.map(tag => tag.slice(1));
+      return Array.from(new Set(tags));
+    }, [content]);
 
     const {
       selectedImages,
@@ -102,19 +115,25 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
         }
       }
 
+      // Remove hashtags from content
+      const hashtagRegex = /#[\w\u00C0-\u024F\u1E00-\u1EFF]+/g;
+      const cleanedContent = content.replace(hashtagRegex, '').trim();
+
       if (isEditMode && editingPost) {
         // Edit mode
         await updatePostAsync(
           editingPost.id,
-          content.trim(),
+          cleanedContent,
           mediaUrls.length > 0 ? mediaUrls : undefined,
+          detectedTags.length > 0 ? detectedTags : undefined,
         );
       } else {
         // Create mode
         createPost({
-          content: content.trim(),
+          content: cleanedContent,
           communityId: communityId!,
           mediaUrls,
+          tags: detectedTags.length > 0 ? detectedTags : undefined,
         });
       }
     }, [
@@ -126,6 +145,7 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
       createPost,
       updatePostAsync,
       uploadAllImages,
+      detectedTags,
     ]);
 
     const renderBackdrop = useCallback(
@@ -182,6 +202,27 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
               multiline
               editable={!isProcessing}
             />
+
+            {/* Detected Tags */}
+            {detectedTags.length > 0 && (
+              <View className="gap-2">
+                <AppText variant="bodySmall" color="muted">
+                  Detected tags:
+                </AppText>
+                <View className="flex-row flex-wrap gap-2">
+                  {detectedTags.map((tag, index) => (
+                    <View
+                      key={index}
+                      className="px-3 py-1 bg-primary/10 rounded-full"
+                    >
+                      <AppText variant="bodySmall" className="text-primary">
+                        #{tag}
+                      </AppText>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
 
             {/* Image Grid */}
             {selectedImages.length > 0 && (
