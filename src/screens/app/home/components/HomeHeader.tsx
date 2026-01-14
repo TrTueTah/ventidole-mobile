@@ -1,8 +1,9 @@
 import Logo from '@/components/icons/Logo';
-import { Avatar, Icon } from '@/components/ui';
+import { AppText, Avatar, Icon } from '@/components/ui';
 import { useAuthStore } from '@/store/authStore';
+import { useNotifications } from '@/store/notificationsStore';
 import { useNavigation } from '@react-navigation/native';
-import { Pressable, TouchableOpacity } from 'react-native';
+import { Pressable, TouchableOpacity, View } from 'react-native';
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -16,6 +17,7 @@ interface HomeHeaderProps {
 const HomeHeader = ({ headerVisible }: HomeHeaderProps) => {
   const userData = useAuthStore(state => state.userData);
   const navigation = useNavigation();
+  const notificationsCount = useNotifications(state => state.notificationsCount);
 
   const handleProfilePress = () => {
     // Navigate to profile screen
@@ -62,11 +64,26 @@ const HomeHeader = ({ headerVisible }: HomeHeaderProps) => {
       </TouchableOpacity>
       <Logo />
       <Pressable
+        onPress={() =>
+          navigation.navigate('NotificationStack', { screen: 'Notifications' })
+        }
         className={
           'bg-background border border-neutrals900 w-12 h-12 rounded-full justify-center items-center'
         }
       >
         <Icon name={'Bell'} className={'text-foreground w-6 h-6'} />
+        {notificationsCount > 0 && (
+          <View className="absolute -top-1 -right-1 bg-primary min-w-5 h-5 rounded-full items-center justify-center px-1">
+            <AppText
+              variant="labelSmall"
+              weight="bold"
+              className="text-primary-foreground"
+              raw
+            >
+              {notificationsCount > 99 ? '99+' : notificationsCount}
+            </AppText>
+          </View>
+        )}
       </Pressable>
     </Animated.View>
   );

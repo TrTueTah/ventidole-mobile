@@ -31,6 +31,7 @@ export type RootStackParamList = {
   CommunityStack: { communityId: string };
   ChatStack: NavigatorScreenParams<ChatStackParamList>;
   MoreStack: NavigatorScreenParams<MoreStackParamList>;
+  NotificationStack: NavigatorScreenParams<NotificationStackParamList>;
   PaymentStack: { orderId: string; paymentMethod: 'CREDIT' | 'COD' };
   ProfileStack: { userId: string };
   Shop: undefined;
@@ -59,6 +60,10 @@ export type MoreStackParamList = {
   Privacy: undefined;
   Terms: undefined;
   Settings: undefined;
+};
+
+export type NotificationStackParamList = {
+  Notifications: undefined;
 };
 
 // Main Tab Navigator

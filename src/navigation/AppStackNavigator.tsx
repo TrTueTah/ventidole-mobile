@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatStackNavigator from './app-stack/ChatStackNavigator';
 import CommunityStackNavigator from './app-stack/CommunityStackNavigator';
 import MoreStackNavigator from './app-stack/MoreStackNavigator';
+import NotificationStackNavigator from './app-stack/NotificationStackNavigator';
 import PaymentStackNavigator from './app-stack/PaymentStackNavigator';
 import PostStackNavigator from './app-stack/PostStackNavigator';
 import ProfileStackNavigator from './app-stack/ProfileStackNavigator';
@@ -12,6 +13,7 @@ import {
   chatStackPath,
   communityStackPath,
   moreStackPath,
+  notificationPath,
   paymentStackPath,
   postStackPath,
   profileStackPath,
@@ -73,6 +75,11 @@ const AppStackNavigator = () => {
         <AppStack.Screen
           name={paymentStackPath}
           component={PaymentStackNavigator}
+          options={{ headerShown: false }}
+        />
+        <AppStack.Screen
+          name={notificationPath}
+          component={NotificationStackNavigator}
           options={{ headerShown: false }}
         />
       </AppStack.Navigator>

@@ -1,6 +1,7 @@
 import InsetsHelper from '@/components/helpers/InsetsHelper.tsx';
 import { LanguageHelper } from '@/components/helpers/LanguageHelper.tsx';
 import BackendApiProvider from '@/components/providers/BackendApiProvider';
+import { KnockProvider } from '@/components/providers/KnockProvider';
 import { StreamChatProvider } from '@/components/providers/StreamChatProvider';
 import { AppText } from '@/components/ui';
 import { DialogProvider } from '@/components/ui/DialogProvider.tsx';
@@ -68,69 +69,73 @@ const AppContent: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView>
-        <View style={{ flex: 1 }} className={theme === 'dark' ? 'dark' : ''}>
-          <BackendApiProvider>
-            <StreamChatProvider>
-              <ChatChannelsProvider>
-                <StatusBar
-                  translucent
-                  backgroundColor="transparent"
-                  barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
-                />
-                <NavigationContainer
-                ref={navigationRef}
-                onReady={() => console.log('Navigation is ready')}
-                onStateChange={state =>
-                  console.log(
-                    'Navigation state changed:',
-                    state?.routes?.[state.index]?.name,
-                  )
-                }
-                linking={{
-                  enabled: true,
-                  prefixes: ['ventidole://', 'https://ventidole.com'],
-                  config: {
-                    screens: {
-                      PaymentSuccess: 'payment/success/:orderId',
-                      PaymentFailure: 'payment/failure/:orderId',
-                      Main: '',
-                    },
-                  },
-                }}
-                fallback={
-                  <View>
-                    <AppText>Loading...</AppText>
-                  </View>
-                }
-                theme={{
-                  ...DefaultTheme,
-                  dark: theme === 'dark',
-                  colors: {
-                    primary: colors.primary,
-                    background: colors.background,
-                    card: colors.neutrals800,
-                    text: colors.foreground,
-                    border: colors.neutrals700,
-                    notification: colors.primary,
-                  },
-                }}
-              >
-                <BottomSheetModalProvider>
-                  <SafeAreaProvider>
-                    <DialogProvider>
-                      <ToastProvider>
-                        <InsetsHelper />
-                        <LanguageHelper />
-                        <Navigator />
-                      </ToastProvider>
-                    </DialogProvider>
-                  </SafeAreaProvider>
-                </BottomSheetModalProvider>
-              </NavigationContainer>
-            </ChatChannelsProvider>
-            </StreamChatProvider>
-          </BackendApiProvider>
-        </View>
+        <SafeAreaProvider>
+          <View style={{ flex: 1 }} className={theme === 'dark' ? 'dark' : ''}>
+            <BackendApiProvider>
+              <ToastProvider>
+                <StreamChatProvider>
+                  <KnockProvider>
+                    <ChatChannelsProvider>
+                      <StatusBar
+                        translucent
+                        backgroundColor="transparent"
+                        barStyle={
+                          theme === 'dark' ? 'light-content' : 'dark-content'
+                        }
+                      />
+                      <NavigationContainer
+                        ref={navigationRef}
+                        onReady={() => console.log('Navigation is ready')}
+                        onStateChange={state =>
+                          console.log(
+                            'Navigation state changed:',
+                            state?.routes?.[state.index]?.name,
+                          )
+                        }
+                        linking={{
+                          enabled: true,
+                          prefixes: ['ventidole://', 'https://ventidole.com'],
+                          config: {
+                            screens: {
+                              PaymentSuccess: 'payment/success/:orderId',
+                              PaymentFailure: 'payment/failure/:orderId',
+                              Main: '',
+                            },
+                          },
+                        }}
+                        fallback={
+                          <View>
+                            <AppText>Loading...</AppText>
+                          </View>
+                        }
+                        theme={{
+                          ...DefaultTheme,
+                          dark: theme === 'dark',
+                          colors: {
+                            primary: colors.primary,
+                            background: colors.background,
+                            card: colors.neutrals800,
+                            text: colors.foreground,
+                            border: colors.neutrals700,
+                            notification: colors.primary,
+                          },
+                        }}
+                      >
+                        <BottomSheetModalProvider>
+                          <DialogProvider>
+                            <InsetsHelper />
+                            <LanguageHelper />
+                            <Navigator />
+                          </DialogProvider>
+                        </BottomSheetModalProvider>
+                      </NavigationContainer>
+                    </ChatChannelsProvider>
+                  </KnockProvider>
+                </StreamChatProvider>
+              </ToastProvider>
+            </BackendApiProvider>
+          </View>
+        </SafeAreaProvider>
       </GestureHandlerRootView>
     </QueryClientProvider>
   );

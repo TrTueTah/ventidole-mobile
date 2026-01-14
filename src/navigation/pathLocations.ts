@@ -13,6 +13,7 @@ const termAndUsePath: keyof RootStackParamList = 'TermAndUse';
 const chooseCommunityPath: keyof RootStackParamList = 'ChooseCommunity';
 const bottomTabPath: keyof RootStackParamList = 'Main';
 const homePath: keyof RootStackParamList = 'Home';
+const notificationPath: keyof RootStackParamList = 'NotificationStack';
 const postStackPath: keyof RootStackParamList = 'PostStack';
 const communityStackPath: keyof RootStackParamList = 'CommunityStack';
 const chatStackPath: keyof RootStackParamList = 'ChatStack';
@@ -48,6 +49,7 @@ export {
   homePath,
   moreMainPath,
   moreStackPath,
+  notificationPath,
   ordersPath,
   paymentFailurePath,
   paymentPath,
