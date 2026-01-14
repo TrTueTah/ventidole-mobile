@@ -61,6 +61,16 @@ const PostCard = ({ post, className, onLike, onClick }: PostCardProps) => {
                 {post.author.username}
               </AppText>
               {post.author.role === 'IDOL' && <Verify size={14} />}
+              {post.communityName && (
+                <>
+                  <AppText variant="labelSmall" color="muted">
+                    •
+                  </AppText>
+                  <AppText variant="labelSmall" color="muted">
+                    {post.communityName}
+                  </AppText>
+                </>
+              )}
             </View>
             <AppText variant="labelSmall" color="muted">
               {formatISODate(post.createdAt)}

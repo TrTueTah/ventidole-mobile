@@ -1196,6 +1196,46 @@ export interface paths {
         patch: operations["AdminBannerController_updateBanner_v1"];
         trace?: never;
     };
+    "/v1/admin/analytics/ecommerce": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get ecommerce analytics
+         * @description Retrieve ecommerce analytics data including revenue, orders, customers, and sales trends
+         */
+        get: operations["AdminAnalyticsController_getEcommerceAnalytics_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/analytics/social": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get social analytics
+         * @description Retrieve social analytics data including posts, engagement, communities, and member trends
+         */
+        get: operations["AdminAnalyticsController_getSocialAnalytics_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/orders/confirm": {
         parameters: {
             query?: never;
@@ -1963,6 +2003,11 @@ export interface components {
              */
             communityId: string;
             /**
+             * @description Community name
+             * @example BTS Army
+             */
+            communityName?: string;
+            /**
              * Format: date-time
              * @description Creation timestamp
              * @example 2024-01-01T00:00:00.000Z
@@ -2088,6 +2133,11 @@ export interface components {
              * @example clxxxxxxx
              */
             communityId: string;
+            /**
+             * @description Community name
+             * @example BTS Army
+             */
+            communityName?: string;
             /**
              * Format: date-time
              * @description Creation timestamp
@@ -2330,10 +2380,15 @@ export interface components {
             /** @description List of idols belonging to the community */
             idols: components["schemas"]["IdolDto"][];
             /**
-             * @description Total number of members in the community
+             * @description Total number of members (followers) in the community
              * @example 1250
              */
             totalMember: number;
+            /**
+             * @description Total number of idols in the community
+             * @example 5
+             */
+            totalIdol: number;
             /** @description Community chat channel if exists */
             chatChannel?: components["schemas"]["ChatChannelDto"];
         };
@@ -2381,10 +2436,15 @@ export interface components {
              */
             isJoined?: boolean;
             /**
-             * @description Total number of members in the community
+             * @description Total number of members (followers) in the community
              * @example 150
              */
             totalMember: number;
+            /**
+             * @description Total number of idols in the community
+             * @example 5
+             */
+            totalIdol: number;
             /**
              * @description Indicates if the community is new
              * @example false
@@ -3171,10 +3231,15 @@ export interface components {
              */
             updatedAt: string;
             /**
-             * @description Total members in the community
+             * @description Total members (followers) in the community
              * @example 100
              */
             totalMembers: number;
+            /**
+             * @description Total idols in the community
+             * @example 5
+             */
+            totalIdols: number;
             /**
              * @description Total posts in the community
              * @example 50
@@ -4365,6 +4430,191 @@ export interface components {
             endDate?: string;
             order?: number;
             isActive?: boolean;
+        };
+        MetricDto: {
+            /**
+             * @description Metric label
+             * @example Customers
+             */
+            label: string;
+            /**
+             * @description Current metric value
+             * @example 3782
+             */
+            value: number;
+            /**
+             * @description Percentage change compared to previous period
+             * @example 11.01
+             */
+            percentageChange?: number;
+            /**
+             * @description Trend direction
+             * @example increase
+             * @enum {string}
+             */
+            trend?: "increase" | "decrease" | "stable";
+            /**
+             * @description Previous period value for comparison
+             * @example 3422
+             */
+            previousValue?: number;
+        };
+        TimeSeriesDataPointDto: {
+            /**
+             * @description Time period label (e.g., month, day)
+             * @example 2026-01
+             */
+            period: string;
+            /**
+             * @description Value for this period
+             * @example 350
+             */
+            value: number;
+        };
+        TimeSeriesDataDto: {
+            /**
+             * @description Chart title
+             * @example Monthly Sales
+             */
+            title: string;
+            /** @description Data points for the chart */
+            data: components["schemas"]["TimeSeriesDataPointDto"][];
+        };
+        EcommerceAnalyticsDto: {
+            /**
+             * @description Summary metrics for ecommerce
+             * @example [
+             *       {
+             *         "label": "Total Revenue",
+             *         "value": 125000,
+             *         "percentageChange": 15.5,
+             *         "trend": "increase",
+             *         "previousValue": 108000
+             *       },
+             *       {
+             *         "label": "Total Orders",
+             *         "value": 5359,
+             *         "percentageChange": -9.05,
+             *         "trend": "decrease",
+             *         "previousValue": 5890
+             *       },
+             *       {
+             *         "label": "Total Customers",
+             *         "value": 3782,
+             *         "percentageChange": 11.01,
+             *         "trend": "increase",
+             *         "previousValue": 3406
+             *       },
+             *       {
+             *         "label": "Average Order Value",
+             *         "value": 23.32,
+             *         "percentageChange": 5.2,
+             *         "trend": "increase",
+             *         "previousValue": 22.16
+             *       }
+             *     ]
+             */
+            metrics: components["schemas"]["MetricDto"][];
+            /** @description Time series data for charts */
+            charts: components["schemas"]["TimeSeriesDataDto"][];
+            /**
+             * @description Additional table data for ecommerce analytics
+             * @example {
+             *       "topProducts": [
+             *         {
+             *           "name": "Product A",
+             *           "revenue": 25000,
+             *           "orders": 150
+             *         },
+             *         {
+             *           "name": "Product B",
+             *           "revenue": 18000,
+             *           "orders": 120
+             *         }
+             *       ],
+             *       "topCategories": [
+             *         {
+             *           "name": "Electronics",
+             *           "revenue": 50000,
+             *           "orders": 300
+             *         },
+             *         {
+             *           "name": "Clothing",
+             *           "revenue": 35000,
+             *           "orders": 250
+             *         }
+             *       ]
+             *     }
+             */
+            tables: Record<string, never>;
+        };
+        SocialAnalyticsDto: {
+            /**
+             * @description Summary metrics for social analytics
+             * @example [
+             *       {
+             *         "label": "Total Posts",
+             *         "value": 1250,
+             *         "percentageChange": 8.5,
+             *         "trend": "increase",
+             *         "previousValue": 1152
+             *       },
+             *       {
+             *         "label": "Total Engagement",
+             *         "value": 45678,
+             *         "percentageChange": 12.3,
+             *         "trend": "increase",
+             *         "previousValue": 40680
+             *       },
+             *       {
+             *         "label": "Active Communities",
+             *         "value": 125,
+             *         "percentageChange": 3.5,
+             *         "trend": "increase",
+             *         "previousValue": 121
+             *       },
+             *       {
+             *         "label": "New Members",
+             *         "value": 890,
+             *         "percentageChange": -2.1,
+             *         "trend": "decrease",
+             *         "previousValue": 909
+             *       }
+             *     ]
+             */
+            metrics: components["schemas"]["MetricDto"][];
+            /** @description Time series data for charts */
+            charts: components["schemas"]["TimeSeriesDataDto"][];
+            /**
+             * @description Additional table data for social analytics
+             * @example {
+             *       "topPosts": [
+             *         {
+             *           "title": "Post A",
+             *           "likes": 500,
+             *           "comments": 150
+             *         },
+             *         {
+             *           "title": "Post B",
+             *           "likes": 450,
+             *           "comments": 120
+             *         }
+             *       ],
+             *       "topCommunities": [
+             *         {
+             *           "name": "Community A",
+             *           "members": 5000,
+             *           "posts": 300
+             *         },
+             *         {
+             *           "name": "Community B",
+             *           "members": 3500,
+             *           "posts": 250
+             *         }
+             *       ]
+             *     }
+             */
+            tables: Record<string, never>;
         };
         OrderItemDto: {
             /**
@@ -10018,6 +10268,106 @@ export interface operations {
                         message: string;
                         /** @description Response data */
                         data?: components["schemas"]["BannerDetailDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    AdminAnalyticsController_getEcommerceAnalytics_v1: {
+        parameters: {
+            query?: {
+                /** @description Start date for analytics (ISO 8601 format) */
+                startDate?: string;
+                /** @description End date for analytics (ISO 8601 format) */
+                endDate?: string;
+                /** @description Time range granularity for grouping data (daily, weekly, monthly, yearly) */
+                timeRange?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["EcommerceAnalyticsDto"];
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    AdminAnalyticsController_getSocialAnalytics_v1: {
+        parameters: {
+            query?: {
+                /** @description Start date for analytics (ISO 8601 format) */
+                startDate?: string;
+                /** @description End date for analytics (ISO 8601 format) */
+                endDate?: string;
+                /** @description Time range granularity for grouping data (daily, weekly, monthly, yearly) */
+                timeRange?: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data */
+                        data?: components["schemas"]["SocialAnalyticsDto"];
                         /**
                          * @description Error information (null on success)
                          * @example null
