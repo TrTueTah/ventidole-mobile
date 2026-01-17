@@ -21,28 +21,28 @@ const BottomTabNavigator: React.FC = () => {
         name="HOME"
         component={HomeStackNavigator}
         options={{
-          title: 'HOME',
+          title: 'TAB.HOME',
         }}
       />
       <Tab.Screen
         name="CHAT"
         component={ChatListScreen}
         options={{
-          title: 'CHAT',
+          title: 'TAB.CHAT',
         }}
       />
       <Tab.Screen
         name="MARKETPLACE"
         component={ShopStackNavigator}
         options={{
-          title: 'MARKETPLACE',
+          title: 'TAB.MARKETPLACE',
         }}
       />
       <Tab.Screen
         name="MORE"
         component={MoreStackNavigator}
         options={{
-          title: 'MORE',
+          title: 'TAB.MORE',
         }}
       />
     </Tab.Navigator>

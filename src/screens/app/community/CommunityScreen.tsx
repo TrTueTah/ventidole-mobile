@@ -6,6 +6,7 @@ import { formatNumber } from '@/utils';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Animated,
@@ -39,6 +40,7 @@ const CommunityScreen = () => {
     useRoute<RouteProp<{ params: CommunityScreenParams }, 'params'>>();
   const { communityId } = route.params || {};
   const colors = useColors();
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [activeTab, setActiveTab] = useState<TabType>('about');
@@ -114,7 +116,7 @@ const CommunityScreen = () => {
               {community.name}
             </AppText>
             <AppText variant="bodySmall" color="muted">
-              {formatNumber(community.totalMember)} members
+              {formatNumber(community.totalMember)} {t('APP.COMMUNITY.MEMBERS')}
             </AppText>
           </View>
 
@@ -145,7 +147,7 @@ const CommunityScreen = () => {
                       : 'text-foreground'
                   }
                 >
-                  {community.isJoined ? 'Joined' : 'Join'}
+                  {community.isJoined ? t('BUTTON.JOINED') : t('BUTTON.JOIN')}
                 </AppText>
               )}
             </AppButton>
@@ -195,7 +197,7 @@ const CommunityScreen = () => {
                 activeTab === 'about' ? colors.primary : colors.neutrals500,
             }}
           >
-            About
+            {t('TAB.ABOUT')}
           </AppText>
         </Pressable>
         <Pressable
@@ -214,7 +216,7 @@ const CommunityScreen = () => {
                 activeTab === 'artist' ? colors.primary : colors.neutrals500,
             }}
           >
-            Artist
+            {t('TAB.ARTIST')}
           </AppText>
         </Pressable>
         <Pressable
@@ -232,7 +234,7 @@ const CommunityScreen = () => {
               color: activeTab === 'fan' ? colors.primary : colors.neutrals500,
             }}
           >
-            Fan
+            {t('TAB.FAN')}
           </AppText>
         </Pressable>
       </View>

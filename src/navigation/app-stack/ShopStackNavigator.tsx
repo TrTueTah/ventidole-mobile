@@ -4,6 +4,7 @@ import ProductDetailScreen from '@/screens/app/shop/product-detail/ProductDetail
 import ShopDetailScreen from '@/screens/app/shop/shop-detail/ShopDetailScreen';
 import ShopMainScreen from '@/screens/app/shop/shop-main/ShopMainScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import CustomScreenHeader from '../components/ScreenHeader';
 import {
   cartPath,
@@ -16,6 +17,7 @@ import {
 const ShopStack = createNativeStackNavigator();
 
 const ShopStackNavigator = () => {
+  const { t } = useTranslation();
   return (
     <ShopStack.Navigator initialRouteName={shopPath}>
       <ShopStack.Screen
@@ -52,6 +54,7 @@ const ShopStackNavigator = () => {
         component={CartScreen}
         options={{
           headerShown: true,
+          title: t('HEADER.CART'),
           header: props => <CustomScreenHeader {...props} />,
         }}
       />
@@ -61,6 +64,7 @@ const ShopStackNavigator = () => {
         component={ConfirmOrderScreen}
         options={{
           headerShown: true,
+          title: t('HEADER.CONFIRM_ORDER'),
           header: props => <CustomScreenHeader {...props} />,
         }}
       />

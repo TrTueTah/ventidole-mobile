@@ -7,7 +7,8 @@ import { useAppStore } from '@/store/appStore';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Alert, ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 
 const MoreMainScreen = () => {
   const navigation =
@@ -15,6 +16,7 @@ const MoreMainScreen = () => {
       NativeStackNavigationProp<RootStackParamList & MoreStackParamList>
     >();
   const { user } = useGetCurrentUser();
+  const { t } = useTranslation();
   const { showSuccess } = useToast();
   const theme = useAppStore(state => state.theme);
   const logout = useAuthStore(state => state.logout);
@@ -56,22 +58,29 @@ const MoreMainScreen = () => {
     ]);
   };
 
+  const handleProfilePress = () => {
+    // Navigate to profile screen
+    navigation.navigate('ProfileStack', { userId: user?.id || '' });
+  };
+
   return (
     <ScrollView className="flex-1 bg-background">
       <View className="p-4 pt-safe-offset-4">
         <AppText variant="heading1" className="mb-6">
-          MORE
+          {t('APP.MORE.TITLE')}
         </AppText>
 
         {/* Profile Card */}
         <View className="bg-neutrals1000 flex-row p-4 rounded-3xl mb-6">
-          <Avatar
-            source={
-              user?.avatarUrl ? { uri: String(user.avatarUrl) } : undefined
-            }
-            text={user?.username || user?.email || 'User'}
-            size="xl"
-          />
+          <TouchableOpacity onPress={handleProfilePress}>
+            <Avatar
+              source={
+                user?.avatarUrl ? { uri: String(user.avatarUrl) } : undefined
+              }
+              text={user?.username || user?.email || 'User'}
+              size="xl"
+            />
+          </TouchableOpacity>
           <View className="flex-1 justify-center ml-4">
             <AppText variant="heading3" weight="bold" className="mb-1">
               {user?.username || 'User'}
@@ -85,7 +94,7 @@ const MoreMainScreen = () => {
         {/* Account Section */}
         <View className="py-2">
           <AppText variant="labelSmall" color="muted" className="mb-2 px-2">
-            ACCOUNT
+            {t('APP.MORE.ACCOUNT')}
           </AppText>
         </View>
         <MenuList
@@ -94,14 +103,14 @@ const MoreMainScreen = () => {
               icon: () => (
                 <Icon name="User" className="w-6 h-6 text-neutrals100" />
               ),
-              title: 'Profile',
+              title: t('APP.MORE.PROFILE'),
               onPress: handleProfile,
             },
             {
               icon: () => (
                 <Icon name="ShoppingBag" className="w-6 h-6 text-neutrals100" />
               ),
-              title: 'My Orders',
+              title: t('APP.MORE.MY_ORDERS'),
               onPress: handleOrders,
             },
           ]}
@@ -110,7 +119,7 @@ const MoreMainScreen = () => {
         {/* Support Section */}
         <View className="py-4">
           <AppText variant="labelSmall" color="muted" className="mb-2 px-2">
-            SUPPORT
+            {t('APP.MORE.SUPPORT')}
           </AppText>
         </View>
         <MenuList
@@ -119,26 +128,26 @@ const MoreMainScreen = () => {
               icon: () => (
                 <Icon name="Settings" className="w-6 h-6 text-neutrals100" />
               ),
-              title: 'Settings',
+              title: t('APP.MORE.SETTINGS'),
               onPress: handleSettings,
             },
             {
               icon: () => (
                 <Icon name="Shield" className="w-6 h-6 text-neutrals100" />
               ),
-              title: 'Privacy Policy',
+              title: t('APP.MORE.PRIVACY_POLICY'),
               onPress: handlePrivacy,
             },
             {
               icon: () => (
                 <Icon name="FileText" className="w-6 h-6 text-neutrals100" />
               ),
-              title: 'Terms of Service',
+              title: t('APP.MORE.TERMS_OF_SERVICE'),
               onPress: handleTerms,
             },
             {
               icon: () => <Icon name="LogOut" className="w-6 h-6 text-error" />,
-              title: 'Logout',
+              title: t('APP.MORE.LOG_OUT'),
               onPress: handleLogout,
             },
           ]}

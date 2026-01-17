@@ -1,4 +1,9 @@
-export const formatISODate = (isoDate: string): string => {
+import { TFunction } from 'node_modules/i18next/typescript/t';
+
+export const formatISODate = (
+  isoDate: string,
+  t: TFunction<'translation', undefined>,
+): string => {
   const date = new Date(isoDate);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -7,16 +12,16 @@ export const formatISODate = (isoDate: string): string => {
   const diffDays = Math.floor(diffMs / 86400000);
 
   if (diffMins < 1) {
-    return 'Just now';
+    return t('TIME.JUST_NOW');
   }
   if (diffMins < 60) {
-    return `${diffMins}m ago`;
+    return t('TIME.MINUTE_AGO', { count: diffMins });
   }
   if (diffHours < 24) {
-    return `${diffHours}h ago`;
+    return t('TIME.HOUR_AGO', { count: diffHours });
   }
   if (diffDays < 7) {
-    return `${diffDays}d ago`;
+    return t('TIME.DAY_AGO', { count: diffDays });
   }
 
   return date.toLocaleDateString('en-US', {
@@ -26,7 +31,10 @@ export const formatISODate = (isoDate: string): string => {
   });
 };
 
-export const formatMessageTime = (date: Date | string): string => {
+export const formatMessageTime = (
+  date: Date | string,
+  t: TFunction<'translation', undefined>,
+): string => {
   const messageDate = typeof date === 'string' ? new Date(date) : date;
   const now = new Date();
   const diffMs = now.getTime() - messageDate.getTime();
@@ -36,22 +44,22 @@ export const formatMessageTime = (date: Date | string): string => {
 
   // Less than 1 minute
   if (diffMins < 1) {
-    return 'now';
+    return t('TIME.JUST_NOW');
   }
 
   // Less than 1 hour
   if (diffMins < 60) {
-    return `${diffMins}m`;
+    return t('TIME.MINUTE_AGO', { count: diffMins });
   }
 
   // Less than 24 hours
   if (diffHours < 24) {
-    return `${diffHours}h`;
+    return t('TIME.HOUR_AGO', { count: diffHours });
   }
 
   // Less than 7 days
   if (diffDays < 7) {
-    return `${diffDays}d`;
+    return t('TIME.DAY_AGO', { count: diffDays });
   }
 
   // More than 7 days - show date

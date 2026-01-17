@@ -4,6 +4,7 @@ import { AppText } from '@/components/ui';
 import { useColors } from '@/hooks/useColors';
 import { components } from '@/schemas/openapi';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -18,6 +19,7 @@ interface FanTabProps {
 
 const FanTab = ({ communityId }: FanTabProps) => {
   const colors = useColors();
+  const { t } = useTranslation();
   const navigation = useNavigation();
 
   const {
@@ -61,7 +63,7 @@ const FanTab = ({ communityId }: FanTabProps) => {
     return (
       <View className="flex-1 items-center justify-center py-20">
         <AppText variant="body" color="muted" className="text-center">
-          No posts yet. Be the first to post!
+          {t('APP.COMMUNITY.NO_POSTS_FOUND')}
         </AppText>
       </View>
     );

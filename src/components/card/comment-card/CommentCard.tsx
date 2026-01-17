@@ -1,6 +1,7 @@
 import { AppText, Avatar } from '@/components/ui';
 import { components } from '@/schemas/openapi';
 import { cn, formatISODate } from '@/utils';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import Verify from '../../icons/Verify';
 
@@ -15,6 +16,7 @@ const CommentCard = ({
   onCommentClick,
   className,
 }: CommentCardProps) => {
+  const { t } = useTranslation();
   const user = comment.user as any;
 
   return (
@@ -37,7 +39,7 @@ const CommentCard = ({
             </AppText>
             {user?.isVerified && <Verify className="w-3 h-3" />}
             <AppText variant="labelSmall" color="muted" className="ml-1">
-              {formatISODate(comment.createdAt)}
+              {formatISODate(comment.createdAt, t)}
             </AppText>
           </View>
 

@@ -4,6 +4,7 @@ import { useCreateAddress } from '@/hooks/useCreateAddress';
 import { useGetAddresses } from '@/hooks/useGetAddresses';
 import { useUpdateAddress } from '@/hooks/useUpdateAddress';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, View } from 'react-native';
 import AddAddressModal, { ShippingAddress } from './components/AddAddressModal';
 import CartItemSkeleton from './components/CartItemSkeleton';
@@ -14,6 +15,7 @@ import { useGetCart } from './hooks/useGetCart';
 
 const CartScreen = () => {
   const colors = useColors();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'shipping' | 'pickup'>('shipping');
 
   // API hooks
@@ -153,10 +155,10 @@ const CartScreen = () => {
             weight="bold"
             className="text-center mb-2"
           >
-            Your cart is empty
+            {t('APP.CART.EMPTY_CART')}
           </AppText>
           <AppText variant="body" className="text-neutrals500 text-center mb-6">
-            Add items to your cart to get started
+            {t('APP.CART.EMPTY_CART_DESCRIPTION')}
           </AppText>
         </View>
       );

@@ -1,9 +1,336 @@
 {
-  "AUTH": {},
-  "APP": {},
-  "LABEL": {},
-  "PLACEHOLDER": {},
-  "BUTTON": {},
+  "AUTH": {
+    "SIGN_IN": {
+      "TITLE": "Welcome back to Ventidole",
+      "DONT_HAVE_ACCOUNT": "Don't have an account?"
+    },
+    "VERIFY_EMAIL": {
+      "TITLE": "Verify your email"
+    },
+    "SIGN_UP": {
+      "TITLE": "Create a new account",
+      "TERMS_AGREEMENT": "I agree to the Terms & Conditions"
+    },
+    "RESET_PASSWORD": {
+      "TITLE": "Reset your password"
+    },
+    "COMPLETE": {
+      "REGISTER": {
+        "TITLE": "Registration Complete!",
+        "SUBTITLE": "Welcome to Ventidole! Your account has been successfully created."
+      },
+      "RESET_PASSWORD": {
+        "TITLE": "Password Reset Complete!",
+        "SUBTITLE": "Your password has been successfully reset. You can now log in with your new password."
+      }
+    },
+    "CHOOSE_COMMUNITY": {
+      "TITLE": "Choose your communities",
+      "SUBTITLE": "Select at least 3 communities",
+      "SEARCH_PLACEHOLDER": "Search communities",
+      "NO_COMMUNITIES_FOUND": "No communities found",
+      "FOLLOW_SUCCESS": "Community followed successfully!",
+      "FOLLOW_ERROR": "Unable to follow community",
+      "SELECT_AT_LEAST_3": "Please select at least 3 communities",
+      "MEMBERS": "{{count}} members"
+    },
+    "EULA": {
+      "TITLE": "End User License Agreement",
+      "CANCEL": "Cancel",
+      "INTRO": "This End User License Agreement (\"Agreement\") is a legal contract between you (\"User\") and Ventidole Inc. (\"Licensor\"), governing your use of the Ventidole fan-idol platform (\"Application\"). By creating an account or using the Application, you agree to these terms. If you do not agree, please discontinue use immediately.",
+      "LICENSE_GRANT": {
+        "TITLE": "1. LICENSE GRANT",
+        "DESCRIPTION": "Under this Agreement, the Licensor grants you a limited, non-exclusive, non-transferable, and revocable license to use the Application for personal, non-commercial purposes. You may not copy, modify, or redistribute any part of the Application without permission."
+      },
+      "ACCOUNT": {
+        "TITLE": "2. ACCOUNT REGISTRATION & TERMINATION",
+        "DESCRIPTION": "You must provide accurate information when creating an account. The Licensor reserves the right to suspend or terminate accounts for violations of these terms or harmful behavior. You may terminate your account at any time through application settings."
+      },
+      "USER_CONTENT": {
+        "TITLE": "3. USER-GENERATED CONTENT",
+        "DESCRIPTION": "The Application allows users to create and share posts, comments, images, and other content.\n\n3.1. Content Ownership\n\nYou retain ownership of your content but grant Ventidole a non-exclusive, worldwide, royalty-free license to use, display, and distribute content within the platform.\n\n3.2. Prohibited Content\n\nWe do not tolerate:\n\n    • Harassment, hate speech, or discrimination\n    • Pornographic, violent, or provocative content\n    • Fraud, impersonation, or misleading information\nViolations may result in immediate suspension or content removal."
+      },
+      "MEMBERSHIP": {
+        "TITLE": "4. MEMBERSHIP OPTIONS & SUBSCRIPTIONS",
+        "DESCRIPTION": "Ventidole offers optional memberships and digital purchases such as event tickets, tokens, and idol merchandise. Prices and benefits are displayed in the app. All payments are securely processed via third-party providers. Memberships renew automatically unless canceled before the renewal date."
+      },
+      "COMMUNITY": {
+        "TITLE": "5. COMMUNITY INTERACTIONS & BLOCKING",
+        "DESCRIPTION": "You may follow idols, comment, and message other fans. You can block abusive users. Blocked users will no longer be able to contact you or view your profile."
+      },
+      "PRIVACY": {
+        "TITLE": "6. PRIVACY & DATA USAGE",
+        "DESCRIPTION": "Your privacy is important to us. Please review our Privacy Policy for details on how personal data is collected and processed. We never sell personal data to third parties."
+      },
+      "CODE_OF_CONDUCT": {
+        "TITLE": "7. CODE OF CONDUCT",
+        "DESCRIPTION": "You agree to:\n\n    • Treat other users with respect\n    • Avoid offensive behavior or spam\n    • Respect intellectual property rights of idols and creators\nRepeated violations may result in suspension or permanent bans."
+      },
+      "DIGITAL_ITEMS": {
+        "TITLE": "8. DIGITAL ITEMS & TOKENS",
+        "DESCRIPTION": "Some features may include digital collectibles, tokens, or NFT-based assets. Ownership of these assets is governed by public blockchain records. Users are responsible for wallet security and understanding digital transaction risks."
+      },
+      "LIABILITY": {
+        "TITLE": "9. LIMITATION OF LIABILITY",
+        "DESCRIPTION": "Ventidole and its affiliates are not liable for indirect or consequential damages, including loss of data or virtual goods, arising from your use of the Application. The Application is provided \"AS IS\" without warranties of uninterrupted or error-free service."
+      },
+      "ELIGIBILITY": {
+        "TITLE": "10. ELIGIBILITY",
+        "DESCRIPTION": "You must be at least 16 years old to use the Application. Some regions may require parental consent for minors. Idol or creator accounts must comply with all local laws and verification procedures."
+      },
+      "GOVERNING_LAW": {
+        "TITLE": "11. GOVERNING LAW",
+        "DESCRIPTION": "This Agreement is governed by the laws of the State of Delaware, United States, without regard to conflict of law principles. Disputes shall be resolved through binding arbitration unless prohibited by local law."
+      },
+      "THIRD_PARTY": {
+        "TITLE": "12. THIRD-PARTY SERVICES",
+        "DESCRIPTION": "The Application may integrate third-party services (e.g., Google, Apple, payment gateways). You agree to comply with their respective terms. Ventidole is not responsible for any external service failures."
+      },
+      "UPDATES": {
+        "TITLE": "13. UPDATES & MODIFICATIONS",
+        "DESCRIPTION": "Ventidole may update these terms periodically. Continued use of the Application after changes take effect constitutes acceptance of the revised Agreement."
+      },
+      "CONTACT": {
+        "TITLE": "14. CONTACT INFORMATION",
+        "DESCRIPTION": "If you have any questions regarding this Agreement, please contact us at support@ventidole.app."
+      },
+      "ACCEPTANCE": {
+        "TITLE": "ACCEPTANCE",
+        "DESCRIPTION": "By clicking \"Agree\" or continuing to use the Application, you confirm that you have read, understood, and accepted this Agreement, including community guidelines, content restrictions, and digital item policies."
+      }
+    }
+  },
+  "APP": {
+    "POST": {
+      "EDIT_POST": "Edit post",
+      "CREATE_POST": "Create post",
+      "DETECTED_TAGS": "Detected tags",
+      "ADD_PHOTO": "Add photo",
+      "UPLOADING": "Uploading"
+    },
+    "PROFILE": {
+      "UNKNOWN_USER": "Anonymous user",
+      "CHANGE_AVATAR": "Change avatar",
+      "SAVING": "Saving...",
+      "SAVE_CHANGES": "Save changes",
+      "CHANGE_PASSWORD": "Change password"
+    },
+    "COMMUNITY": {
+      "MEMBERS": "Members",
+      "ABOUT": "About",
+      "COMMUNITY_STAT": "Community stats",
+      "IDOLS": "Idols",
+      "NO_DESCRIPTION": "No description",
+      "NO_POSTS_FOUND": "No posts yet",
+      "NEW": "New"
+    },
+    "CHAT": {
+      "TOTAL_MEMBERS": "Total members",
+      "IDOL_CREATOR": "Idol / Creator",
+      "FAN": "Fan",
+      "CANNOT_SEND_MESSAGES_ROLE_RESTRICTED": "You can only view messages in this channel"
+    },
+    "NOTIFICATION": {
+      "CLEAR_ALL": "Clear all",
+      "CLEARING": "Clearing...",
+      "CLEAR_ALL_TITLE": "Clear all notifications",
+      "CLEAR_ALL_MESSAGE": "Are you sure you want to clear all notifications? This action cannot be undone.",
+      "NO_NOTIFICATIONS": "No notifications",
+      "NO_NOTIFICATIONS_DESCRIPTION": "Notifications about your activity will appear here",
+      "NO_CONTENT": "No content"
+    },
+    "SHOP": {
+      "FAILED_TO_LOAD": "Failed to load shop",
+      "NO_FOLLOWING_SHOPS": "No followed shops found",
+      "MY_ARTISTS_SHOPS": "My artists' shops",
+      "SEARCH_MORE_SHOPS": "Search more artist shops",
+      "SEARCH_FOR_SHOPS": "Search for shops",
+      "NO_SHOPS_MATCHING": "No matching shops found",
+      "NO_SHOPS_AVAILABLE": "No shops available",
+      "SHOP": "Shop",
+      "PRODUCTS": "Products",
+      "ALL": "All",
+      "NO_PRODUCTS_AVAILABLE": "No products available",
+      "CATEGORIES": {
+        "MERCH": "MERCH",
+        "SEASONS_GREETINGS": "SEASONS GREETINGS",
+        "ALBUM": "ALBUM",
+        "TOUR_MERCH": "TOUR MERCH"
+      }
+    },
+    "PRODUCT": {
+      "FAILED_TO_LOAD": "Failed to load product details",
+      "SELECT_VARIANT": "Select variant",
+      "ADDED_TO_CART": "Added to cart",
+      "FAILED_TO_ADD": "Failed to add to cart",
+      "PLEASE_TRY_AGAIN": "Please try again",
+      "PLEASE_SELECT_VARIANT": "Please select a variant",
+      "PRE_ORDER": "PRE-ORDER",
+      "USD": "USD",
+      "STOCK_AVAILABLE": "In stock ",
+      "OUT_OF_STOCK": "Out of stock",
+      "PURCHASE": "Purchase now",
+      "PRICE": "Price",
+      "STOCK": "Stock",
+      "TYPE": "Type",
+      "DETAILS": "Details",
+      "NOTES": "Notes",
+      "PRODUCT_DETAILS": "Product details",
+      "NO_DESCRIPTION": "No description",
+      "PRODUCT_NOTES": "Product notes",
+      "CREATED": "Created",
+      "UPDATED": "Updated",
+      "STATUS": "Status",
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive",
+      "NO_NOTES": "No additional notes"
+    },
+    "CART": {
+      "EMPTY_TITLE": "Cart is empty",
+      "EMPTY_DESCRIPTION": "Add products to cart to get started",
+      "SHIPPING": "Shipping",
+      "PICKUP": "Pickup",
+      "STANDARD_SHIPPING": "Standard shipping",
+      "EXPECTED_DELIVERY": "Expected delivery: 3-5 days",
+      "BUY_NOW": "Buy now",
+      "ADD_SHIPPING_ADDRESS": "Add shipping address",
+      "SELECT_ALL": "Select all",
+      "DELETE": "Delete",
+      "SUBTOTAL": "Subtotal",
+      "TOTAL": "Total",
+      "ADD_ADDRESS_TO_CONTINUE": "Add shipping address to continue",
+      "BUY_PRODUCTS": "Buy products ({{count}})",
+      "ONLY_ITEMS_AVAILABLE": "Only {{count}} items available",
+      "ITEM_REMOVED": "Item removed from cart",
+      "FAILED_TO_REMOVE": "Failed to remove item",
+      "ITEMS_REMOVED": "Items removed from cart",
+      "FAILED_TO_REMOVE_ITEMS": "Failed to remove items",
+      "SELECT_ITEMS_TO_CHECKOUT": "Please select items to checkout",
+      "FAILED_TO_UPDATE_QUANTITY": "Failed to update quantity",
+      "COMING_SOON": "Coming soon",
+      "EMPTY_CART": "Cart is empty",
+      "EMPTY_CART_DESCRIPTION": "Add products to cart to get started",
+      "ADD_SHIPPING_ADDRESS_TO_CONTINUE": "Add shipping address to continue"
+    },
+    "ADDRESS": {
+      "EDIT_TITLE": "Edit shipping address",
+      "ADD_TITLE": "Add shipping address",
+      "SELECT_TITLE": "Select shipping address",
+      "NAME": "First name",
+      "ENTER_FIRST_NAME": "Enter first name",
+      "LAST_NAME": "Last name",
+      "ENTER_LAST_NAME": "Enter last name",
+      "PROVINCE": "Province/City",
+      "SELECT_PROVINCE": "Select province/city",
+      "DISTRICT": "District",
+      "SELECT_DISTRICT": "Select district",
+      "DETAIL_ADDRESS": "Detailed address",
+      "ENTER_DETAIL_ADDRESS": "Enter detailed address",
+      "PHONE_NUMBER": "Phone number",
+      "ENTER_PHONE_NUMBER": "Enter phone number",
+      "SET_DEFAULT": "Set as default address",
+      "SAVE": "Save",
+      "DEFAULT": "Default",
+      "EDIT": "Edit",
+      "NO_ADDRESSES": "No shipping addresses found.",
+      "ADD_ADDRESS_TO_START": "Add a new address to get started.",
+      "ADD": "Add",
+      "DELETING": "Deleting address..."
+    },
+    "ORDER": {
+      "YOUR_ORDER": "Your order",
+      "CUSTOMER": "Customer",
+      "SHIPPING_ADDRESS": "Shipping address",
+      "PAYMENT_METHOD": "Payment method",
+      "CUSTOMER_INFO_FROM_PROFILE": "Customer information will be taken from your profile.",
+      "CHANGE": "Change",
+      "CREDIT_CARD_QR": "Credit card / QR code",
+      "CASH_ON_DELIVERY": "Cash on delivery",
+      "ORDER_SUMMARY": "Order summary",
+      "TERMS_AGREEMENT": "I have read and agree to the collection, use, and provision of personal information (including international transfer for overseas shipping).",
+      "ACCEPT_AND_PAY": "Accept and pay",
+      "AGREE_TO_TERMS_ERROR": "Please agree to the terms and conditions to continue.",
+      "SELECT_ADDRESS_ERROR": "Please select a shipping address.",
+      "EMPTY_CART_ERROR": "Cart is empty. Please add products to continue."
+    },
+    "CONFIRM_ORDER": {
+      "YOUR_ORDER": "Your order",
+      "SHIPPING_ADDRESS": "Shipping address",
+      "PAYMENT_METHOD": "Payment method",
+      "TERM": "I have read and agree to the collection, use, and provision of personal information (including international transfer for overseas goods shipment).",
+      "ORDER_SUMMARY": "Order summary"
+    },
+    "MORE": {
+      "TITLE": "More",
+      "ACCOUNT": "Account",
+      "PROFILE": "Profile",
+      "MY_ORDERS": "My orders",
+      "SUPPORT": "Support",
+      "SETTINGS": "Settings",
+      "PRIVACY_POLICY": "Privacy policy",
+      "TERMS_OF_SERVICE": "Terms of service",
+      "LOG_OUT": "Log out",
+      "PERSONAL_INFO": "Personal information"
+    },
+    "SETTINGS": {
+      "THEME": "Theme",
+      "LANGUAGE": "Language",
+      "DARK_MODE": "Dark mode",
+      "LIGHT_MODE": "Light mode"
+    }
+  },
+  "LABEL": {
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "VERIFICATION_CODE": "Verification code",
+    "USERNAME": "Username",
+    "CONFIRM_PASSWORD": "Confirm password",
+    "NEW_PASSWORD": "New password",
+    "CONFIRM_NEW_PASSWORD": "Confirm new password",
+    "BIO": "Bio"
+  },
+  "PLACEHOLDER": {
+    "EMAIL": "johndoe@gmail.com",
+    "PASSWORD": "Enter password",
+    "VERIFICATION_CODE": "Enter verification code",
+    "USERNAME": "Enter username",
+    "CONFIRM_PASSWORD": "Re-enter password",
+    "NEW_PASSWORD": "Enter new password",
+    "CONFIRM_NEW_PASSWORD": "Re-enter new password",
+    "COMMENT": "Write your comment...",
+    "POST_CONTENT": "Enter post content...",
+    "SEARCH_CHANNELS": "Search channels...",
+    "MESSAGE": "Enter message...",
+    "SEARCH_COMMUNITIES": "Search communities"
+  },
+  "BUTTON": {
+    "CANCEL": "Cancel",
+    "FORGET_PASSWORD": "Forgot password?",
+    "SIGN_UP": "Sign up",
+    "SIGN_IN": "Sign in",
+    "SEND_OTP": "Send OTP",
+    "RESEND_OTP": "Resend OTP",
+    "WAIT_SECONDS": "Wait {{seconds}} seconds",
+    "VERIFY": "Verify",
+    "TERMS_AGREEMENT": "Terms & Conditions",
+    "CONTINUE": "Continue",
+    "RESET_PASSWORD": "Reset password",
+    "GET_STARTED": "Get started",
+    "BACK_TO_LOGIN": "Back to login",
+    "GO_TO_COMMUNITY": "Go to community",
+    "EDIT": "Edit",
+    "REPORT": "Report",
+    "UPDATE": "Update",
+    "POST": "Post",
+    "ADD_PHOTO": "Add photo ({{count}}/5)",
+    "JOIN": "Join",
+    "JOINED": "Joined",
+    "LEAVE_COMMUNITY": "Leave community",
+    "DELETE_CHANNEL": "Delete channel",
+    "BUY_PRODUCT": "Buy product",
+    "ACCEPT_AND_PAY": "Accept and pay",
+    "CHANGE_PASSWORD": "Change password"
+  },
   "VALIDATION": {
     "INVALID_EMAIL": "Invalid email address",
     "PASSWORD_MIN_LENGTH": "Password must be at least 8 characters",
@@ -17,11 +344,52 @@
     "NAME_TOO_LONG": "Name is too long",
     "MESSAGE_MIN_LENGTH": "Message must be at least 10 characters",
     "MESSAGE_TOO_LONG": "Message is too long",
-    "PASSWORDS_DONT_MATCH": "Passwords do not match",
+    "PASSWORDS_DONT_MATCH": "Passwords don't match",
     "OTP_REQUIRED": "Verification code must be 4-6 digits",
     "OTP_LENGTH": "OTP must be 4 digits",
     "USERNAME_MIN_LENGTH": "Username must be at least 3 characters",
     "USERNAME_TOO_LONG": "Username is too long",
     "PHONE_NUMBER_INVALID": "Phone number must be 10 digits"
+  },
+  "TAB": {
+    "HOME": "Home",
+    "CHAT": "Chat",
+    "MARKETPLACE": "Marketplace",
+    "MORE": "More",
+    "POSTS": "Posts",
+    "REACTIONS": "Reactions",
+    "ABOUT": "About",
+    "ARTIST": "Artist",
+    "FAN": "Fan"
+  },
+  "TIME": {
+    "JUST_NOW": "Just now",
+    "MINUTE_AGO": "{{count}} minute ago",
+    "HOUR_AGO": "{{count}} hour ago",
+    "DAY_AGO": "{{count}} day ago",
+    "WEEK_AGO": "{{count}} week ago",
+    "MONTH_AGO": "{{count}} month ago",
+    "YEAR_AGO": "{{count}} year ago"
+  },
+  "COMMON": {
+    "COMMENTS": "Comments"
+  },
+  "HEADER": {
+    "POST": "Post",
+    "CHAT_WINDOW": "Chat window",
+    "CHANNEL_DETAILS": "Channel details",
+    "NOTIFICATIONS": "Notifications",
+    "CART": "Cart",
+    "CONFIRM_ORDER": "Confirm order",
+    "PROFILE": "Profile",
+    "ORDERS": "Orders",
+    "ORDER_DETAILS": "Order details",
+    "PRIVACY_POLICY": "Privacy policy",
+    "TERMS_OF_SERVICE": "Terms of service",
+    "SETTINGS": "Settings"
+  },
+  "FILTER": {
+    "ALL": "All",
+    "JOINED": "Joined"
   }
 }

@@ -4,6 +4,7 @@ import { useAddToCart } from '@/hooks/useAddToCart';
 import { components } from '@/schemas/openapi';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Dimensions,
@@ -26,6 +27,7 @@ type RouteParams = {
 type TabType = 'details' | 'notes';
 
 const ProductDetailScreen = () => {
+  const { t } = useTranslation();
   const width = Dimensions.get('window').width;
   const navigation = useNavigation();
   const route = useRoute();
@@ -94,7 +96,7 @@ const ProductDetailScreen = () => {
     return (
       <View className="flex-1 bg-background items-center justify-center px-4">
         <AppText variant="body" className="text-center">
-          Failed to load product details
+          {t('APP.PRODUCT.FAILED_TO_LOAD')}
         </AppText>
       </View>
     );
@@ -103,7 +105,7 @@ const ProductDetailScreen = () => {
   const handlePurchase = async () => {
     // Check if variant is required and selected
     if (variants.length > 0 && !selectedVariantId) {
-      showError('Please select a variant');
+      showError(t('APP.PRODUCT.PLEASE_SELECT_VARIANT'));
       return;
     }
 
@@ -116,12 +118,15 @@ const ProductDetailScreen = () => {
         action: 'increase',
       });
 
-      showSuccess('Added to cart');
+      showSuccess(t('APP.PRODUCT.ADDED_TO_CART'));
 
       // Navigate to cart
       navigation.navigate('Cart');
     } catch (error) {
-      showError('Failed to add to cart', 'Please try again');
+      showError(
+        t('APP.PRODUCT.FAILED_TO_ADD'),
+        t('APP.PRODUCT.PLEASE_TRY_AGAIN'),
+      );
     }
   };
 
@@ -164,7 +169,7 @@ const ProductDetailScreen = () => {
         {/* Product Info */}
         <View className="p-4 border-b border-neutrals900/10">
           <AppText variant="labelSmall" weight="semibold" className="mb-2">
-            {product.shop?.name || 'Shop'}
+            {product.shop?.name || t('APP.SHOP.SHOP')}
           </AppText>
           <AppText variant="heading3" weight="semibold" className="mb-2">
             {product.name}
@@ -176,15 +181,15 @@ const ProductDetailScreen = () => {
                 weight="semibold"
                 className="text-primary"
               >
-                ⏰ PRE-ORDER
+                ⏰ {t('APP.PRODUCT.PRE_ORDER')}
               </AppText>
             </View>
           )}
           <AppText variant="heading1" weight="bold" className="mb-2">
-            USD ${displayPrice.toFixed(2)}
+            {t('APP.PRODUCT.USD')} ${displayPrice.toFixed(2)}
           </AppText>
           <AppText variant="body" className="text-primary">
-            Stock: {displayStock} available
+            {t('APP.PRODUCT.STOCK_AVAILABLE')} {displayStock}
           </AppText>
         </View>
 
@@ -192,7 +197,7 @@ const ProductDetailScreen = () => {
         {variants.length > 0 ? (
           <View className="p-4 border-b border-neutrals900/10">
             <AppText variant="heading3" weight="semibold" className="mb-3">
-              Select Variant
+              {t('APP.PRODUCT.SELECT_VARIANT')}
             </AppText>
             <View className="flex-row flex-wrap -mx-1">
               {variants.map((variant: UserProductVariantDto) => {
@@ -209,8 +214,8 @@ const ProductDetailScreen = () => {
                       isDisabled
                         ? 'bg-neutrals900/5 border-neutrals900/20'
                         : isSelected
-                        ? 'bg-foreground border-foreground'
-                        : 'bg-background border-neutrals900'
+                          ? 'bg-foreground border-foreground'
+                          : 'bg-background border-neutrals900'
                     }`}
                     activeOpacity={0.7}
                   >
@@ -221,12 +226,14 @@ const ProductDetailScreen = () => {
                         isDisabled
                           ? 'text-neutrals900/40'
                           : isSelected
-                          ? 'text-background'
-                          : 'text-foreground'
+                            ? 'text-background'
+                            : 'text-foreground'
                       }
                     >
                       {variant.name}
-                      {variant.stock === 0 ? ' (Out of Stock)' : ''}
+                      {variant.stock === 0
+                        ? ` (${t('APP.PRODUCT.OUT_OF_STOCK')})`
+                        : ''}
                     </AppText>
                   </TouchableOpacity>
                 );
@@ -234,7 +241,8 @@ const ProductDetailScreen = () => {
             </View>
             {selectedVariant && (
               <AppText variant="body" className="text-primary mt-2">
-                Price: USD ${selectedVariant.price.toFixed(2)} • Stock:{' '}
+                {t('APP.PRODUCT.PRICE')}: {t('APP.PRODUCT.USD')} $
+                {selectedVariant.price.toFixed(2)} • {t('APP.PRODUCT.STOCK')}:{' '}
                 {selectedVariant.stock}
               </AppText>
             )}
@@ -243,7 +251,7 @@ const ProductDetailScreen = () => {
           product.type && (
             <View className="p-4 border-b border-neutrals900/10">
               <AppText variant="heading3" weight="semibold">
-                Type: {product.type.name}
+                {t('APP.PRODUCT.TYPE')}: {product.type.name}
               </AppText>
             </View>
           )
@@ -270,7 +278,9 @@ const ProductDetailScreen = () => {
               <ActivityIndicator color="#fff" />
             ) : (
               <AppText variant="heading3" weight="bold" className="text-white">
-                {displayStock === 0 ? 'Out of Stock' : 'Purchase'}
+                {displayStock === 0
+                  ? t('APP.PRODUCT.OUT_OF_STOCK')
+                  : t('APP.PRODUCT.PURCHASE')}
               </AppText>
             )}
           </AppButton>
@@ -294,7 +304,7 @@ const ProductDetailScreen = () => {
                   : 'text-neutrals100'
               }
             >
-              Details
+              {t('APP.PRODUCT.DETAILS')}
             </AppText>
           </TouchableOpacity>
           <TouchableOpacity
@@ -311,7 +321,7 @@ const ProductDetailScreen = () => {
                 selectedTab === 'notes' ? 'text-foreground' : 'text-neutrals100'
               }
             >
-              Notes
+              {t('APP.PRODUCT.NOTES')}
             </AppText>
           </TouchableOpacity>
         </View>
@@ -325,13 +335,13 @@ const ProductDetailScreen = () => {
                   ℹ️
                 </AppText>
                 <AppText variant="heading3" weight="bold">
-                  Product Details
+                  {t('APP.PRODUCT.PRODUCT_DETAILS')}
                 </AppText>
               </View>
               <AppText variant="body" className="text-neutrals100 leading-5">
                 {typeof product.description === 'string'
                   ? product.description
-                  : 'No description available'}
+                  : t('APP.PRODUCT.NO_DESCRIPTION')}
               </AppText>
             </View>
           ) : (
@@ -341,19 +351,24 @@ const ProductDetailScreen = () => {
                   ℹ️
                 </AppText>
                 <AppText variant="heading3" weight="bold">
-                  Product Notes
+                  {t('APP.PRODUCT.PRODUCT_NOTES')}
                 </AppText>
               </View>
               <AppText variant="body" className="text-neutrals100">
-                Created: {new Date(product.createdAt).toLocaleDateString()}
+                {t('APP.PRODUCT.CREATED')}:{' '}
+                {new Date(product.createdAt).toLocaleDateString()}
                 {'\n'}
-                Updated: {new Date(product.updatedAt).toLocaleDateString()}
+                {t('APP.PRODUCT.UPDATED')}:{' '}
+                {new Date(product.updatedAt).toLocaleDateString()}
                 {'\n'}
-                Status: {product.isActive ? 'Active' : 'Inactive'}
+                {t('APP.PRODUCT.STATUS')}:{' '}
+                {product.isActive
+                  ? t('APP.PRODUCT.ACTIVE')
+                  : t('APP.PRODUCT.INACTIVE')}
                 {'\n'}
                 {typeof product.note === 'string'
                   ? product.note
-                  : 'No additional notes available'}
+                  : t('APP.PRODUCT.NO_NOTES')}
               </AppText>
             </View>
           )}

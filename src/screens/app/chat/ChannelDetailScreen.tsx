@@ -9,6 +9,7 @@ import { ChatStackParamList } from '@/navigation/types';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -28,15 +29,16 @@ type ChannelDetailNavigationProp = NativeStackNavigationProp<
 
 const ChannelDetailScreen = () => {
   const route = useRoute<ChannelDetailRouteProp>();
-  const navigation = useNavigation<ChannelDetailNavigationProp>();
+  const navigation = useNavigation();
   const { channelId } = route.params;
   const { client } = useChatContext();
   const colors = useColors();
+  const { t } = useTranslation();
   const { user } = useGetCurrentUser();
   const { refetch } = useChatChannels();
   const { showError, showWarning } = useToast();
   const [channel, setChannel] = useState<Channel | null>(null);
-  const { mutateAsync: leaveChannel, isPending: isLeaving } = useLeaveChannel();
+  const { leaveChannel, isLeaving } = useLeaveChannel();
   const [promotingMemberId, setPromotingMemberId] = useState<string | null>(
     null,
   );
@@ -125,12 +127,26 @@ const ChannelDetailScreen = () => {
   const handleLeaveChannel = async () => {
     if (!channel) return;
 
-    try {
-      await leaveChannel({ channelId: channel.id || channel.cid || '' });
-      navigation.goBack();
-    } catch (error) {
-      console.error('Failed to leave channel:', error);
+    // Get community ID from channel data or extract from channel ID (remove "community_" prefix)
+    const rawId = (channel.data as any)?.communityId || channel.id || '';
+    const communityId = rawId.replace('community_', '');
+
+    if (!communityId) {
+      showError('Cannot leave channel: Community ID not found');
+      return;
     }
+
+    await leaveChannel(communityId, {
+      onSuccess: () => {
+        // Pop to the top of the stack (ChatList) to restore bottom tabs
+        navigation.goBack();
+        navigation.goBack();
+      },
+      onError: error => {
+        console.error('Failed to leave channel:', error);
+        showError('Failed to leave channel');
+      },
+    });
   };
 
   const handleDeleteChannel = async () => {
@@ -441,7 +457,7 @@ const ChannelDetailScreen = () => {
               textClassname="text-secondary-foreground"
               loading={isLeaving}
             >
-              Leave Channel
+              {t('BUTTON.LEAVE_COMMUNITY')}
             </AppButton>
           </View>
         ) : (
@@ -454,7 +470,7 @@ const ChannelDetailScreen = () => {
               textClassname="text-secondary-foreground"
               loading={isDeleting}
             >
-              Delete Channel
+              {t('BUTTON.DELETE_CHANNEL')}
             </AppButton>
           </View>
         )}
@@ -463,9 +479,7 @@ const ChannelDetailScreen = () => {
       {/* Members Count */}
       <View className="px-4 pb-2">
         <AppText variant="body" color="muted">
-          Total Members: {totalMemberCount}
-          {totalMemberCount > idolsAndCreators.length + fans.length &&
-            ` (showing ${idolsAndCreators.length + fans.length})`}
+          {t('APP.CHAT.TOTAL_MEMBERS')}: {totalMemberCount}
         </AppText>
       </View>
 
@@ -474,7 +488,7 @@ const ChannelDetailScreen = () => {
         <View className="mb-4">
           <View className="px-4 py-3 border-b border-neutrals900">
             <AppText variant="heading5">
-              Idols & Creators ({idolsAndCreators.length})
+              {t('APP.CHAT.IDOL_CREATOR')} ({idolsAndCreators.length})
             </AppText>
           </View>
           {idolsAndCreators.map(member => (
@@ -486,7 +500,9 @@ const ChannelDetailScreen = () => {
       {/* Fans Section Header */}
       {currentUserRole !== 'default_member' && fans.length > 0 && (
         <View className="px-4 py-3 border-b border-neutrals900">
-          <AppText variant="heading5">Fans ({fans.length})</AppText>
+          <AppText variant="heading5">
+            {t('APP.CHAT.FAN')} ({fans.length})
+          </AppText>
         </View>
       )}
     </>

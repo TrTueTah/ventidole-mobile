@@ -10,6 +10,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import { forwardRef, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { useReportPost } from '../hooks/useReportPost';
 
@@ -32,13 +33,13 @@ const PostActionsBottomSheet = forwardRef<
     ref,
   ) => {
     const colors = useColors();
+    const { t } = useTranslation();
     const { user } = useGetCurrentUser();
     const isAuthor = user?.id === post.author.id;
     const navigation = useNavigation();
     const { showSuccess, showError } = useToast();
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportReason, setReportReason] = useState('');
-
     const { reportPostAsync, isReporting } = useReportPost({
       onSuccess: () => {
         showSuccess('Post reported successfully');
@@ -176,19 +177,19 @@ const PostActionsBottomSheet = forwardRef<
             <View className="py-2">
               <MenuItem
                 icon="Users"
-                label="Go to Community"
+                label={t('BUTTON.GO_TO_COMMUNITY')}
                 onPress={onGotoCommunity}
               />
               {isAuthor && (
                 <MenuItem
                   icon="Pencil"
-                  label="Edit"
+                  label={t('BUTTON.EDIT')}
                   onPress={handleEditPress}
                 />
               )}
               <MenuItem
                 icon="Flag"
-                label="Report"
+                label={t('BUTTON.REPORT')}
                 onPress={handleReportPress}
                 isDanger
               />

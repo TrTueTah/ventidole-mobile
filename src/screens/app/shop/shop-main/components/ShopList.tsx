@@ -2,6 +2,7 @@ import { AppText, Icon } from '@/components/ui';
 import { components } from '@/schemas/openapi';
 import { useNavigation } from '@react-navigation/native';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, Image, TouchableOpacity, View } from 'react-native';
 import { useGetFollowingShops } from '../hooks/useGetFollowingShops';
 import ShopListSkeleton from './ShopListSkeleton';
@@ -10,6 +11,7 @@ import ShopModal, { ShopModalRef } from './ShopModal';
 type Shop = components['schemas']['ShopListDto'];
 
 const ShopList = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const shopModalRef = useRef<ShopModalRef>(null);
 
@@ -24,7 +26,7 @@ const ShopList = () => {
       <View className="bg-background rounded-xl shadow py-4 mb-4">
         {/* Title */}
         <AppText variant="heading3" weight="bold" className="px-4 mb-4">
-          My Artists' Shops
+          {t('APP.SHOP.MY_ARTISTS_SHOPS')}
         </AppText>
 
         {/* Horizontal Shop List */}
@@ -73,7 +75,7 @@ const ShopList = () => {
           >
             <Icon name="Search" className="w-4 h-4 text-foreground" />
             <AppText variant="body" className="mt-1">
-              Search for more artists' shops
+              {t('APP.SHOP.SEARCH_MORE_SHOPS')}
             </AppText>
           </TouchableOpacity>
         </View>

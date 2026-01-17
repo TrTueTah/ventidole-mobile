@@ -2,7 +2,7 @@ import { MMKV } from 'react-native-mmkv';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { colorScheme } from 'nativewind';
-import { LanguageCode } from '@/config/i18n';
+import { changeLanguage, LANGUAGES, LanguageCode } from '@/config/i18n';
 import { getDeviceLanguage } from '@/utils/getDeviceLanguage';
 
 export type Theme = 'light' | 'dark';
@@ -77,7 +77,11 @@ export const useAppStore = create<AppState>()(
         set({ theme });
       },
 
-      setLanguage: language => set({ language }),
+      setLanguage: language => {
+        set({ language });
+        // Defer i18n change to next tick to avoid layout recursion during animations
+        setTimeout(() => changeLanguage(language), 0);
+      },
 
       setInsets: insets => set({ insets }),
 
@@ -105,6 +109,12 @@ export const useAppStore = create<AppState>()(
           if (error) {
             console.error('AppStore: hydration error', error);
           } else if (state) {
+            // Validate persisted language still exists
+            if (!LANGUAGES[state.language]) {
+              state.language = 'en';
+            }
+            // Sync i18n with persisted language
+            changeLanguage(state.language);
             state.isStorageReady = true;
           }
         };

@@ -2,6 +2,7 @@ import ChannelDetailScreen from '@/screens/app/chat/ChannelDetailScreen';
 import ChatListScreen from '@/screens/app/chat/ChatListScreen';
 import ChatWindowScreen from '@/screens/app/chat/ChatWindowScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import CustomScreenHeader from '../components/ScreenHeader';
 import { chatListPath } from '../pathLocations';
 import { ChatStackParamList } from '../types';
@@ -9,6 +10,7 @@ import { ChatStackParamList } from '../types';
 const ChatStack = createNativeStackNavigator<ChatStackParamList>();
 
 const ChatStackNavigator = () => {
+  const { t } = useTranslation();
   return (
     <ChatStack.Navigator
       initialRouteName={chatListPath}
@@ -28,7 +30,7 @@ const ChatStackNavigator = () => {
         component={ChatWindowScreen}
         options={{
           headerShown: true,
-          title: 'Chat',
+          title: t('HEADER.CHAT_WINDOW'),
         }}
       />
       <ChatStack.Screen
@@ -36,7 +38,7 @@ const ChatStackNavigator = () => {
         component={ChannelDetailScreen}
         options={{
           headerShown: true,
-          title: 'Channel Details',
+          title: t('HEADER.CHANNEL_DETAILS'),
         }}
       />
     </ChatStack.Navigator>

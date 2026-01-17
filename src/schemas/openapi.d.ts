@@ -796,6 +796,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/user/shop/{shopId}/product-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ShopController_getShopProductTypes_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/user/shop/products/{id}": {
         parameters: {
             query?: never;
@@ -2770,6 +2786,18 @@ export interface components {
              * @example 2023-01-01T00:00:00.000Z
              */
             updatedAt: string;
+        };
+        ShopProductTypeDto: {
+            /**
+             * @description Product type ID
+             * @example clxxxxxxxxxxxxxxxxxx
+             */
+            id: string;
+            /**
+             * @description Product type name
+             * @example Apparel
+             */
+            name: string;
         };
         CartItemProductDto: {
             /**
@@ -4879,20 +4907,20 @@ export interface components {
         };
         PayOSWebhookDto: {
             /**
-             * @description Response code
+             * @description Response code (optional)
              * @example 00
              */
-            code: string;
+            code?: string;
             /**
-             * @description Description
+             * @description Description (optional)
              * @example success
              */
-            desc: string;
+            desc?: string;
             /**
-             * @description Success status
+             * @description Success status (optional)
              * @example true
              */
-            success: boolean;
+            success?: boolean;
             /** @description Webhook data */
             data: components["schemas"]["PayOSWebhookDataDto"];
             /**
@@ -7597,6 +7625,8 @@ export interface operations {
                 limit?: number;
                 /** @description Search products by name */
                 search?: string;
+                /** @description Filter products by product type ID */
+                productTypeId?: string;
             };
             header?: never;
             path: {
@@ -7648,6 +7678,51 @@ export interface operations {
                              */
                             totalPages: number;
                         };
+                        /**
+                         * @description Error information (null on success)
+                         * @example null
+                         */
+                        error?: Record<string, never> | null;
+                        /**
+                         * @description Error code (null on success)
+                         * @example null
+                         */
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    ShopController_getShopProductTypes_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                shopId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description HTTP status code
+                         * @example 200
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Response message
+                         * @example OK
+                         */
+                        message: string;
+                        /** @description Response data array */
+                        data?: components["schemas"]["ShopProductTypeDto"][];
                         /**
                          * @description Error information (null on success)
                          * @example null

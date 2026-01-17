@@ -59,7 +59,7 @@ const PaymentScreen = () => {
   // Show error state
   if (error) {
     return (
-      <View className="flex-1 bg-background items-center justify-center px-4">
+      <View className="flex-1 items-center justify-center px-4">
         <AppText variant="body" className="text-red-500 text-center mb-4">
           Failed to load payment information
         </AppText>
@@ -79,7 +79,7 @@ const PaymentScreen = () => {
   }
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1">
       <WebView
         source={{ uri: order.payment.checkoutUrl }}
         originWhitelist={['*']}
@@ -87,7 +87,7 @@ const PaymentScreen = () => {
         startInLoadingState
         onShouldStartLoadWithRequest={handleShouldStartLoad}
         renderLoading={() => (
-          <View className="flex-1 items-center justify-center">
+          <View className="absolute inset-0 bg-background items-center justify-center">
             <ActivityIndicator size="large" />
             <AppText variant="body" className="mt-2 text-neutrals500">
               Loading payment page...
@@ -96,8 +96,7 @@ const PaymentScreen = () => {
         )}
         onError={syntheticEvent => {
           const { nativeEvent } = syntheticEvent;
-          console.error('WebView error:', nativeEvent);
-          showError('Failed to load payment page');
+          // console.error('WebView error:', nativeEvent);
         }}
       />
     </View>

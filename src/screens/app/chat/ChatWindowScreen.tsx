@@ -5,6 +5,7 @@ import { ChatStackParamList } from '@/navigation/types';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -32,6 +33,7 @@ const ChatWindowScreen = () => {
   const navigation = useNavigation<ChatWindowNavigationProp>();
   const { channelId } = route.params;
   const { client } = useChatContext();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { user } = useGetCurrentUser();
   const { joinCommunity } = useToggleCommunity({
@@ -345,7 +347,11 @@ const ChatWindowScreen = () => {
         <Channel channel={channel}>
           <MessageList />
           {canSendMessages ? (
-            <MessageInput />
+            <MessageInput
+              additionalTextInputProps={{
+                placeholder: t('PLACEHOLDER.MESSAGE'),
+              }}
+            />
           ) : (
             <View className="px-4 py-3 bg-muted/20 border-t border-neutrals900">
               <AppText
@@ -353,7 +359,7 @@ const ChatWindowScreen = () => {
                 color="muted"
                 className="text-center"
               >
-                You can only view messages in this channel
+                {t('APP.CHAT.CANNOT_SEND_MESSAGES_ROLE_RESTRICTED')}
               </AppText>
             </View>
           )}

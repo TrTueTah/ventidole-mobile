@@ -1,10 +1,11 @@
-import { AppButton, AppImage, AppText, Badge } from '@/components/ui';
+import { AppButton, AppText, Badge } from '@/components/ui';
 import { useColors } from '@/hooks/useColors';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Package } from 'lucide-react-native';
 import { useState } from 'react';
 import {
   ActivityIndicator,
+  Image,
   RefreshControl,
   ScrollView,
   TouchableOpacity,
@@ -307,10 +308,10 @@ const OrderDetailsScreen = () => {
                   (step as any).isCanceled
                     ? 'bg-error'
                     : step.isCompleted
-                    ? 'bg-success'
-                    : step.isActive
-                    ? 'bg-primary'
-                    : 'bg-neutrals700'
+                      ? 'bg-success'
+                      : step.isActive
+                        ? 'bg-primary'
+                        : 'bg-neutrals700'
                 }`}
               />
               {index < timelineSteps.length - 1 && (
@@ -319,8 +320,8 @@ const OrderDetailsScreen = () => {
                     (step as any).isCanceled
                       ? 'bg-error'
                       : step.isCompleted
-                      ? 'bg-success'
-                      : 'bg-neutrals700'
+                        ? 'bg-success'
+                        : 'bg-neutrals700'
                   }`}
                 />
               )}
@@ -334,8 +335,8 @@ const OrderDetailsScreen = () => {
                   (step as any).isCanceled
                     ? 'text-error font-sans-semibold'
                     : step.isActive
-                    ? 'text-primary font-sans-semibold'
-                    : ''
+                      ? 'text-primary font-sans-semibold'
+                      : ''
                 }
               >
                 {step.title}
@@ -403,7 +404,7 @@ const OrderDetailsScreen = () => {
           >
             {/* Item Image */}
             {item.mediaUrls && item.mediaUrls.length > 0 ? (
-              <AppImage
+              <Image
                 source={{ uri: item.mediaUrls[0] }}
                 className="w-16 h-16 rounded-lg mr-3"
                 resizeMode="cover"

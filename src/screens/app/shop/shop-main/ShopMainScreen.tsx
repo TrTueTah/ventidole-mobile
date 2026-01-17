@@ -2,6 +2,7 @@ import ShopCard from '@/components/card/shop-card/ShopCard';
 import ShopCardSkeleton from '@/components/card/shop-card/ShopCardSkeleton';
 import { AppText } from '@/components/ui';
 import { useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import ShopBanner from './components/ShopBanner';
@@ -10,6 +11,7 @@ import ShopList from './components/ShopList';
 import { useGetFollowingShops } from './hooks/useGetFollowingShops';
 
 const ShopMainScreen = () => {
+  const { t } = useTranslation();
   const scrollY = useSharedValue(0);
   const lastScrollY = useRef(0);
   const headerVisible = useSharedValue(true);
@@ -64,13 +66,13 @@ const ShopMainScreen = () => {
             </>
           ) : error ? (
             <AppText variant="body" color="muted" className="text-center">
-              Failed to load shops
+              {t('APP.SHOP.FAILED_TO_LOAD')}
             </AppText>
           ) : shops.length > 0 ? (
             shops.map(shop => <ShopCard key={shop.id} shop={shop} />)
           ) : (
             <AppText variant="body" color="muted" className="text-center">
-              No following shops found
+              {t('APP.SHOP.NO_FOLLOWING_SHOPS')}
             </AppText>
           )}
         </View>

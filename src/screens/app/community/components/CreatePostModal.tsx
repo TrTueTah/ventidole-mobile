@@ -9,12 +9,12 @@ import {
 import {
   forwardRef,
   useCallback,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, Pressable, View } from 'react-native';
 import { useUpdatePost } from '../../post/hooks/useUpdatePost';
 import { useCreatePost } from '../hooks/useCreatePost';
@@ -32,24 +32,50 @@ export interface CreatePostModalRef {
   close: () => void;
 }
 
+/* =========================
+   Helpers
+========================= */
+
+const HASHTAG_REGEX = /#[\w\u00C0-\u024F\u1E00-\u1EFF]+/g;
+
+function extractTagsAndContent(raw: string) {
+  const matches = raw.match(HASHTAG_REGEX) || [];
+  const tags = Array.from(new Set(matches.map(tag => tag.slice(1))));
+
+  const cleanedContent = raw
+    .replace(HASHTAG_REGEX, '')
+    .replace(/\n{2,}/g, '\n')
+    .trim();
+
+  return { tags, cleanedContent };
+}
+
+function buildContentFromPost(tags?: string[], content?: string) {
+  if (!tags || tags.length === 0) {
+    return content || '';
+  }
+
+  return `${tags.map(tag => `#${tag}`).join(' ')}\n${content || ''}`.trim();
+}
+
+/* =========================
+   Component
+========================= */
+
 const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
   ({ communityId, onSuccess }, ref) => {
     const bottomSheetRef = useRef<BottomSheetModal>(null);
     const [content, setContent] = useState('');
     const [editingPost, setEditingPost] = useState<PostDto | null>(null);
+
     const colors = useColors();
+    const { t } = useTranslation();
 
     const isEditMode = !!editingPost;
 
-    // Extract hashtags from content
+    /* ===== Tags derived from content (single source of truth) ===== */
     const detectedTags = useMemo(() => {
-      const hashtagRegex = /#[\w\u00C0-\u024F\u1E00-\u1EFF]+/g;
-      const matches = content.match(hashtagRegex);
-      if (!matches) return [];
-
-      // Remove # symbol and remove duplicates
-      const tags = matches.map(tag => tag.slice(1));
-      return Array.from(new Set(tags));
+      return extractTagsAndContent(content).tags;
     }, [content]);
 
     const {
@@ -83,57 +109,49 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
       bottomSheetRef.current?.dismiss();
     };
 
+    /* ===== Imperative API ===== */
     useImperativeHandle(ref, () => ({
       open: (post?: PostDto) => {
         if (post) {
-          // Edit mode
           setEditingPost(post);
-          setContent(post.content || '');
+          setContent(buildContentFromPost(post.tags, post.content));
           setSelectedImages(post.mediaUrls || []);
         } else {
-          // Create mode
           setEditingPost(null);
           setContent('');
           clearImages();
         }
         bottomSheetRef.current?.present();
       },
-      close: () => handleCloseModal(),
+      close: handleCloseModal,
     }));
 
+    /* ===== Submit ===== */
     const handleSubmit = useCallback(async () => {
-      if (!content.trim() && selectedImages.length === 0) {
-        return;
-      }
+      if (!content.trim() && selectedImages.length === 0) return;
 
       let mediaUrls: string[] = [];
 
       if (selectedImages.length > 0) {
         mediaUrls = await uploadAllImages();
-        if (mediaUrls.length === 0) {
-          return; // Upload failed
-        }
+        if (mediaUrls.length === 0) return;
       }
 
-      // Remove hashtags from content
-      const hashtagRegex = /#[\w\u00C0-\u024F\u1E00-\u1EFF]+/g;
-      const cleanedContent = content.replace(hashtagRegex, '').trim();
+      const { tags, cleanedContent } = extractTagsAndContent(content);
 
       if (isEditMode && editingPost) {
-        // Edit mode
         await updatePostAsync(
           editingPost.id,
           cleanedContent,
           mediaUrls.length > 0 ? mediaUrls : undefined,
-          detectedTags.length > 0 ? detectedTags : undefined,
+          tags.length > 0 ? tags : undefined,
         );
       } else {
-        // Create mode
         createPost({
           content: cleanedContent,
           communityId: communityId!,
           mediaUrls,
-          tags: detectedTags.length > 0 ? detectedTags : undefined,
+          tags: tags.length > 0 ? tags : undefined,
         });
       }
     }, [
@@ -145,7 +163,6 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
       createPost,
       updatePostAsync,
       uploadAllImages,
-      detectedTags,
     ]);
 
     const renderBackdrop = useCallback(
@@ -160,13 +177,14 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
       [],
     );
 
-    const isSubmitDisabled =
-      isCreating ||
-      isUpdating ||
-      isUploading ||
-      (!content.trim() && selectedImages.length === 0);
-
     const isProcessing = isCreating || isUpdating || isUploading;
+
+    const isSubmitDisabled =
+      isProcessing || (!content.trim() && selectedImages.length === 0);
+
+    /* =========================
+       Render
+    ========================= */
 
     return (
       <BottomSheetModal
@@ -183,7 +201,9 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
             {/* Header */}
             <View className="flex-row items-center justify-between mb-6">
               <AppText variant="heading3" weight="bold">
-                {isEditMode ? 'Edit Post' : 'Create Post'}
+                {isEditMode
+                  ? t('APP.POST.EDIT_POST')
+                  : t('APP.POST.CREATE_POST')}
               </AppText>
               <Pressable
                 onPress={handleCloseModal}
@@ -193,10 +213,10 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
               </Pressable>
             </View>
 
-            {/* Content Input */}
+            {/* Content */}
             <AppInput
               variant="textarea"
-              placeholder="What's on your mind?"
+              placeholder={t('PLACEHOLDER.POST_CONTENT')}
               value={content}
               onChangeText={setContent}
               multiline
@@ -207,7 +227,7 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
             {detectedTags.length > 0 && (
               <View className="gap-2">
                 <AppText variant="bodySmall" color="muted">
-                  Detected tags:
+                  {t('APP.POST.DETECTED_TAGS')}
                 </AppText>
                 <View className="flex-row flex-wrap gap-2">
                   {detectedTags.map((tag, index) => (
@@ -224,7 +244,7 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
               </View>
             )}
 
-            {/* Image Grid */}
+            {/* Images */}
             {selectedImages.length > 0 && (
               <View className="flex-row flex-wrap gap-2 mb-4">
                 {selectedImages.map((image, index) => (
@@ -237,7 +257,7 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
                     <Pressable
                       onPress={() => removeImage(index)}
                       className="absolute -top-2 -right-2 w-6 h-6 bg-error rounded-full items-center justify-center"
-                      disabled={isUploading || isCreating}
+                      disabled={isProcessing}
                     >
                       <Icon name="X" className="w-4 h-4 text-white" />
                     </Pressable>
@@ -255,12 +275,12 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
               >
                 <Icon name="Image" className="w-5 h-5 text-foreground" />
                 <AppText variant="bodySmall">
-                  Add Photo ({selectedImages.length}/5)
+                  {t('BUTTON.ADD_PHOTO', { count: selectedImages.length })}
                 </AppText>
               </Pressable>
             </View>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <AppButton
               onPress={handleSubmit}
               disabled={isSubmitDisabled}
@@ -268,15 +288,7 @@ const CreatePostModal = forwardRef<CreatePostModalRef, CreatePostModalProps>(
               className="w-full"
               variant="primary"
             >
-              {isProcessing
-                ? isUploading
-                  ? 'Uploading...'
-                  : isEditMode
-                  ? 'Updating...'
-                  : 'Posting...'
-                : isEditMode
-                ? 'Update'
-                : 'Post'}
+              {isEditMode ? t('BUTTON.UPDATE') : t('BUTTON.POST')}
             </AppButton>
           </View>
         </BottomSheetScrollView>

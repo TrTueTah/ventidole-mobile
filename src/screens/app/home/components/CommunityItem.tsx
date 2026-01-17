@@ -3,6 +3,7 @@ import { useToggleCommunity } from '@/hooks/useToggleCommunity';
 import { formatNumber } from '@/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { memo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 
 interface CommunityItemProps {
@@ -12,6 +13,7 @@ interface CommunityItemProps {
 
 const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const updateCommunityInCache = useCallback(
     async (communityId: string, isJoined: boolean) => {
@@ -140,7 +142,7 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
           {item.isNew && (
             <Badge variant="default" className="mb-1 self-start">
               <AppText variant="labelSmall" className="text-white uppercase">
-                NEW
+                {t('APP.COMMUNITY.NEW')}
               </AppText>
             </Badge>
           )}
@@ -153,7 +155,7 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
             {item.name}
           </AppText>
           <AppText variant="bodySmall" color="muted">
-            {formatNumber(item.totalMember || 0)} members
+            {formatNumber(item.totalMember || 0)} {t('APP.COMMUNITY.MEMBERS')}
           </AppText>
         </View>
       </TouchableOpacity>
@@ -179,7 +181,7 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
             weight="semibold"
             className={item.isJoined ? 'text-foreground' : 'text-white'}
           >
-            {item.isJoined ? 'Joined' : 'Join'}
+            {item.isJoined ? t('BUTTON.JOINED') : t('BUTTON.JOIN')}
           </AppText>
         )}
       </TouchableOpacity>

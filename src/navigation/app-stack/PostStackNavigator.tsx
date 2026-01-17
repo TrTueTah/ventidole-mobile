@@ -9,6 +9,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native';
 import CustomScreenHeader from '../components/ScreenHeader';
 import { postStackPath } from '../pathLocations';
@@ -23,6 +24,7 @@ const PostStackNavigator = ({ route }: { route: any }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const editPostRef = useRef<CreatePostModalRef>(null);
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const [currentPost, setCurrentPost] = useState<PostDto | null>(null);
 
   const handleOpenBottomSheet = (post: PostDto) => {
@@ -57,14 +59,14 @@ const PostStackNavigator = ({ route }: { route: any }) => {
           component={PostScreen}
           options={{
             headerShown: true,
-            title: 'Post',
+            title: t('HEADER.POST'),
             headerRight: () => (
               <TouchableOpacity
                 onPress={() =>
                   currentPost && handleOpenBottomSheet(currentPost)
                 }
               >
-                <Icon name="EllipsisVertical" />
+                <Icon name="EllipsisVertical" className="text-foreground" />
               </TouchableOpacity>
             ),
             header: props => <CustomScreenHeader {...props} />,

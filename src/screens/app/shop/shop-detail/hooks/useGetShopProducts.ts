@@ -7,19 +7,23 @@ type UserProductDto = components['schemas']['UserProductDto'];
 interface UseGetShopProductsParams {
   shopId: string;
   limit?: number;
+  productTypeId?: string;
+  search?: string;
 }
 
 export const useGetShopProducts = (params: UseGetShopProductsParams) => {
   const backendApi = useContext(BackendApiContext);
 
-  const { shopId, limit = 20 } = params;
+  const { shopId, limit = 20, productTypeId, search } = params;
 
   // Build query params
   const baseQueryParams = useMemo(
     () => ({
       limit,
+      ...(productTypeId && { productTypeId }),
+      ...(search && { search }),
     }),
-    [limit],
+    [limit, productTypeId, search],
   );
 
   // Use openapi-react-query's useInfiniteQuery

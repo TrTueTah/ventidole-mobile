@@ -100,7 +100,185 @@
       }
     }
   },
-  "APP": {},
+  "APP": {
+    "POST": {
+      "EDIT_POST": "Chỉnh sửa bài viết",
+      "CREATE_POST": "Tạo bài viết",
+      "DETECTED_TAGS": "Thẻ được phát hiện",
+      "ADD_PHOTO": "Thêm ảnh",
+      "UPLOADING": "Đang tải lên"
+    },
+    "PROFILE": {
+      "UNKNOWN_USER": "Người dùng ẩn danh",
+      "CHANGE_AVATAR": "Đổi ảnh đại diện",
+      "SAVING": "Đang lưu...",
+      "SAVE_CHANGES": "Lưu thay đổi",
+      "CHANGE_PASSWORD": "Đổi mật khẩu"
+    },
+    "COMMUNITY": {
+      "MEMBERS": "Thành viên",
+      "ABOUT": "Giới thiệu",
+      "COMMUNITY_STAT": "Thống kê cộng đồng",
+      "IDOLS": "Thần tượng",
+      "NO_DESCRIPTION": "Không có mô tả",
+      "NO_POSTS_FOUND": "Chưa có bài viết nào",
+      "NEW": "Mới"
+    },
+    "CHAT": {
+      "TOTAL_MEMBERS": "Tổng thành viên",
+      "IDOL_CREATOR": "Thần tượng / Người sáng tạo",
+      "FAN": "Người hâm mộ",
+      "CANNOT_SEND_MESSAGES_ROLE_RESTRICTED": "Bạn chỉ có thể xem tin nhắn trong kênh này"
+    },
+    "NOTIFICATION": {
+      "CLEAR_ALL": "Xóa tất cả",
+      "CLEARING": "Đang xóa...",
+      "CLEAR_ALL_TITLE": "Xóa tất cả thông báo",
+      "CLEAR_ALL_MESSAGE": "Bạn có chắc muốn xóa tất cả thông báo? Hành động này không thể hoàn tác.",
+      "NO_NOTIFICATIONS": "Không có thông báo",
+      "NO_NOTIFICATIONS_DESCRIPTION": "Thông báo về hoạt động của bạn sẽ xuất hiện ở đây",
+      "NO_CONTENT": "Không có nội dung"
+    },
+    "SHOP": {
+      "FAILED_TO_LOAD": "Không thể tải cửa hàng",
+      "NO_FOLLOWING_SHOPS": "Không tìm thấy cửa hàng đang theo dõi",
+      "MY_ARTISTS_SHOPS": "Cửa hàng nghệ sĩ của tôi",
+      "SEARCH_MORE_SHOPS": "Tìm kiếm thêm cửa hàng nghệ sĩ",
+      "SEARCH_FOR_SHOPS": "Tìm kiếm cửa hàng",
+      "NO_SHOPS_MATCHING": "Không tìm thấy cửa hàng phù hợp",
+      "NO_SHOPS_AVAILABLE": "Không có cửa hàng",
+      "SHOP": "Cửa hàng",
+      "PRODUCTS": "Sản phẩm",
+      "ALL": "Tất cả",
+      "NO_PRODUCTS_AVAILABLE": "Không có sản phẩm",
+      "CATEGORIES": {
+        "MERCH": "MERCH",
+        "SEASONS_GREETINGS": "SEASONS GREETINGS",
+        "ALBUM": "ALBUM",
+        "TOUR_MERCH": "TOUR MERCH"
+      }
+    },
+    "PRODUCT": {
+      "FAILED_TO_LOAD": "Không thể tải chi tiết sản phẩm",
+      "SELECT_VARIANT": "Chọn biến thể",
+      "ADDED_TO_CART": "Đã thêm vào giỏ hàng",
+      "FAILED_TO_ADD": "Không thể thêm vào giỏ hàng",
+      "PLEASE_TRY_AGAIN": "Vui lòng thử lại",
+      "PLEASE_SELECT_VARIANT": "Vui lòng chọn biến thể",
+      "PRE_ORDER": "ĐẶT TRƯỚC",
+      "USD": "USD",
+      "STOCK_AVAILABLE": "Còn hàng ",
+      "OUT_OF_STOCK": "Hết hàng",
+      "PURCHASE": "Mua ngay",
+      "PRICE": "Giá",
+      "STOCK": "Còn",
+      "TYPE": "Loại",
+      "DETAILS": "Chi tiết",
+      "NOTES": "Ghi chú",
+      "PRODUCT_DETAILS": "Chi tiết sản phẩm",
+      "NO_DESCRIPTION": "Không có mô tả",
+      "PRODUCT_NOTES": "Ghi chú sản phẩm",
+      "CREATED": "Ngày tạo",
+      "UPDATED": "Cập nhật",
+      "STATUS": "Trạng thái",
+      "ACTIVE": "Đang hoạt động",
+      "INACTIVE": "Ngừng hoạt động",
+      "NO_NOTES": "Không có ghi chú bổ sung"
+    },
+    "CART": {
+      "EMPTY_TITLE": "Giỏ hàng trống",
+      "EMPTY_DESCRIPTION": "Thêm sản phẩm vào giỏ hàng để bắt đầu",
+      "SHIPPING": "Giao hàng",
+      "PICKUP": "Nhận tại cửa hàng",
+      "STANDARD_SHIPPING": "Giao hàng tiêu chuẩn",
+      "EXPECTED_DELIVERY": "Dự kiến giao: 3-5 ngày",
+      "BUY_NOW": "Mua ngay",
+      "ADD_SHIPPING_ADDRESS": "Thêm địa chỉ giao hàng",
+      "SELECT_ALL": "Chọn tất cả",
+      "DELETE": "Xóa",
+      "SUBTOTAL": "Tạm tính",
+      "TOTAL": "Tổng cộng",
+      "ADD_ADDRESS_TO_CONTINUE": "Thêm địa chỉ giao hàng để tiếp tục",
+      "BUY_PRODUCTS": "Mua sản phẩm ({{count}})",
+      "ONLY_ITEMS_AVAILABLE": "Chỉ còn {{count}} sản phẩm",
+      "ITEM_REMOVED": "Đã xóa sản phẩm khỏi giỏ hàng",
+      "FAILED_TO_REMOVE": "Không thể xóa sản phẩm",
+      "ITEMS_REMOVED": "Đã xóa các sản phẩm khỏi giỏ hàng",
+      "FAILED_TO_REMOVE_ITEMS": "Không thể xóa các sản phẩm",
+      "SELECT_ITEMS_TO_CHECKOUT": "Vui lòng chọn sản phẩm để thanh toán",
+      "FAILED_TO_UPDATE_QUANTITY": "Không thể cập nhật số lượng",
+      "COMING_SOON": "Sắp ra mắt",
+      "EMPTY_CART": "Giỏ hàng trống",
+      "EMPTY_CART_DESCRIPTION": "Thêm sản phẩm vào giỏ hàng để bắt đầu",
+      "ADD_SHIPPING_ADDRESS_TO_CONTINUE": "Thêm địa chỉ giao hàng để tiếp tục"
+    },
+    "ADDRESS": {
+      "EDIT_TITLE": "Sửa địa chỉ giao hàng",
+      "ADD_TITLE": "Thêm địa chỉ giao hàng",
+      "SELECT_TITLE": "Chọn địa chỉ giao hàng",
+      "NAME": "Tên",
+      "ENTER_FIRST_NAME": "Nhập tên",
+      "LAST_NAME": "Họ",
+      "ENTER_LAST_NAME": "Nhập họ",
+      "PROVINCE": "Tỉnh/Thành phố",
+      "SELECT_PROVINCE": "Chọn tỉnh/thành phố",
+      "DISTRICT": "Quận/Huyện",
+      "SELECT_DISTRICT": "Chọn quận/huyện",
+      "DETAIL_ADDRESS": "Địa chỉ chi tiết",
+      "ENTER_DETAIL_ADDRESS": "Nhập địa chỉ chi tiết",
+      "PHONE_NUMBER": "Số điện thoại",
+      "ENTER_PHONE_NUMBER": "Nhập số điện thoại",
+      "SET_DEFAULT": "Đặt làm địa chỉ mặc định",
+      "SAVE": "Lưu",
+      "DEFAULT": "Mặc định",
+      "EDIT": "Sửa",
+      "NO_ADDRESSES": "Không tìm thấy địa chỉ giao hàng.",
+      "ADD_ADDRESS_TO_START": "Thêm địa chỉ mới để bắt đầu.",
+      "ADD": "Thêm",
+      "DELETING": "Đang xóa địa chỉ..."
+    },
+    "ORDER": {
+      "YOUR_ORDER": "Đơn hàng của bạn",
+      "CUSTOMER": "Khách hàng",
+      "SHIPPING_ADDRESS": "Địa chỉ giao hàng",
+      "PAYMENT_METHOD": "Phương thức thanh toán",
+      "CUSTOMER_INFO_FROM_PROFILE": "Thông tin khách hàng sẽ được lấy từ hồ sơ của bạn.",
+      "CHANGE": "Thay đổi",
+      "CREDIT_CARD_QR": "Thẻ tín dụng / Mã QR",
+      "CASH_ON_DELIVERY": "Thanh toán khi nhận hàng",
+      "ORDER_SUMMARY": "Tóm tắt đơn hàng",
+      "TERMS_AGREEMENT": "Tôi đã đọc và đồng ý với việc thu thập, sử dụng và cung cấp thông tin cá nhân (bao gồm chuyển giao quốc tế cho việc vận chuyển ra nước ngoài).",
+      "ACCEPT_AND_PAY": "Chấp nhận và thanh toán",
+      "AGREE_TO_TERMS_ERROR": "Vui lòng đồng ý với các điều khoản và điều kiện để tiếp tục.",
+      "SELECT_ADDRESS_ERROR": "Vui lòng chọn địa chỉ giao hàng.",
+      "EMPTY_CART_ERROR": "Giỏ hàng trống. Vui lòng thêm sản phẩm để tiếp tục."
+    },
+    "CONFIRM_ORDER": {
+      "YOUR_ORDER": "Đơn hàng của bạn",
+      "SHIPPING_ADDRESS": "Địa chỉ giao hàng",
+      "PAYMENT_METHOD": "Phương thức thanh toán",
+      "TERM": "Tôi đã đọc và đồng ý với việc thu thập, sử dụng và cung cấp thông tin cá nhân (bao gồm cả việc chuyển giao quốc tế cho vận chuyển hàng hóa ra nước ngoài).",
+      "ORDER_SUMMARY": "Tóm tắt đơn hàng"
+    },
+    "MORE": {
+      "TITLE": "Thêm",
+      "ACCOUNT": "Tài khoản",
+      "PROFILE": "Hồ sơ",
+      "MY_ORDERS": "Đơn hàng của tôi",
+      "SUPPORT": "Hỗ trợ",
+      "SETTINGS": "Cài đặt",
+      "PRIVACY_POLICY": "Chính sách quyền riêng tư",
+      "TERMS_OF_SERVICE": "Điều khoản dịch vụ",
+      "LOG_OUT": "Đăng xuất",
+      "PERSONAL_INFO": "Thông tin cá nhân"
+    },
+    "SETTINGS": {
+      "THEME": "Chế độ",
+      "LANGUAGE": "Ngôn ngữ",
+      "DARK_MODE": "Chế độ tối",
+      "LIGHT_MODE": "Chế độ sáng"
+    }
+  },
   "LABEL": {
     "EMAIL": "Email",
     "PASSWORD": "Mật khẩu",
@@ -108,7 +286,8 @@
     "USERNAME": "Tên người dùng",
     "CONFIRM_PASSWORD": "Xác nhận mật khẩu",
     "NEW_PASSWORD": "Mật khẩu mới",
-    "CONFIRM_NEW_PASSWORD": "Xác nhận mật khẩu mới"
+    "CONFIRM_NEW_PASSWORD": "Xác nhận mật khẩu mới",
+    "BIO": "Tiểu sử"
   },
   "PLACEHOLDER": {
     "EMAIL": "johndoe@gmail.com",
@@ -117,9 +296,15 @@
     "USERNAME": "Nhập tên người dùng",
     "CONFIRM_PASSWORD": "Nhập lại mật khẩu",
     "NEW_PASSWORD": "Nhập mật khẩu mới",
-    "CONFIRM_NEW_PASSWORD": "Nhập lại mật khẩu mới"
+    "CONFIRM_NEW_PASSWORD": "Nhập lại mật khẩu mới",
+    "COMMENT": "Viết bình luận của bạn...",
+    "POST_CONTENT": "Nhập nội dung bài viết...",
+    "SEARCH_CHANNELS": "Tìm kiếm kênh...",
+    "MESSAGE": "Nhập tin nhắn...",
+    "SEARCH_COMMUNITIES": "Tìm kiếm cộng đồng"
   },
   "BUTTON": {
+    "CANCEL": "Hủy",
     "FORGET_PASSWORD": "Quên mật khẩu?",
     "SIGN_UP": "Đăng ký",
     "SIGN_IN": "Đăng nhập",
@@ -131,7 +316,20 @@
     "CONTINUE": "Tiếp tục",
     "RESET_PASSWORD": "Đặt lại mật khẩu",
     "GET_STARTED": "Bắt đầu",
-    "BACK_TO_LOGIN": "Quay lại đăng nhập"
+    "BACK_TO_LOGIN": "Quay lại đăng nhập",
+    "GO_TO_COMMUNITY": "Đến cộng đồng",
+    "EDIT": "Chỉnh sửa",
+    "REPORT": "Báo cáo",
+    "UPDATE": "Cập nhật",
+    "POST": "Đăng",
+    "ADD_PHOTO": "Thêm ảnh ({{count}}/5)",
+    "JOIN": "Tham gia",
+    "JOINED": "Đã tham gia",
+    "LEAVE_COMMUNITY": "Rời cộng đồng",
+    "DELETE_CHANNEL": "Xóa kênh",
+    "BUY_PRODUCT": "Mua sản phẩm",
+    "ACCEPT_AND_PAY": "Chấp nhận và thanh toán",
+    "CHANGE_PASSWORD": "Đổi mật khẩu"
   },
   "VALIDATION": {
     "INVALID_EMAIL": "Địa chỉ email không hợp lệ",
@@ -152,5 +350,46 @@
     "USERNAME_MIN_LENGTH": "Tên người dùng phải có ít nhất 3 ký tự",
     "USERNAME_TOO_LONG": "Tên người dùng quá dài",
     "PHONE_NUMBER_INVALID": "Số điện thoại phải có 10 chữ số"
+  },
+  "TAB": {
+    "HOME": "Trang chủ",
+    "CHAT": "Trò chuyện",
+    "MARKETPLACE": "Cửa hàng",
+    "MORE": "Thêm",
+    "POSTS": "Bài viết",
+    "REACTIONS": "Tương tác",
+    "ABOUT": "Giới thiệu",
+    "ARTIST": "Nghệ sĩ",
+    "FAN": "Người hâm mộ"
+  },
+  "TIME": {
+    "JUST_NOW": "Vừa xong",
+    "MINUTE_AGO": "{{count}} phút trước",
+    "HOUR_AGO": "{{count}} giờ trước",
+    "DAY_AGO": "{{count}} ngày trước",
+    "WEEK_AGO": "{{count}} tuần trước",
+    "MONTH_AGO": "{{count}} tháng trước",
+    "YEAR_AGO": "{{count}} năm trước"
+  },
+  "COMMON": {
+    "COMMENTS": "Bình luận"
+  },
+  "HEADER": {
+    "POST": "Bài viết",
+    "CHAT_WINDOW": "Cửa sổ trò chuyện",
+    "CHANNEL_DETAILS": "Chi tiết kênh",
+    "NOTIFICATIONS": "Thông báo",
+    "CART": "Giỏ hàng",
+    "CONFIRM_ORDER": "Xác nhận đơn hàng",
+    "PROFILE": "Hồ sơ",
+    "ORDERS": "Đơn hàng",
+    "ORDER_DETAILS": "Chi tiết đơn hàng",
+    "PRIVACY_POLICY": "Chính sách quyền riêng tư",
+    "TERMS_OF_SERVICE": "Điều khoản dịch vụ",
+    "SETTINGS": "Cài đặt"
+  },
+  "FILTER": {
+    "ALL": "Tất cả",
+    "JOINED": "Đã tham gia"
   }
 }

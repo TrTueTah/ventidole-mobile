@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { ActionButton } from '@knocklabs/client';
 import AppText from '@/components/ui/AppText';
 import Avatar from '@/components/ui/Avatar';
@@ -19,6 +20,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   onPress,
   onActionPress,
 }) => {
+  const { t } = useTranslation();
+
   const handlePress = () => {
     onPress(item);
   };
@@ -61,7 +64,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
             numberOfLines={3}
             raw
           >
-            {item.body || 'No content'}
+            {item.body || t('APP.NOTIFICATION.NO_CONTENT')}
           </AppText>
         </View>
 

@@ -1,9 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AppText from '@/components/ui/AppText';
 import { Icon } from '@/components/ui';
 
 const NotificationEmptyFallback: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <View className="flex-1 justify-center items-center p-8">
       <View className="w-16 h-16 rounded-full bg-neutrals800 items-center justify-center mb-4">
@@ -16,10 +19,10 @@ const NotificationEmptyFallback: React.FC = () => {
         className="mb-2"
         raw
       >
-        No Notifications
+        {t('APP.NOTIFICATION.NO_NOTIFICATIONS')}
       </AppText>
       <AppText variant="body" color="muted" align="center" raw>
-        Notifications for your activity will appear here
+        {t('APP.NOTIFICATION.NO_NOTIFICATIONS_DESCRIPTION')}
       </AppText>
     </View>
   );

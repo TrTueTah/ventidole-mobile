@@ -5,6 +5,7 @@ import { useRemoveFromCart } from '@/hooks/useRemoveFromCart';
 import { components } from '@/schemas/openapi';
 import { useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -33,6 +34,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const { showSuccess, showError } = useToast();
+  const { t } = useTranslation();
 
   const { addToCart, isLoading: isAddingToCart } = useAddToCart({
     onSuccess: () => {
@@ -240,17 +242,6 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
 
     return (
       <View className="bg-background p-4 border-b-8 border-neutrals900/5">
-        {/* Shipping Option Header */}
-        <TouchableOpacity className="flex-row justify-between items-center mb-1">
-          <AppText variant="heading3" weight="bold">
-            Standard Shipping
-          </AppText>
-          <Icon name="ChevronRight" className="w-6 h-6 text-neutrals100" />
-        </TouchableOpacity>
-        <AppText variant="bodySmall" className="text-blue-500 mb-4">
-          Expected delivery: 3-5 days
-        </AppText>
-
         {/* Item Container */}
         <View className="flex-row mb-3">
           {/* Checkbox */}
@@ -346,10 +337,15 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
           <AppButton
             variant="outline"
             onPress={() => handleBuyNow(item.id)}
+            disabled={!selectedAddress}
             className="w-full"
           >
-            <AppText variant="body" weight="bold" className="text-primary">
-              Buy Now
+            <AppText
+              variant="body"
+              weight="bold"
+              className={selectedAddress ? 'text-primary' : 'text-neutrals100'}
+            >
+              {t('APP.CART.BUY_NOW')}
             </AppText>
           </AppButton>
         </View>
@@ -393,7 +389,9 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
                     </AppText>
                   </View>
                 ) : (
-                  <AppText variant="body">Add shipping address</AppText>
+                  <AppText variant="body">
+                    {t('APP.CART.ADD_SHIPPING_ADDRESS')}
+                  </AppText>
                 )}
               </View>
               <Icon name="ChevronRight" className="w-5 h-5 text-neutrals100" />
@@ -417,7 +415,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
                   )}
                 </View>
                 <AppText variant="body" weight="semibold">
-                  Select all
+                  {t('APP.CART.SELECT_ALL')}
                 </AppText>
               </TouchableOpacity>
 
@@ -433,10 +431,10 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
                     className={
                       selectedItems.length === 0
                         ? 'text-neutrals100'
-                        : 'text-foreground'
+                        : 'text-error'
                     }
                   >
-                    Delete
+                    {t('APP.CART.DELETE')}
                   </AppText>
                 </TouchableOpacity>
               </View>
@@ -449,13 +447,13 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
             <View className="mb-3">
               <View className="flex-row justify-between items-center mb-3">
                 <AppText variant="body" color="muted">
-                  Subtotal
+                  {t('APP.CART.SUBTOTAL')}
                 </AppText>
                 <AppText variant="body">${subtotal.toFixed(2)}</AppText>
               </View>
               <View className="flex-row justify-between items-center mb-3 pt-3 border-t border-neutrals900/10">
                 <AppText variant="heading3" weight="bold">
-                  Total
+                  {t('APP.CART.TOTAL')}
                 </AppText>
                 <AppText variant="heading2" weight="bold">
                   ${subtotal.toFixed(2)}
@@ -470,7 +468,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
                   className="w-3.5 h-3.5 text-neutrals100 mr-1"
                 />
                 <AppText variant="bodySmall" color="muted">
-                  Add shipping address to continue
+                  {t('APP.CART.ADD_SHIPPING_ADDRESS_TO_CONTINUE')}
                 </AppText>
               </View>
             )}
@@ -486,7 +484,7 @@ const ShippingTab: React.FC<ShippingTabProps> = ({
           className="w-full"
           variant="primary"
         >
-          Buy Products ({selectedItems.length})
+          {t('BUTTON.BUY_PRODUCT')} ({selectedItems.length})
         </AppButton>
       </View>
     </View>

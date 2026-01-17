@@ -2,6 +2,7 @@ import { AppButton, AppInput, AppText, Avatar } from '@/components/ui';
 import { useToast } from '@/components/ui/ToastProvider';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   ScrollView,
@@ -9,24 +10,32 @@ import {
   View,
 } from 'react-native';
 import { ChangePasswordModal } from './components/ChangePasswordModal';
+import { useAvatarPicker } from './hooks/useAvatarPicker';
 import { useUpdateProfile } from './hooks/useUpdateProfile';
 
 const ProfileScreen = () => {
   const { user, isLoading, error, refetch } = useGetCurrentUser();
   const { showInfo } = useToast();
+  const { t } = useTranslation();
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
 
   // Change Password Modal State
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+
+  // Avatar Picker Hook
+  const { pickAndUploadAvatar, isUploading: isUploadingAvatar } =
+    useAvatarPicker();
 
   // Update Profile Hook
   const { updateProfile, isUpdating } = useUpdateProfile({
     onSuccess: () => {
       setIsEditMode(false);
+      setAvatarUrl(undefined); // Clear local avatar state
       refetch(); // Refresh user data
     },
   });
@@ -51,6 +60,7 @@ const ProfileScreen = () => {
       setUsername(user.username || '');
       setBio(String(user.bio || ''));
     }
+    setAvatarUrl(undefined);
     setIsEditMode(false);
   };
 
@@ -59,12 +69,15 @@ const ProfileScreen = () => {
     updateProfile({
       username: username || undefined,
       bio: bio || undefined,
+      avatarUrl: avatarUrl || undefined,
     });
   };
 
   const handleChangeAvatar = async () => {
-    // TODO: Implement image picker
-    showInfo('Avatar upload coming soon!');
+    const uploadedUrl = await pickAndUploadAvatar();
+    if (uploadedUrl) {
+      setAvatarUrl(uploadedUrl);
+    }
   };
 
   const handleOpenPasswordModal = () => {
@@ -113,24 +126,43 @@ const ProfileScreen = () => {
         {!isEditMode && (
           <View className="absolute top-4 right-4 z-10">
             <AppButton variant="outline" onPress={handleEdit} size="sm">
-              Edit
+              {t('BUTTON.EDIT')}
             </AppButton>
           </View>
         )}
 
         {/* Avatar Section */}
         <View className="items-center py-6 gap-2">
-          <Avatar
-            source={
-              user?.avatarUrl ? { uri: String(user.avatarUrl) } : undefined
-            }
-            text={getUserInitials()}
-            size="xl"
-          />
+          <View className="relative">
+            <Avatar
+              source={
+                avatarUrl
+                  ? { uri: avatarUrl }
+                  : user?.avatarUrl
+                    ? { uri: String(user.avatarUrl) }
+                    : undefined
+              }
+              text={getUserInitials()}
+              size="xl"
+            />
+            {isUploadingAvatar && (
+              <View className="absolute inset-0 bg-black/50 rounded-full items-center justify-center">
+                <ActivityIndicator size="small" color="white" />
+              </View>
+            )}
+          </View>
           {isEditMode && (
-            <TouchableOpacity onPress={handleChangeAvatar}>
-              <AppText variant="body" className="text-primary">
-                Change Avatar
+            <TouchableOpacity
+              onPress={handleChangeAvatar}
+              disabled={isUploadingAvatar}
+            >
+              <AppText
+                variant="body"
+                className={isUploadingAvatar ? 'text-neutrals500' : 'text-primary'}
+              >
+                {isUploadingAvatar
+                  ? t('APP.POST.UPLOADING')
+                  : t('APP.PROFILE.CHANGE_AVATAR')}
               </AppText>
             </TouchableOpacity>
           )}
@@ -139,7 +171,7 @@ const ProfileScreen = () => {
         {/* Personal Information */}
         <View className="mb-6">
           <AppText variant="heading4" className="mb-4">
-            Personal Information
+            {t('APP.MORE.PERSONAL_INFO')}
           </AppText>
 
           <View className="gap-4">
@@ -199,18 +231,18 @@ const ProfileScreen = () => {
           <View className="gap-3">
             <AppButton
               onPress={handleSave}
-              disabled={isUpdating}
+              disabled={isUpdating || isUploadingAvatar}
               loading={isUpdating}
               variant="primary"
             >
-              {isUpdating ? 'Saving...' : 'Save Changes'}
+              {isUpdating ? t('APP.PROFILE.SAVING') : t('APP.PROFILE.SAVE_CHANGES')}
             </AppButton>
             <AppButton
               variant="outline"
               onPress={handleCancel}
-              disabled={isUpdating}
+              disabled={isUpdating || isUploadingAvatar}
             >
-              Cancel
+              {t('BUTTON.CANCEL')}
             </AppButton>
           </View>
         )}
@@ -219,7 +251,7 @@ const ProfileScreen = () => {
         {!isEditMode && (
           <View className="mt-3">
             <AppButton variant="outline" onPress={handleOpenPasswordModal}>
-              Change Password
+              {t('APP.PROFILE.CHANGE_PASSWORD')}
             </AppButton>
           </View>
         )}

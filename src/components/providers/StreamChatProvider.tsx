@@ -11,7 +11,12 @@ import {
 import { STREAM_CHAT_API_KEY } from '@env';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StreamChat } from 'stream-chat';
-import { Chat, OverlayProvider } from 'stream-chat-react-native';
+import {
+  Chat,
+  DeepPartial,
+  OverlayProvider,
+  Theme,
+} from 'stream-chat-react-native';
 import { BackendApiContext } from './BackendApiProvider';
 
 interface StreamChatProviderProps {
@@ -430,7 +435,7 @@ export const StreamChatProvider: React.FC<StreamChatProviderProps> = React.memo(
 
     const AppColors = useColors();
 
-    const customTheme = {
+    const customTheme: DeepPartial<Theme> = {
       colors: {
         accent_blue: AppColors.primary,
         white_snow: AppColors.background,

@@ -1,23 +1,29 @@
-import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
-import { useCallback, useState } from 'react';
-import { useChatContext } from 'stream-chat-react-native';
+import { BackendApiContext } from '@/components/providers/BackendApiProvider';
+import { ChatChannelsContext } from '@/contexts/ChatChannelsContext';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useContext, useState } from 'react';
+
+interface LeaveChannelCallbacks {
+  onSuccess?: (data: any) => void;
+  onError?: (error: any) => void;
+}
 
 export const useLeaveChannel = () => {
-  const { client } = useChatContext();
-  const { user } = useGetCurrentUser();
+  const backendApi = useContext(BackendApiContext);
+  const chatChannelsContext = useContext(ChatChannelsContext);
+  const queryClient = useQueryClient();
   const [isLeaving, setIsLeaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const { mutateAsync: leaveCommunityMutation } = backendApi.useMutation(
+    'delete',
+    '/v1/user/community/{id}/leave',
+  );
+
   const leaveChannel = useCallback(
-    async (
-      { params }: { params: { path: { channelId: string } } },
-      callbacks?: {
-        onSuccess?: (data: any) => void;
-        onError?: (error: any) => void;
-      },
-    ) => {
-      if (!client || !user?.id) {
-        const err = 'Client not connected or user not authenticated';
+    async (communityId: string, callbacks?: LeaveChannelCallbacks) => {
+      if (!communityId) {
+        const err = 'Community ID is required';
         setError(err);
         callbacks?.onError?.(new Error(err));
         return;
@@ -27,29 +33,40 @@ export const useLeaveChannel = () => {
         setIsLeaving(true);
         setError(null);
 
-        const channelId = params.path.channelId.replace('messaging:', '');
-        const channel = client.channel('messaging', channelId);
+        await leaveCommunityMutation({
+          params: {
+            path: { id: communityId },
+          },
+        });
 
-        // Remove user from channel
-        await channel.removeMembers([user.id]);
+        console.log('Left community successfully:', communityId);
 
-        console.log('Left channel successfully:', channelId);
-        callbacks?.onSuccess?.({ channelId });
+        // Invalidate community queries to refetch data
+        queryClient.invalidateQueries({
+          queryKey: ['get', '/v1/user/community'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['get', '/v1/user/community/joined'],
+        });
+
+        // Refetch chat channels to update the list
+        chatChannelsContext?.refetch?.();
+
+        callbacks?.onSuccess?.({ communityId });
       } catch (err: any) {
-        console.error('Error leaving channel:', err);
-        setError('Failed to leave channel');
+        console.error('Error leaving community:', err);
+        setError('Failed to leave community');
         callbacks?.onError?.(err);
       } finally {
         setIsLeaving(false);
       }
     },
-    [client, user?.id],
+    [leaveCommunityMutation, chatChannelsContext, queryClient],
   );
 
   return {
     leaveChannel,
     isLeaving,
     error,
-    variables: null,
   };
 };

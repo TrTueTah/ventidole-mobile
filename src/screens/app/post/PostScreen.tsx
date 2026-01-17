@@ -7,6 +7,7 @@ import { components } from '@/schemas/openapi';
 import { formatNumber } from '@/utils';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -35,6 +36,7 @@ const PostScreen = () => {
   const route = useRoute<RouteProp<{ params: PostScreenParams }, 'params'>>();
   const { postId, onPostLoaded } = route.params;
   const colors = useColors();
+  const { t } = useTranslation();
   const [commentText, setCommentText] = useState('');
 
   const {
@@ -121,7 +123,7 @@ const PostScreen = () => {
         <View className="bg-background px-4 py-3 border-t border-neutrals900">
           <View className="flex-row items-baseline gap-2">
             <AppText variant="body" weight="semibold">
-              Comments
+              {t('COMMON.COMMENTS')}
             </AppText>
             <AppText variant="body" color="muted">
               ({formatNumber(totalComments || post?.commentCount || 0)})
@@ -132,7 +134,7 @@ const PostScreen = () => {
         {commentsLoading && <CommentLoadingSkeletons />}
       </View>
     ),
-    [postLoading, post, totalComments, commentsLoading],
+    [postLoading, post, totalComments, commentsLoading, t],
   );
 
   const renderEmptyComments = useCallback(() => {
@@ -187,7 +189,7 @@ const PostScreen = () => {
               textAlignVertical="top"
               variant="comment"
               className="rounded-xl"
-              placeholder="Write your comment..."
+              placeholder={t('PLACEHOLDER.COMMENT')}
               numberOfLines={3}
               value={commentText}
               onChangeText={setCommentText}

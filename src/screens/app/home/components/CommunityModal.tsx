@@ -18,6 +18,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Dimensions,
@@ -41,6 +42,7 @@ const FILTERS: FilterType[] = ['All', 'Joined'];
 
 const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
   const colors = useColors();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -115,8 +117,8 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
       <View className="flex-1 justify-center items-center p-8">
         <AppText variant="body" color="muted" className="text-center">
           {searchQuery
-            ? 'No communities found matching your search'
-            : 'No communities available'}
+            ? t('MESSAGE.NO_COMMUNITIES_FOUND')
+            : t('MESSAGE.NO_COMMUNITIES_AVAILABLE')}
         </AppText>
       </View>
     );
@@ -158,7 +160,7 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
       <View className="flex-row gap-2 items-start overflow-visible px-4 py-4 justify-between">
         <View className="flex-[7] overflow-visible">
           <AppInput
-            placeholder="Enter artist name"
+            placeholder={t('PLACEHOLDER.SEARCH_COMMUNITIES')}
             variant="default"
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -208,7 +210,7 @@ const CommunityModal = forwardRef<CommunityModalRef>((_, ref) => {
                     : 'text-foreground',
                 )}
               >
-                {filter}
+                {t(`FILTER.${filter.toUpperCase()}`)}
               </AppText>
             </TouchableOpacity>
           ))}

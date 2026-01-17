@@ -4,8 +4,9 @@ import { useToast } from '@/components/ui/ToastProvider';
 import { useCreateAddress } from '@/hooks/useCreateAddress';
 import { useGetAddresses } from '@/hooks/useGetAddresses';
 import { useUpdateAddress } from '@/hooks/useUpdateAddress';
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef, useState } from 'react';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Image,
@@ -22,22 +23,22 @@ import { useConfirmOrder } from './hooks/useConfirmOrder';
 
 type PaymentMethod = 'CREDIT' | 'COD';
 
+type ConfirmOrderParams = {
+  ConfirmOrder: { itemIds?: string[] };
+};
+
 interface Section {
   id: string;
   title: string;
   content: 'order' | 'customer' | 'shipping' | 'shippingOption' | 'payment';
 }
 
-const sections: Section[] = [
-  { id: 'order', title: 'Your Order', content: 'order' },
-  { id: 'customer', title: 'Customer', content: 'customer' },
-  { id: 'shipping', title: 'Shipping Address', content: 'shipping' },
-  { id: 'payment', title: 'Payment Method', content: 'payment' },
-];
-
 const ConfirmOrderScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute<RouteProp<ConfirmOrderParams, 'ConfirmOrder'>>();
+  const { itemIds } = route.params || {};
   const { showError } = useToast();
+  const { t } = useTranslation();
   const scrollRef = useRef<ScrollView>(null);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('CREDIT');
@@ -48,6 +49,20 @@ const ConfirmOrderScreen = () => {
   const [editingAddress, setEditingAddress] = useState<
     ShippingAddress | undefined
   >(undefined);
+
+  const sections: Section[] = [
+    { id: 'order', title: t('APP.CONFIRM_ORDER.YOUR_ORDER'), content: 'order' },
+    {
+      id: 'shipping',
+      title: t('APP.CONFIRM_ORDER.SHIPPING_ADDRESS'),
+      content: 'shipping',
+    },
+    {
+      id: 'payment',
+      title: t('APP.CONFIRM_ORDER.PAYMENT_METHOD'),
+      content: 'payment',
+    },
+  ];
 
   // Initialize all sections as expanded
   const [activeSections, setActiveSections] = useState<number[]>([
@@ -99,12 +114,23 @@ const ConfirmOrderScreen = () => {
   // Get cart data
   const { cart, isLoading: isLoadingCart } = useGetCart();
 
-  // Calculate total amount from cart
-  const totalAmount =
-    cart?.items?.reduce((sum, item) => {
+  // Filter cart items based on itemIds (if provided)
+  const selectedCartItems = useMemo(() => {
+    if (!cart?.items) return [];
+    // If itemIds provided, filter to only those items; otherwise show all
+    if (itemIds && itemIds.length > 0) {
+      return cart.items.filter(item => itemIds.includes(item.id));
+    }
+    return cart.items;
+  }, [cart?.items, itemIds]);
+
+  // Calculate total amount from selected items only
+  const totalAmount = useMemo(() => {
+    return selectedCartItems.reduce((sum, item) => {
       const price = item.variant?.price || item.product.price;
       return sum + price * item.quantity;
-    }, 0) || 0;
+    }, 0);
+  }, [selectedCartItems]);
 
   // Confirm order hook
   const { confirmOrderAsync, isLoading: isConfirming } = useConfirmOrder({
@@ -212,14 +238,14 @@ const ConfirmOrderScreen = () => {
       return;
     }
 
-    if (!cart || !cart.items || cart.items.length === 0) {
-      showError('Your cart is empty. Please add items to continue.');
+    if (selectedCartItems.length === 0) {
+      showError('No items selected. Please select items to continue.');
       return;
     }
 
     try {
-      // Prepare order items from cart
-      const orderItems = cart.items.map(item => ({
+      // Prepare order items from selected cart items only
+      const orderItems = selectedCartItems.map(item => ({
         productId: item.product.id,
         variantId: item.variant?.id,
         quantity: item.quantity,
@@ -267,7 +293,7 @@ const ConfirmOrderScreen = () => {
       case 'order':
         return (
           <View className="p-4 bg-neutrals900/5">
-            {cart?.items.map((item, index) => (
+            {selectedCartItems.map((item, index) => (
               <View key={index} className="flex-row mb-4">
                 <Image
                   source={{
@@ -425,7 +451,7 @@ const ConfirmOrderScreen = () => {
         <View className="p-4 border-b border-neutrals900/10">
           <View className="flex-row justify-between items-center">
             <AppText variant="heading3" weight="bold">
-              Order Summary
+              {t('APP.CONFIRM_ORDER.ORDER_SUMMARY')}
             </AppText>
             <AppText variant="heading3" weight="bold">
               ${totalAmount.toFixed(2)}
@@ -443,9 +469,7 @@ const ConfirmOrderScreen = () => {
             label={
               <View className="flex-1 ml-2">
                 <AppText variant="bodySmall" className="text-neutrals500">
-                  I have read and agree to the collection, use, and provision of
-                  personal information (including international transfers for
-                  overseas shipping).
+                  {t('APP.CONFIRM_ORDER.TERM')}
                 </AppText>
               </View>
             }
@@ -463,7 +487,7 @@ const ConfirmOrderScreen = () => {
           loading={isConfirming}
           variant="primary"
         >
-          Accept and Pay ${totalAmount.toFixed(2)}
+          {t('BUTTON.ACCEPT_AND_PAY')} ${totalAmount.toFixed(2)}
         </AppButton>
       </View>
 

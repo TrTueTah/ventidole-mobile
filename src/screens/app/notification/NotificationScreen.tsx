@@ -2,6 +2,7 @@ import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { KNOCK_FEED_ID } from '@env';
 import AppText from '@/components/ui/AppText';
 import { useDialog } from '@/components/ui/DialogProvider';
@@ -23,6 +24,7 @@ const NotificationScreen = () => {
 };
 
 const KnockFeedContent = () => {
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { showConfirm } = useDialog();
@@ -40,15 +42,15 @@ const KnockFeedContent = () => {
 
   const handleClearPress = useCallback(() => {
     showConfirm(
-      'Clear All Notifications',
-      'Are you sure you want to clear all notifications? This action cannot be undone.',
+      t('APP.NOTIFICATION.CLEAR_ALL_TITLE'),
+      t('APP.NOTIFICATION.CLEAR_ALL_MESSAGE'),
       async () => {
         await clearAllNotifications();
       },
       undefined,
       'horizontal',
     );
-  }, [showConfirm, clearAllNotifications]);
+  }, [showConfirm, clearAllNotifications, t]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -60,12 +62,12 @@ const KnockFeedContent = () => {
           style={{ opacity: isClearing || !hasItems ? 0.4 : 1 }}
         >
           <AppText variant="labelSmall" color="default" raw>
-            {isClearing ? 'Clearing...' : 'Clear'}
+            {isClearing ? t('APP.NOTIFICATION.CLEARING') : t('APP.NOTIFICATION.CLEAR_ALL')}
           </AppText>
         </TouchableOpacity>
       ),
     });
-  }, [handleClearPress, hasItems, isClearing, navigation]);
+  }, [handleClearPress, hasItems, isClearing, navigation, t]);
 
   return (
     <KnockNotificationsList

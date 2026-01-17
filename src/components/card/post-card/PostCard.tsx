@@ -1,11 +1,12 @@
 import { usePostView } from '@/hooks/usePostView';
 import { components } from '@/schemas/openapi';
 import { cn, formatISODate, formatNumber } from '@/utils';
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import Verify from '../../icons/Verify';
 import { AppText, Avatar, Icon } from '../../ui';
-import { useNavigation } from '@react-navigation/native';
 
 interface PostCardProps {
   post: components['schemas']['PostDto'];
@@ -15,6 +16,7 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post, className, onLike, onClick }: PostCardProps) => {
+  const { t } = useTranslation();
   const width = Dimensions.get('window').width;
   const { trackPostView } = usePostView();
   const navigation = useNavigation();
@@ -60,7 +62,7 @@ const PostCard = ({ post, className, onLike, onClick }: PostCardProps) => {
               <AppText variant="label" weight="bold">
                 {post.author.username}
               </AppText>
-              {post.author.role === 'IDOL' && <Verify size={14} />}
+              {post.author.role === 'IDOL' && <Verify />}
               {post.communityName && (
                 <>
                   <AppText variant="labelSmall" color="muted">
@@ -73,7 +75,7 @@ const PostCard = ({ post, className, onLike, onClick }: PostCardProps) => {
               )}
             </View>
             <AppText variant="labelSmall" color="muted">
-              {formatISODate(post.createdAt)}
+              {formatISODate(post.createdAt, t)}
             </AppText>
           </View>
         </View>

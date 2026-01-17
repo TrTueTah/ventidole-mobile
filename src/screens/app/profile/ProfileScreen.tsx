@@ -1,7 +1,8 @@
-import { AppText, Icon } from '@/components/ui';
+import { AppInput, AppText, Icon } from '@/components/ui';
 import { useColors } from '@/hooks/useColors';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Animated, Image, ListRenderItem, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CommunityHeader from '../community/components/CommunityHeader';
@@ -25,6 +26,7 @@ const ProfileScreen = () => {
     useRoute<RouteProp<{ params: ProfileScreenParams }, 'params'>>();
   const { userId } = route.params || {};
   const colors = useColors();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<TabType>('posts');
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -52,40 +54,50 @@ const ProfileScreen = () => {
         className="px-4 py-6 bg-background border-b border-neutrals900"
         style={{ paddingTop: insets.top + 60 }}
       >
-        <View className="flex-row items-center mb-4">
-          {/* Avatar */}
-          <View className="mr-4">
-            {userProfile.avatarUrl ? (
-              <Image
-                source={{ uri: userProfile.avatarUrl }}
-                className="w-20 h-20 rounded-full"
-              />
-            ) : (
-              <View
-                className="w-20 h-20 rounded-full items-center justify-center"
-                style={{ backgroundColor: colors.neutrals800 }}
-              >
-                <Icon name="User" className="w-10 h-10 text-neutrals500" />
-              </View>
-            )}
-          </View>
+        {/* Avatar */}
+        <View className="items-center mb-6">
+          {userProfile.avatarUrl ? (
+            <Image
+              source={{ uri: userProfile.avatarUrl }}
+              className="w-24 h-24 rounded-full"
+            />
+          ) : (
+            <View
+              className="w-24 h-24 rounded-full items-center justify-center"
+              style={{ backgroundColor: colors.neutrals800 }}
+            >
+              <Icon name="User" className="w-12 h-12 text-neutrals500" />
+            </View>
+          )}
+        </View>
 
-          {/* User Info */}
-          <View className="flex-1">
-            <AppText variant="heading3" weight="bold" className="mb-1">
-              {userProfile.username || 'Unknown User'}
-            </AppText>
-            {userProfile.email && (
-              <AppText variant="bodySmall" color="muted">
-                {userProfile.email}
-              </AppText>
-            )}
-            {userProfile.bio && (
-              <AppText variant="bodySmall" color="muted" className="mt-1">
-                {userProfile.bio}
-              </AppText>
-            )}
-          </View>
+        {/* User Info Fields */}
+        <View className="gap-3">
+          <AppInput
+            label={t('LABEL.USERNAME')}
+            value={userProfile.username || t('APP.PROFILE.UNKNOWN_USER')}
+            editable={false}
+            containerClassName="opacity-80"
+          />
+
+          {userProfile.email && (
+            <AppInput
+              label={t('LABEL.EMAIL')}
+              value={userProfile.email}
+              editable={false}
+              containerClassName="opacity-80"
+            />
+          )}
+
+          {userProfile.bio && (
+            <AppInput
+              label={t('LABEL.BIO')}
+              value={userProfile.bio}
+              editable={false}
+              multiline
+              containerClassName="opacity-80"
+            />
+          )}
         </View>
       </View>
 
@@ -107,7 +119,7 @@ const ProfileScreen = () => {
                 activeTab === 'posts' ? colors.primary : colors.neutrals500,
             }}
           >
-            Posts
+            {t('TAB.POSTS')}
           </AppText>
         </Pressable>
         <Pressable
@@ -126,7 +138,7 @@ const ProfileScreen = () => {
                 activeTab === 'reactions' ? colors.primary : colors.neutrals500,
             }}
           >
-            Reactions
+            {t('TAB.REACTIONS')}
           </AppText>
         </Pressable>
       </View>

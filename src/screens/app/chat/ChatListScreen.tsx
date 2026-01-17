@@ -6,6 +6,7 @@ import { RootStackParamList } from '@/navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, RefreshControl, TouchableOpacity, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import { Channel } from 'stream-chat';
@@ -23,6 +24,7 @@ const ChatListScreen = () => {
   const colors = useColors();
   const { channels, isLoading, isFetching, refetch } = useChatChannels();
   const { user } = useGetCurrentUser();
+  const { t } = useTranslation();
   const scrollY = useSharedValue(0);
   const lastScrollY = useRef(0);
   const headerVisible = useSharedValue(true);
@@ -127,27 +129,29 @@ const ChatListScreen = () => {
     <View className="flex-1 bg-background">
       <ChatHeader headerVisible={headerVisible} />
 
-      {/* Search Input */}
-      <View className="px-4 pb-3 bg-background" style={{ paddingTop: 120 }}>
-        <AppInput
-          placeholder="Search channels..."
-          variant="default"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          className="rounded-full"
-          rightIcon={
-            searchQuery ? (
-              <TouchableOpacity onPress={() => setSearchQuery('')}>
-                <Icon name="X" className="w-5 h-5 text-neutrals500" />
-              </TouchableOpacity>
-            ) : undefined
-          }
-          leftIcon={<Icon name="Search" className="w-5 h-5 text-neutrals500" />}
-        />
-      </View>
-
       <FlatList
         data={filteredChannels}
+        ListHeaderComponent={
+          <View className="px-4 pb-3 bg-background" style={{ paddingTop: 120 }}>
+            <AppInput
+              placeholder={t('PLACEHOLDER.SEARCH_CHANNELS')}
+              variant="default"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              className="rounded-full"
+              rightIcon={
+                searchQuery ? (
+                  <TouchableOpacity onPress={() => setSearchQuery('')}>
+                    <Icon name="X" className="w-5 h-5 text-neutrals500" />
+                  </TouchableOpacity>
+                ) : undefined
+              }
+              leftIcon={
+                <Icon name="Search" className="w-5 h-5 text-neutrals500" />
+              }
+            />
+          </View>
+        }
         extraData={filteredChannels.map(ch => ({
           id: ch.id || ch.cid,
           lastMsg: ch.state?.messages?.[ch.state.messages.length - 1]?.id,

@@ -1,5 +1,6 @@
 import { AppText } from '@/components/ui';
 import { formatMessageTime } from '@/utils/formatDate';
+import { useTranslation } from 'react-i18next';
 import { Pressable, View } from 'react-native';
 import { Channel } from 'stream-chat';
 
@@ -16,6 +17,7 @@ const CustomChannelPreview = ({
 }: CustomChannelPreviewProps) => {
   // Get channel name from metadata or generate from members
   const displayName = (channel.data as any)?.name || 'Unnamed Channel';
+  const { t } = useTranslation();
 
   // Get last message - prioritize state.messages, fallback to lastMessage from backend
   const messages = channel.state?.messages || [];
@@ -60,7 +62,7 @@ const CustomChannelPreview = ({
           </View>
           {lastMessage?.created_at && (
             <AppText variant="bodySmall" color="muted">
-              {formatMessageTime(lastMessage.created_at)}
+              {formatMessageTime(lastMessage.created_at, t)}
             </AppText>
           )}
         </View>

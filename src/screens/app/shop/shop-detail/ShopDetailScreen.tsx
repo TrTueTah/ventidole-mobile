@@ -4,8 +4,9 @@ import ProductCard, {
 import ProductCardSkeleton from '@/components/card/product-card/ProductCardSkeleton';
 import { AppText } from '@/components/ui';
 import { components } from '@/schemas/openapi';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -14,29 +15,37 @@ import {
   View,
 } from 'react-native';
 import { useGetShopProducts } from './hooks/useGetShopProducts';
+import { useGetShopProductTypes } from './hooks/useGetShopProductTypes';
 
 type UserProductDto = components['schemas']['UserProductDto'];
+type ShopProductTypeDto = components['schemas']['ShopProductTypeDto'];
 
 type RouteParams = {
   shopId: string;
   shopName?: string;
 };
 
-const CATEGORIES = ['MERCH', "SEASON'S GREETINGS", 'ALBUM', 'TOUR MERCH'];
-
 const ShopDetailScreen = () => {
+  const { t } = useTranslation();
+  const navigation = useNavigation();
   const route = useRoute();
   const { shopId, shopName } = (route.params as RouteParams) || {};
-  const [activeCategory, setActiveCategory] = useState(0);
+  const [selectedProductTypeId, setSelectedProductTypeId] = useState<
+    string | undefined
+  >(undefined);
+
+  const { productTypes } = useGetShopProductTypes({ shopId });
 
   const { products, isLoading, isLoadingMore, loadMore, hasMore } =
     useGetShopProducts({
       shopId,
       limit: 20,
+      productTypeId: selectedProductTypeId,
     });
 
   const handleProductPress = (productId: string) => {
     // Navigate to product detail
+    navigation.navigate('ShopProduct', { productId, shopName });
     console.log('Product pressed:', productId);
   };
 
@@ -65,14 +74,14 @@ const ShopDetailScreen = () => {
       {/* Shop Banner */}
       <View className="bg-primary h-48 rounded-xl mx-4 mt-4 mb-4 items-center justify-center">
         <AppText variant="heading2" weight="bold" className="text-white">
-          {shopName || 'Shop'}
+          {shopName || t('APP.SHOP.SHOP')}
         </AppText>
       </View>
 
       {/* Products Section */}
       <View className="bg-background rounded-t-2xl shadow-lg shadow-neutrals900/20 pt-4 px-4">
         <AppText variant="heading3" weight="bold" className="mb-2">
-          Products
+          {t('APP.SHOP.PRODUCTS')}
         </AppText>
 
         {/* Category Tabs */}
@@ -81,12 +90,38 @@ const ShopDetailScreen = () => {
           showsHorizontalScrollIndicator={false}
           className="mb-4 pt-4"
         >
-          {CATEGORIES.map((category, index) => (
+          {/* All Products Tab */}
+          <TouchableOpacity
+            onPress={() => setSelectedProductTypeId(undefined)}
+            className={`px-5 py-2.5 rounded-full mr-2 ${
+              selectedProductTypeId === undefined
+                ? 'bg-foreground'
+                : 'bg-neutrals900'
+            }`}
+            activeOpacity={0.7}
+          >
+            <AppText
+              variant="labelSmall"
+              weight="semibold"
+              className={
+                selectedProductTypeId === undefined
+                  ? 'text-background'
+                  : 'text-neutrals100'
+              }
+            >
+              {t('APP.SHOP.ALL')}
+            </AppText>
+          </TouchableOpacity>
+
+          {/* Dynamic Product Type Tabs */}
+          {productTypes.map((productType: ShopProductTypeDto) => (
             <TouchableOpacity
-              key={category}
-              onPress={() => setActiveCategory(index)}
+              key={productType.id}
+              onPress={() => setSelectedProductTypeId(productType.id)}
               className={`px-5 py-2.5 rounded-full mr-2 ${
-                activeCategory === index ? 'bg-foreground' : 'bg-neutrals900'
+                selectedProductTypeId === productType.id
+                  ? 'bg-foreground'
+                  : 'bg-neutrals900'
               }`}
               activeOpacity={0.7}
             >
@@ -94,12 +129,12 @@ const ShopDetailScreen = () => {
                 variant="labelSmall"
                 weight="semibold"
                 className={
-                  activeCategory === index
+                  selectedProductTypeId === productType.id
                     ? 'text-background'
                     : 'text-neutrals100'
                 }
               >
-                {category}
+                {productType.name}
               </AppText>
             </TouchableOpacity>
           ))}
@@ -132,21 +167,15 @@ const ShopDetailScreen = () => {
     return (
       <View className="py-8 items-center">
         <AppText variant="body" color="muted">
-          No products available
+          {t('APP.SHOP.NO_PRODUCTS_AVAILABLE')}
         </AppText>
       </View>
     );
   };
 
-  const renderProductItem = ({
-    item,
-    index,
-  }: {
-    item: ProductCardData;
-    index: number;
-  }) => (
+  const renderProductItem = ({ item }: { item: ProductCardData }) => (
     <View className="w-[48%] mb-4">
-      <ProductCard product={item} onPress={handleProductPress} />
+      <ProductCard product={item} onPress={() => handleProductPress(item.id)} />
     </View>
   );
 

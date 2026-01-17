@@ -6,12 +6,14 @@ import ProfileScreen from '@/screens/app/more/profile/ProfileScreen';
 import SettingsScreen from '@/screens/app/more/SettingsScreen';
 import TermsScreen from '@/screens/app/more/TermsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import CustomScreenHeader from '../components/ScreenHeader';
 import { MoreStackParamList } from '../types';
 
 const MoreStack = createNativeStackNavigator<MoreStackParamList>();
 
 const MoreStackNavigator = () => {
+  const { t } = useTranslation();
   return (
     <MoreStack.Navigator
       initialRouteName="MoreMain"
@@ -30,42 +32,42 @@ const MoreStackNavigator = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
-          title: 'Profile',
+          title: t('HEADER.PROFILE'),
         }}
       />
       <MoreStack.Screen
         name="Orders"
         component={OrdersScreen}
         options={{
-          title: 'My Orders',
+          title: t('HEADER.ORDERS'),
         }}
       />
       <MoreStack.Screen
         name="OrderDetailsScreen"
         component={OrderDetailsScreen}
         options={{
-          title: 'Order Details',
+          title: t('HEADER.ORDER_DETAILS'),
         }}
       />
       <MoreStack.Screen
         name="Privacy"
         component={PrivacyScreen}
         options={{
-          title: 'Privacy Policy',
+          title: t('HEADER.PRIVACY_POLICY'),
         }}
       />
       <MoreStack.Screen
         name="Terms"
         component={TermsScreen}
         options={{
-          title: 'Terms of Service',
+          title: t('HEADER.TERMS_OF_SERVICE'),
         }}
       />
       <MoreStack.Screen
         name="Settings"
         component={SettingsScreen}
         options={{
-          title: 'Settings',
+          title: t('HEADER.SETTINGS'),
         }}
       />
     </MoreStack.Navigator>

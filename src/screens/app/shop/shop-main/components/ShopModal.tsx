@@ -14,6 +14,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Dimensions,
@@ -38,6 +39,7 @@ export interface ShopModalRef {
 
 const ShopModal = forwardRef<ShopModalRef, ShopModalProps>(
   ({ onShopPress }, ref) => {
+    const { t } = useTranslation();
     const bottomSheetRef = useRef<BottomSheetModal>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -139,8 +141,8 @@ const ShopModal = forwardRef<ShopModalRef, ShopModalProps>(
         <View className="flex-1 justify-center items-center py-8 px-8">
           <AppText variant="body" className="text-neutrals100 text-center">
             {searchQuery
-              ? 'No shops found matching your search'
-              : 'No shops available'}
+              ? t('APP.SHOP.NO_SHOPS_MATCHING')
+              : t('APP.SHOP.NO_SHOPS_AVAILABLE')}
           </AppText>
         </View>
       );
@@ -160,7 +162,7 @@ const ShopModal = forwardRef<ShopModalRef, ShopModalProps>(
         <View className="flex-row gap-2 items-start overflow-visible px-4 py-4 justify-between">
           <View className="flex-[7] overflow-visible">
             <AppInput
-              placeholder="Search for shops"
+              placeholder={t('APP.SHOP.SEARCH_FOR_SHOPS')}
               variant="default"
               value={searchQuery}
               onChangeText={setSearchQuery}
