@@ -1,5 +1,6 @@
 import { useColors } from '@/hooks/useColors';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
+import { useAuthStore } from '@/store/authStore';
 import { isClientConnected } from '@/utils/streamChat/connectionUtils';
 import {
   handleStreamChatError,
@@ -8,14 +9,9 @@ import {
   safeDisconnectUser,
 } from '@/utils/streamChat/streamChatErrorHandler';
 import { STREAM_CHAT_API_KEY } from '@env';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StreamChat } from 'stream-chat';
-import {
-  Chat,
-  DeepPartial,
-  OverlayProvider,
-  Theme,
-} from 'stream-chat-react-native';
+import { Chat, OverlayProvider } from 'stream-chat-react-native';
 import { BackendApiContext } from './BackendApiProvider';
 
 interface StreamChatProviderProps {
@@ -25,6 +21,7 @@ interface StreamChatProviderProps {
 export const StreamChatProvider: React.FC<StreamChatProviderProps> = React.memo(
   ({ children }) => {
     const { user, isLoading, error } = useGetCurrentUser();
+    const { isChooseCommunity, isLogin } = useAuthStore();
     const [client, setClient] = useState<StreamChat | null>(null);
     const clientRef = useRef<StreamChat | null>(null);
     const connectingRef = useRef<boolean>(false);
@@ -44,10 +41,44 @@ export const StreamChatProvider: React.FC<StreamChatProviderProps> = React.memo(
     const MAX_RETRIES = 3;
     const RETRY_DELAY_MS = 2000;
 
+    // Disconnect StreamChat client when user logs out
+    useEffect(() => {
+      if (!isLogin) {
+        console.log(
+          '[StreamChatProvider] User logged out, disconnecting StreamChat client...',
+        );
+
+        // Clean up event listeners
+        if (eventCleanupRef.current) {
+          eventCleanupRef.current();
+          eventCleanupRef.current = null;
+        }
+
+        // Disconnect the client
+        if (clientRef.current) {
+          safeDisconnectUser(clientRef.current);
+          clientRef.current = null;
+        }
+
+        // Reset state
+        currentUserIdRef.current = null;
+        connectingRef.current = false;
+        retryCountRef.current = 0;
+
+        if (retryTimeoutRef.current) {
+          clearTimeout(retryTimeoutRef.current);
+          retryTimeoutRef.current = null;
+        }
+
+        setClient(null);
+      }
+    }, [isLogin]);
+
     useEffect(() => {
       // Wait for user data to be fully loaded before connecting
       // This ensures we have the user's name from the API
-      const isUserReady = user?.id && !isLoading && !error;
+      // Also wait for user to complete community selection to ensure backend has synced user to StreamChat
+      const isUserReady = user?.id && !isLoading && !error && isChooseCommunity;
 
       if (!isUserReady) {
         retryCountRef.current = 0;
@@ -391,6 +422,7 @@ export const StreamChatProvider: React.FC<StreamChatProviderProps> = React.memo(
       error,
       getStreamChatToken,
       client,
+      isChooseCommunity,
     ]);
 
     const activeClient = client || minimalClient;
@@ -398,19 +430,39 @@ export const StreamChatProvider: React.FC<StreamChatProviderProps> = React.memo(
 
     const AppColors = useColors();
 
-    const customTheme: DeepPartial<Theme> = useMemo(
-      () => ({
-        colors: {
-          white_snow: AppColors.background,
-        },
-        messageList: {
-          container: {
-            backgroundColor: AppColors.background,
+    const customTheme = {
+      colors: {
+        accent_blue: AppColors.primary,
+        white_snow: AppColors.background,
+      },
+
+      messageSimple: {
+        content: {
+          containerInner: {
+            borderWidth: 1,
+            borderColor: AppColors.border,
+          },
+          receiverMessageBackgroundColor: AppColors.background,
+          senderMessageBackgroundColor: AppColors.primary,
+          markdown: {
+            text: {
+              color: AppColors.foreground,
+              fontSize: 14,
+              lineHeight: 20,
+            },
           },
         },
-      }),
-      [AppColors.background],
-    );
+      },
+
+      messageInput: {
+        container: {
+          backgroundColor: AppColors.background,
+        },
+        inputBox: {
+          color: AppColors.foreground,
+        },
+      },
+    };
 
     return (
       <OverlayProvider>

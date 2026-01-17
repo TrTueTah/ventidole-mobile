@@ -25,6 +25,7 @@ const BackendApiProvider = ({ children }: BackendApiProviderProps) => {
   }, []);
 
   if (!backendApi) {
+    console.log('[BackendApiProvider] Not ready, returning null...');
     return null; // or a loading component
   }
 

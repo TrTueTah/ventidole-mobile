@@ -1,3 +1,4 @@
+import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import SettingsScreen from '@/screens/app/more/SettingsScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatStackNavigator from './app-stack/ChatStackNavigator';
@@ -23,6 +24,9 @@ import { RootStackParamList } from './types';
 const AppStack = createNativeStackNavigator<RootStackParamList>();
 
 const AppStackNavigator = () => {
+  // Fetch current user data when in AppStack
+  useGetCurrentUser();
+
   return (
     <>
       <AppStack.Navigator

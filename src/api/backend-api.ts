@@ -179,17 +179,42 @@ const myMiddleware: Middleware = {
             // Retry the original request
             return fetch(retryRequest);
           } else {
-            console.log('❌ Token refresh failed, logging out user');
-            const { logout } = useAuthStore.getState();
-            logout();
+            // Check if we're within the grace period after login/signup (30 seconds)
+            // to prevent auto-logout during initial auth flow
+            const { lastLoginTimestamp, logout } = useAuthStore.getState();
+            const GRACE_PERIOD_MS = 30000; // 30 seconds
+            const isWithinGracePeriod =
+              lastLoginTimestamp &&
+              Date.now() - lastLoginTimestamp < GRACE_PERIOD_MS;
+
+            if (isWithinGracePeriod) {
+              console.log(
+                '⏳ Token refresh failed but within grace period after login, skipping auto-logout',
+              );
+            } else {
+              console.log('❌ Token refresh failed, logging out user');
+              logout();
+            }
           }
         }
       } catch (error) {
         console.error('Error handling 401/403 response:', error);
         // If we can't parse the response or handle it properly, log out for 401 errors
+        // but respect the grace period after login/signup
         if (response.status === 401) {
-          const { logout } = useAuthStore.getState();
-          logout();
+          const { lastLoginTimestamp, logout } = useAuthStore.getState();
+          const GRACE_PERIOD_MS = 30000; // 30 seconds
+          const isWithinGracePeriod =
+            lastLoginTimestamp &&
+            Date.now() - lastLoginTimestamp < GRACE_PERIOD_MS;
+
+          if (!isWithinGracePeriod) {
+            logout();
+          } else {
+            console.log(
+              '⏳ 401 error but within grace period after login, skipping auto-logout',
+            );
+          }
         }
       }
     }

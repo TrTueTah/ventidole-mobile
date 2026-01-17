@@ -1,6 +1,7 @@
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { useKnockAuthToken } from '@/hooks/useKnockAuthToken';
 import { useNewNotificationToast } from '@/screens/app/notification/hooks/useNewNotificationToast';
+import { useAuthStore } from '@/store/authStore';
 import { KNOCK_FEED_ID, KNOCK_PUBLIC_KEY } from '@env';
 import {
   KnockFeedProvider,
@@ -77,14 +78,19 @@ interface KnockProviderProps {
 export const KnockProvider: React.FC<KnockProviderProps> = React.memo(
   ({ children }) => {
     const { user } = useGetCurrentUser();
+    const { isChooseCommunity } = useAuthStore();
     // const { } = useToast();
     const publicKey = KNOCK_PUBLIC_KEY;
+
+    // Only fetch Knock token when user has completed registration (chose communities)
+    // This prevents 403 errors when the user hasn't been synced to Knock yet
+    const shouldFetchKnockToken = Boolean(user?.id && isChooseCommunity);
 
     const {
       token: knockAuthToken,
       error: knockAuthError,
       refreshToken,
-    } = useKnockAuthToken(user?.id);
+    } = useKnockAuthToken(shouldFetchKnockToken ? user?.id : null);
     const [knockInitFailed, setKnockInitFailed] = useState(false);
     const knockRetryAttemptsRef = useRef(0);
     const knockRetryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
@@ -100,6 +106,8 @@ export const KnockProvider: React.FC<KnockProviderProps> = React.memo(
         renderCount: renderCountRef.current,
         userId: user?.id,
         hasToken: !!knockAuthToken,
+        isChooseCommunity,
+        shouldFetchKnockToken,
         timestamp: Date.now(),
       });
     });

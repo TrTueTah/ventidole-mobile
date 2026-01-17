@@ -71,7 +71,7 @@ const CommunityCard = ({ item, isSelected, onPress }: CommunityCardProps) => {
             {item.name}
           </AppText>
           <AppText className="text-xs text-neutrals400 mt-1">
-            {item.totalMember} {t('MEMBERS')}
+            {t('AUTH.CHOOSE_COMMUNITY.MEMBERS', { count: item.totalMember })}
           </AppText>
         </View>
       </View>

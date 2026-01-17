@@ -36,8 +36,13 @@ export const useLogin = () => {
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
         setUserMetadata({ uid: id });
-        setIsLogin(true);
         setIsChooseCommunity(isChooseCommunity);
+
+        // Only set isLogin if user has already chosen communities
+        // Otherwise, they'll be prompted to choose and isLogin will be set after
+        if (isChooseCommunity) {
+          setIsLogin(true);
+        }
 
         showSuccess('Login successful!');
 

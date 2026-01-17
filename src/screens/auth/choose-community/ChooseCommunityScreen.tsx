@@ -24,7 +24,7 @@ type Community = components['schemas']['CommunityListDto'];
 const ChooseCommunityScreen = () => {
   const { t } = useTranslation();
   const { showSuccess, showError } = useToast();
-  const { setIsChooseCommunity } = useAuthStore();
+  const { setIsChooseCommunity, setIsLogin } = useAuthStore();
 
   // Use custom hook with callbacks
   const {
@@ -40,17 +40,20 @@ const ChooseCommunityScreen = () => {
     loadMore,
   } = useChooseCommunity({
     onSuccess: () => {
-      showSuccess('Communities followed successfully!');
+      showSuccess(t('AUTH.CHOOSE_COMMUNITY.FOLLOW_SUCCESS'));
       setIsChooseCommunity(true);
+      // Now that communities are chosen, mark as fully logged in
+      // This will trigger Navigator to show AppStack
+      setIsLogin(true);
     },
     onError: (error: any) => {
-      showError(error?.message || 'Failed to follow communities');
+      showError(error?.message || t('AUTH.CHOOSE_COMMUNITY.FOLLOW_ERROR'));
     },
   });
 
   const handleContinue = () => {
     if (selectedCommunities.length < 3) {
-      showError('Please select at least 3 communities');
+      showError(t('AUTH.CHOOSE_COMMUNITY.SELECT_AT_LEAST_3'));
       return;
     }
     handleBulkFollow();
@@ -87,7 +90,7 @@ const ChooseCommunityScreen = () => {
       <View className="py-8 items-center">
         <Icon name="Search" className="w-12 h-12 text-neutrals300 mb-2" />
         <AppText className="text-sm text-neutrals400">
-          {t('NO_COMMUNITIES_FOUND')}
+          {t('AUTH.CHOOSE_COMMUNITY.NO_COMMUNITIES_FOUND')}
         </AppText>
       </View>
     ),
@@ -118,20 +121,20 @@ const ChooseCommunityScreen = () => {
       <View className="flex-1">
         {/* Header */}
         <View className="px-4 py-4">
-          <AuthTitle title={t('CHOOSE_COMMUNITIES')} />
+          <AuthTitle title={t('AUTH.CHOOSE_COMMUNITY.TITLE')} />
         </View>
 
         {/* Search Section */}
         <View className="px-4 mb-4">
           <AppText className="text-sm text-neutrals400 mb-3">
-            {t('SELECT_AT_LEAST_3_COMMUNITIES')}
+            {t('AUTH.CHOOSE_COMMUNITY.SUBTITLE')}
           </AppText>
 
           {/* Search Input */}
           <AppInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder={t('SEARCH_COMMUNITIES')}
+            placeholder={t('AUTH.CHOOSE_COMMUNITY.SEARCH_PLACEHOLDER')}
             leftIcon={
               <Icon name="Search" className="w-5 h-5 text-neutrals400" />
             }
@@ -170,7 +173,7 @@ const ChooseCommunityScreen = () => {
             disabled={selectedCommunities.length < 3 || isFollowing}
             loading={isFollowing}
           >
-            {`${t('CONTINUE')} (${selectedCommunities.length}/3)`}
+            {`${t('BUTTON.CONTINUE')} (${selectedCommunities.length}/3)`}
           </AppButton>
         </View>
       </View>

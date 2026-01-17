@@ -6,6 +6,9 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 // Create MMKV storage instance
 const storage = new MMKV();
 
+// Reference to chat storage for clearing on logout
+const chatStorage = new MMKV({ id: 'chat-storage' });
+
 // MMKV storage adapter for Zustand
 const mmkvStorage = {
   setItem: (name: string, value: string) => {
@@ -39,6 +42,7 @@ interface AuthState {
   isLogin: boolean;
   isChooseCommunity: boolean;
   isStorageReady: boolean;
+  lastLoginTimestamp: number | null; // Track when login/signup happened to prevent auto-logout
 
   // === Actions ===
   setIsStorageReady: (ready: boolean) => void;
@@ -72,6 +76,7 @@ export const useAuthStore = create<AuthState>()(
       isLogin: false,
       isChooseCommunity: false,
       isStorageReady: false,
+      lastLoginTimestamp: null,
 
       // === Actions ===
       setIsStorageReady: ready => set({ isStorageReady: ready }),
@@ -89,20 +94,36 @@ export const useAuthStore = create<AuthState>()(
 
       setRefreshToken: token => set({ refreshToken: token ?? '' }),
 
-      setIsLogin: isLogin => set({ isLogin }),
+      setIsLogin: isLogin => {
+        console.log('[AuthStore] setIsLogin called:', isLogin, new Error().stack);
+        return set({
+          isLogin,
+          // Track login time to prevent auto-logout during initial auth flow
+          lastLoginTimestamp: isLogin ? Date.now() : null,
+        });
+      },
 
       setIsChooseCommunity: isChooseCommunity => set({ isChooseCommunity }),
 
-      logout: () =>
-        set(state => ({
+      logout: () => {
+        console.log('[AuthStore] logout called!', new Error().stack);
+        // Clear the persisted storage completely
+        storage.delete('auth-storage');
+        // Also clear chat storage to prevent old user's channels from persisting
+        chatStorage.delete('chat-storage');
+
+        return set(state => ({
           userMetadata: { ...initialUserMetadata },
           userData: null,
+          userPhoneNumber: '',
           accessToken: '',
           refreshToken: '',
           isLogin: false,
           isChooseCommunity: false,
           isStorageReady: state.isStorageReady,
-        })),
+          lastLoginTimestamp: null,
+        }));
+      },
     }),
     {
       name: 'auth-storage',

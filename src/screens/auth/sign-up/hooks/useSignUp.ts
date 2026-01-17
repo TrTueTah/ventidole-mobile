@@ -23,20 +23,22 @@ export const useSignUp = () => {
   const signUpMutation = backendApi.useMutation('post', '/v1/auth/sign-up', {
     onSuccess: data => {
       console.log('✅ Sign up success');
+      console.log('Navigating to AuthComplete with type: register');
 
       navigation.navigate('AuthComplete', {
         type: 'register',
-      });
+      } as const);
 
       if (data.data) {
-        const { accessToken, refreshToken, id, role, isChooseCommunity } =
+        const { accessToken, refreshToken, id, isChooseCommunity } =
           data.data as SignInResponse;
 
         // Update auth store
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
         setUserMetadata({ uid: id });
-        setIsLogin(true);
+        // Don't set isLogin here - it will be set after choosing communities
+        // This prevents Navigator from resetting AuthStack navigation
         setIsChooseCommunity(isChooseCommunity);
 
         showSuccess('Account created successfully!');

@@ -3,7 +3,6 @@ import ChooseCommunityScreen from '@/screens/auth/choose-community/ChooseCommuni
 import ResetPasswordScreen from '@/screens/auth/reset-password/ResetPasswordScreen';
 import SignInScreen from '@/screens/auth/sign-in/SignInScreen';
 import SignUpScreen from '@/screens/auth/sign-up/SignUpScreen';
-import TermAndUseScreen from '@/screens/auth/term-and-use/TermAndUseScreen';
 import VerifyEmailScreen from '@/screens/auth/verify-email/VerifyEmailScreen';
 import { NavigationIndependentTree } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -13,13 +12,13 @@ import {
   resetPasswordPath,
   signInPath,
   signUpPath,
-  termAndUsePath,
   verifyEmailPath,
 } from './pathLocations';
 
 const AuthStack = createNativeStackNavigator();
 
 const AuthStackNavigator = () => {
+  console.log('[AuthStackNavigator] Rendering...');
   return (
     <NavigationIndependentTree>
       <AuthStack.Navigator
@@ -31,9 +30,9 @@ const AuthStackNavigator = () => {
           component={SignInScreen}
         />
         <AuthStack.Screen
-          key={signUpPath}
-          name={signUpPath}
-          component={SignUpScreen}
+          key={authCompletePath}
+          name={authCompletePath}
+          component={AuthCompleteScreen}
         />
         <AuthStack.Screen
           key={resetPasswordPath}
@@ -41,19 +40,14 @@ const AuthStackNavigator = () => {
           component={ResetPasswordScreen}
         />
         <AuthStack.Screen
+          key={signUpPath}
+          name={signUpPath}
+          component={SignUpScreen}
+        />
+        <AuthStack.Screen
           key={verifyEmailPath}
           name={verifyEmailPath}
           component={VerifyEmailScreen}
-        />
-        <AuthStack.Screen
-          key={authCompletePath}
-          name={authCompletePath}
-          component={AuthCompleteScreen}
-        />
-        <AuthStack.Screen
-          key={termAndUsePath}
-          name={termAndUsePath}
-          component={TermAndUseScreen}
         />
         <AuthStack.Screen
           key={chooseCommunityPath}

@@ -1,4 +1,5 @@
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
+import { useAuthStore } from '@/store/authStore';
 import React, {
   PropsWithChildren,
   useCallback,
@@ -24,6 +25,7 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
 }) => {
   const { client } = useChatContext();
   const { user } = useGetCurrentUser();
+  const { isChooseCommunity, isLogin } = useAuthStore();
 
   console.log(
     '[ChatChannelsProvider] RENDER - client:',
@@ -34,6 +36,10 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
     user?.id,
     'client.userID:',
     client?.userID,
+    'isChooseCommunity:',
+    isChooseCommunity,
+    'isLogin:',
+    isLogin,
   );
 
   const [channels, setChannels] = useState<ChannelType[]>([]);
@@ -42,6 +48,23 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
   const [error, setError] = useState<any>(null);
   const hasBootstrappedRef = useRef(false);
   const currentUserIdRef = useRef<string | null>(null);
+  const prevIsChooseCommunityRef = useRef<boolean>(isChooseCommunity);
+
+  // Clear all state when user logs out
+  useEffect(() => {
+    if (!isLogin) {
+      console.log(
+        '[ChatChannelsProvider] User logged out, clearing all state...',
+      );
+      setChannels([]);
+      hasBootstrappedRef.current = false;
+      currentUserIdRef.current = null;
+      prevIsChooseCommunityRef.current = false;
+      setIsLoading(true);
+      setIsFetching(false);
+      setError(null);
+    }
+  }, [isLogin]);
 
   // Clear channels when user changes
   useEffect(() => {
@@ -61,6 +84,30 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
       currentUserIdRef.current = null;
     }
   }, [user?.id]);
+
+  // Refetch channels when user completes community selection
+  // This handles the case where user just signed up and chose communities
+  useEffect(() => {
+    const wasNotChosenBefore = !prevIsChooseCommunityRef.current;
+    const isChosenNow = isChooseCommunity;
+
+    if (
+      wasNotChosenBefore &&
+      isChosenNow &&
+      client &&
+      user?.id &&
+      client.userID === user.id
+    ) {
+      console.log(
+        '[ChatChannelsProvider] isChooseCommunity changed to true, refetching channels...',
+      );
+      // Reset bootstrap flag to allow refetch
+      hasBootstrappedRef.current = false;
+      setIsLoading(true);
+    }
+
+    prevIsChooseCommunityRef.current = isChooseCommunity;
+  }, [isChooseCommunity, client, user?.id]);
 
   // Fetch channels from GetStream SDK directly
   const fetchChannelsFromStream = useCallback(async () => {
@@ -124,10 +171,10 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
       setError(null);
       hasBootstrappedRef.current = true;
     } catch (err: any) {
-      console.error(
-        '[ChatChannelsProvider] Error fetching channels from Stream:',
-        err,
-      );
+      // console.error(
+      //   '[ChatChannelsProvider] Error fetching channels from Stream:',
+      //   err,
+      // );
       setError(err);
     } finally {
       setIsLoading(false);
@@ -177,7 +224,13 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
         '[ChatChannelsProvider] Already bootstrapped, skipping fetch',
       );
     }
-  }, [client, user?.id, client?.userID, fetchChannelsFromStream]);
+  }, [
+    client,
+    user?.id,
+    client?.userID,
+    fetchChannelsFromStream,
+    isChooseCommunity,
+  ]);
 
   // Real-time event handlers (GetStream events only - no queries)
   useEffect(() => {
@@ -265,7 +318,7 @@ export const ChatChannelsProvider: React.FC<ChatChannelsProviderProps> = ({
         channelId,
         eventCid: event?.cid,
         channelCid: event?.channel?.cid,
-        channelId: event?.channel?.id,
+        eventChannelId: event?.channel?.id,
       });
       if (channelId) {
         updateChannelInState(channelId, true);

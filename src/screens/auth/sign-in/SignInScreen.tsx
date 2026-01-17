@@ -65,14 +65,14 @@ export default function SignInScreen() {
         >
           <View className="flex-1 px-4 justify-center gap-6">
             {/* Auth Title */}
-            <AuthTitle title={t('WELCOME_BACK_TO_VENTIDOLE')} />
+            <AuthTitle title={t('AUTH.SIGN_IN.TITLE')} />
 
             {/* Input Fields */}
             <View className="w-full gap-2">
               <AppInput
                 {...register('email')}
-                label={t('EMAIL')}
-                placeholder="johndoe@gmail.com"
+                label={t('LABEL.EMAIL')}
+                placeholder={t('PLACEHOLDER.EMAIL')}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoComplete="email"
@@ -84,8 +84,8 @@ export default function SignInScreen() {
 
               <AppInput
                 {...register('password')}
-                label={t('PASSWORD')}
-                placeholder={t('ENTER_PASSWORD')}
+                label={t('LABEL.PASSWORD')}
+                placeholder={t('PLACEHOLDER.PASSWORD')}
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 autoComplete="password"
@@ -116,7 +116,7 @@ export default function SignInScreen() {
                 }}
               >
                 <AppText className="text-primary font-sans-medium underline">
-                  {t('FORGET_PASSWORD')}
+                  {t('BUTTON.FORGET_PASSWORD')}
                 </AppText>
               </TouchableOpacity>
             </View>
@@ -130,14 +130,14 @@ export default function SignInScreen() {
                 loading={isLoading}
                 disabled={isLoading}
               >
-                {t('LOGIN')}
+                {t('BUTTON.SIGN_IN')}
               </AppButton>
             </View>
 
             {/* Sign Up Link */}
             <View className="flex-row justify-center items-center">
               <AppText className="text-foreground font-sans-medium">
-                {t('DONT_HAVE_ACCOUNT_SIGNUP')}{' '}
+                {t('AUTH.SIGN_IN.DONT_HAVE_ACCOUNT')}{' '}
               </AppText>
               <TouchableOpacity
                 onPress={() => {
@@ -147,7 +147,7 @@ export default function SignInScreen() {
                 }}
               >
                 <AppText className="text-primary font-sans-medium underline">
-                  {t('SIGNUP')}
+                  {t('BUTTON.SIGN_UP')}
                 </AppText>
               </TouchableOpacity>
             </View>
